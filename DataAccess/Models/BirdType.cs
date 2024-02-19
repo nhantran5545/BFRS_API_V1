@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace DataAccess.Models
+{
+    public partial class BirdType
+    {
+        public BirdType()
+        {
+            BirdSpecies = new HashSet<BirdSpecy>();
+        }
+
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid BirdTypeId { get; set; }
+        public string? BirdTypeName { get; set; }
+        public string? Image { get; set; }
+        public string? Description { get; set; }
+        public string? Status { get; set; }
+
+        public virtual ICollection<BirdSpecy> BirdSpecies { get; set; }
+    }
+}
