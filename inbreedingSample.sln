@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "inbreedingSample", "inbreedingSample\inbreedingSample.csproj", "{32550C9E-D9C8-46DE-AB9E-42F963955707}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32550C9E-D9C8-46DE-AB9E-42F963955707}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32550C9E-D9C8-46DE-AB9E-42F963955707}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32550C9E-D9C8-46DE-AB9E-42F963955707}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32550C9E-D9C8-46DE-AB9E-42F963955707}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {141AB33C-DFCC-4146-85A7-3F492360A0F1}
+	EndGlobalSection
+EndGlobal
