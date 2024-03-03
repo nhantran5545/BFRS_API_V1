@@ -18,11 +18,6 @@ namespace DataAccess.IRepositories.Implements
             _context = context;
         }
 
-        /*public GenericRepository()
-        {
-            _context = new EStoreContext();
-        }*/
-
         public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync();

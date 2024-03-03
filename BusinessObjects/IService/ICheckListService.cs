@@ -13,7 +13,7 @@ namespace BusinessObjects.IService
         void UpdateCheckList(CheckList checkList);
         void DeleteCheckList(CheckList checkList);
         void DeleteCheckListById(object checkListId);
-        Task<IEnumerable<CheckList>> GetAllCheckListAsync();
+        Task<IEnumerable<CheckList>> GetAllCheckListsAsync();
         Task<CheckList?> GetCheckListByIdAsync(object checkListId);
     }
 }

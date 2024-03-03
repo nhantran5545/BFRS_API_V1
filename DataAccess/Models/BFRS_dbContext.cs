@@ -42,7 +42,7 @@ namespace DataAccess.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=BFRS_db;Persist Security Info=True;User ID=sa;Password=123456");
+                optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=BFRS_db;Persist Security Info=True;User ID=sa;Password=123456");
             }
         }
 

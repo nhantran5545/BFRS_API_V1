@@ -22,8 +22,6 @@ namespace DataAccess.Models
             IssueAssignedToNavigations = new HashSet<Issue>();
             IssueCreatedByNavigations = new HashSet<Issue>();
             IssueUpdatedByNavigations = new HashSet<Issue>();
-            TaskManagers = new HashSet<Task>();
-            TaskStaffs = new HashSet<Task>();
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -52,7 +50,5 @@ namespace DataAccess.Models
         public virtual ICollection<Issue> IssueAssignedToNavigations { get; set; }
         public virtual ICollection<Issue> IssueCreatedByNavigations { get; set; }
         public virtual ICollection<Issue> IssueUpdatedByNavigations { get; set; }
-        public virtual ICollection<Task> TaskManagers { get; set; }
-        public virtual ICollection<Task> TaskStaffs { get; set; }
     }
 }
