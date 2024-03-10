@@ -17,9 +17,10 @@ namespace BusinessObjects.IService.Implements
             _accountRepository = accountRepository;
         }
 
-        public Task CreateAccountAsync(Account account)
+        public async Task CreateAccountAsync(Account account)
         {
-            throw new NotImplementedException();
+            await _accountRepository.AddAsync(account);
+            _accountRepository.SaveChanges();
         }
 
         public void DeleteAccount(Account account)

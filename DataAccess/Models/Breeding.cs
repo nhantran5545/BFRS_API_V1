@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
@@ -15,7 +13,6 @@ namespace DataAccess.Models
             Issues = new HashSet<Issue>();
         }
 
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid BreedingId { get; set; }
         public Guid? FatherBirdId { get; set; }
         public Guid? MotherBirdId { get; set; }

@@ -17,9 +17,10 @@ namespace BusinessObjects.IService.Implements
             _birdRepository = birdRepository;
         }
 
-        public Task CreateBirdAsync(Bird bird)
+        public async Task CreateBirdAsync(Bird bird)
         {
-            throw new NotImplementedException();
+            await _birdRepository.AddAsync(bird);
+            _birdRepository.SaveChanges();
         }
 
         public void DeleteBird(Bird bird)
@@ -32,19 +33,19 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Bird>> GetAllBirdsAsync()
+        public async Task<IEnumerable<Bird>> GetAllBirdsAsync()
         {
-            throw new NotImplementedException();
+            return await _birdRepository.GetAllAsync();
         }
 
-        public Task<IEnumerable<Bird>> GetAllBirdsByFarmId(object farmId)
+        public async Task<IEnumerable<Bird>> GetAllBirdsByFarmId(object farmId)
         {
-            throw new NotImplementedException();
+            return await _birdRepository.GetAllBirdsByFarmId(farmId);
         }
 
-        public Task<Bird?> GetBirdByIdAsync(object birdId)
+        public async Task<Bird?> GetBirdByIdAsync(object birdId)
         {
-            throw new NotImplementedException();
+            return await _birdRepository.GetByIdAsync(birdId);
         }
 
         public void UpdateBird(Bird bird)

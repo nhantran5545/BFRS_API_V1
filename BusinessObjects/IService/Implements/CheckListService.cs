@@ -17,9 +17,10 @@ namespace BusinessObjects.IService.Implements
             _checkListRepository = checkListRepository;
         }
 
-        public Task CreateCheckListAsync(CheckList checkList)
+        public async Task CreateCheckListAsync(CheckList checkList)
         {
-            throw new NotImplementedException();
+            await _checkListRepository.AddAsync(checkList);
+            _checkListRepository.SaveChanges();
         }
 
         public void DeleteCheckList(CheckList checkList)
@@ -32,14 +33,14 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<CheckList>> GetAllCheckListsAsync()
+        public async Task<IEnumerable<CheckList>> GetAllCheckListsAsync()
         {
-            throw new NotImplementedException();
+            return await _checkListRepository.GetAllAsync();
         }
 
-        public Task<CheckList?> GetCheckListByIdAsync(object checkListId)
+        public async Task<CheckList?> GetCheckListByIdAsync(object checkListId)
         {
-            throw new NotImplementedException();
+            return await _checkListRepository.GetByIdAsync(checkListId);
         }
 
         public void UpdateCheckList(CheckList checkList)

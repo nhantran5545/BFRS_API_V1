@@ -19,6 +19,7 @@ namespace DataAccess.Models
         public virtual DbSet<Account> Accounts { get; set; } = null!;
         public virtual DbSet<Area> Areas { get; set; } = null!;
         public virtual DbSet<Bird> Birds { get; set; } = null!;
+        public virtual DbSet<BirdMutation> BirdMutations { get; set; } = null!;
         public virtual DbSet<BirdSpecy> BirdSpecies { get; set; } = null!;
         public virtual DbSet<BirdType> BirdTypes { get; set; } = null!;
         public virtual DbSet<Breeding> Breedings { get; set; } = null!;
@@ -31,6 +32,7 @@ namespace DataAccess.Models
         public virtual DbSet<Clutch> Clutches { get; set; } = null!;
         public virtual DbSet<ClutchReason> ClutchReasons { get; set; } = null!;
         public virtual DbSet<Egg> Eggs { get; set; } = null!;
+        public virtual DbSet<EggBird> EggBirds { get; set; } = null!;
         public virtual DbSet<EggReason> EggReasons { get; set; } = null!;
         public virtual DbSet<Farm> Farms { get; set; } = null!;
         public virtual DbSet<Issue> Issues { get; set; } = null!;
@@ -101,6 +103,8 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.AcquisitionDate).HasColumnType("date");
 
+                entity.Property(e => e.Gender).HasMaxLength(10);
+
                 entity.Property(e => e.HatchedDate).HasColumnType("date");
 
                 entity.Property(e => e.Image)
@@ -112,8 +116,6 @@ namespace DataAccess.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.PurchaseFrom).HasMaxLength(255);
-
-                entity.Property(e => e.Sex).HasMaxLength(10);
 
                 entity.Property(e => e.Status).HasMaxLength(50);
 
@@ -141,17 +143,33 @@ namespace DataAccess.Models
                     .WithMany(p => p.InverseMotherBird)
                     .HasForeignKey(d => d.MotherBirdId)
                     .HasConstraintName("FK_MotherBird");
+            });
+
+            modelBuilder.Entity<BirdMutation>(entity =>
+            {
+                entity.HasKey(e => new { e.BirdId, e.MutationId });
+
+                entity.ToTable("BirdMutation");
+
+                entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.HasOne(d => d.Bird)
+                    .WithMany(p => p.BirdMutations)
+                    .HasForeignKey(d => d.BirdId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BirdBirdMutation");
 
                 entity.HasOne(d => d.Mutation)
-                    .WithMany(p => p.Birds)
+                    .WithMany(p => p.BirdMutations)
                     .HasForeignKey(d => d.MutationId)
-                    .HasConstraintName("FK_MutationBird");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_MutationBirdMutation");
             });
 
             modelBuilder.Entity<BirdSpecy>(entity =>
             {
                 entity.HasKey(e => e.BirdSpeciesId)
-                    .HasName("PK__BirdSpec__D9DA595F86B429F0");
+                    .HasName("PK__BirdSpec__D9DA595F795A9562");
 
                 entity.Property(e => e.BirdSpeciesId).ValueGeneratedNever();
 
@@ -241,11 +259,6 @@ namespace DataAccess.Models
                     .WithMany(p => p.BreedingCheckListDetails)
                     .HasForeignKey(d => d.CheckListDetailId)
                     .HasConstraintName("FK_CheckListDetailBreedingCheckListDetail");
-
-                entity.HasOne(d => d.CheckList)
-                    .WithMany(p => p.BreedingCheckListDetails)
-                    .HasForeignKey(d => d.CheckListId)
-                    .HasConstraintName("FK_CheckListBreedingCheckListDetail");
             });
 
             modelBuilder.Entity<BreedingNorm>(entity =>
@@ -430,11 +443,6 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("date");
 
-                entity.HasOne(d => d.Bird)
-                    .WithMany(p => p.Eggs)
-                    .HasForeignKey(d => d.BirdId)
-                    .HasConstraintName("FK_BirdEgg");
-
                 entity.HasOne(d => d.Clutch)
                     .WithMany(p => p.Eggs)
                     .HasForeignKey(d => d.ClutchId)
@@ -449,6 +457,27 @@ namespace DataAccess.Models
                     .WithMany(p => p.EggUpdatedByNavigations)
                     .HasForeignKey(d => d.UpdatedBy)
                     .HasConstraintName("FK_UpdatedByEgg");
+            });
+
+            modelBuilder.Entity<EggBird>(entity =>
+            {
+                entity.HasKey(e => new { e.EggId, e.BirdId });
+
+                entity.ToTable("EggBird");
+
+                entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.HasOne(d => d.Bird)
+                    .WithMany(p => p.EggBirds)
+                    .HasForeignKey(d => d.BirdId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BirdEggBird");
+
+                entity.HasOne(d => d.Egg)
+                    .WithMany(p => p.EggBirds)
+                    .HasForeignKey(d => d.EggId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EggEggBird");
             });
 
             modelBuilder.Entity<EggReason>(entity =>

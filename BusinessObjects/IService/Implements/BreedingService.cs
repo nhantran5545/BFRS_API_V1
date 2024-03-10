@@ -11,10 +11,14 @@ namespace BusinessObjects.IService.Implements
     public class BreedingService : IBreedingService
     {
         private readonly IBreedingRepository _breedingRepository;
+        private readonly IBirdRepository _birdRepository;
+        private readonly BirdAlgorithmService birdAlgorithmService;
 
-        public BreedingService(IBreedingRepository breedingRepository)
+        public BreedingService(IBreedingRepository breedingRepository, IBirdRepository birdRepository)
         {
             _breedingRepository = breedingRepository;
+            _birdRepository = birdRepository;
+            birdAlgorithmService = new BirdAlgorithmService(birdRepository);
         }
 
         public Task<float> CalculateInbreedingPercentage(Bird FatherBird, Bird MotherBird)
@@ -22,9 +26,10 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task CreateBreeding(Breeding breeding)
+        public async Task CreateBreeding(Breeding breeding)
         {
-            throw new NotImplementedException();
+            await _breedingRepository.AddAsync(breeding);
+            _breedingRepository.SaveChanges();
         }
 
         public void DeleteBreeding(Breeding breeding)
@@ -37,9 +42,9 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Breeding>> GetAllBreedings()
+        public async Task<IEnumerable<Breeding>> GetAllBreedings()
         {
-            throw new NotImplementedException();
+            return await _breedingRepository.GetAllAsync();
         }
 
         public Task<IEnumerable<Breeding>> GetAllBreedingsByManagerId(object managerId)
@@ -47,9 +52,9 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task<Breeding?> GetBreedingById(object breedingId)
+        public async Task<Breeding?> GetBreedingById(object breedingId)
         {
-            throw new NotImplementedException();
+            return await _breedingRepository.GetByIdAsync(breedingId);
         }
 
         public void UpdateBreeding(Breeding breeding)

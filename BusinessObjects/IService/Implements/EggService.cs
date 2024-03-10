@@ -17,9 +17,9 @@ namespace BusinessObjects.IService.Implements
             _eggRepository = eggRepository;
         }
 
-        public Task CreateEggAsync(Egg checkList)
+        public async Task CreateEggAsync(Egg checkList)
         {
-            throw new NotImplementedException();
+            await _eggRepository.
         }
 
         public void DeleteEgg(CheckList checkList)

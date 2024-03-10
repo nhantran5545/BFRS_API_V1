@@ -36,55 +36,28 @@ namespace DataAccess.IRepositories.Implements
         public async Task AddAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
-            await SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(T entity)
+        public void Update(T entity)
         {
-            _context.Entry(entity).State = EntityState.Deleted;
             _context.Set<T>().Update(entity);
-            //_context.Entry(entity).State = EntityState.Modified;
-            await SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(T entity)
+        public void Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
-            await SaveChangesAsync();
         }
 
-        public async Task DeleteByIdAsync(object id)
-        {
-            var entity = await GetByIdAsync(id);
-            if (entity != null)
-            {
-                _context.Set<T>().Remove(entity);
-                await SaveChangesAsync();
-            }
-        }
-
-        public async Task SaveChangesAsync()
+        public void SaveChanges()
         {
             try
             {
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-        }
-
-        public async Task AddRangeAsync(IEnumerable<T> entities)
-        {
-            await _context.Set<T>().AddRangeAsync(entities);
-            await SaveChangesAsync();
-        }
-
-        public async Task DeleteRangeAsync(IEnumerable<T> entities)
-        {
-            _context.Set<T>().RemoveRange(entities);
-            await SaveChangesAsync();
         }
     }
 }

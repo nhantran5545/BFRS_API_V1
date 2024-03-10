@@ -17,9 +17,10 @@ namespace BusinessObjects.IService.Implements
             _clutchRepository = clutchRepository;
         }
 
-        public Task CreateClutchAsync(Clutch clutch)
+        public async Task CreateClutchAsync(Clutch clutch)
         {
-            throw new NotImplementedException();
+            await _clutchRepository.AddAsync(clutch);
+            _clutchRepository.SaveChanges();
         }
 
         public void DeleteClutch(Clutch clutch)
@@ -32,19 +33,19 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Clutch>> GetAllClutchsAsync()
+        public async Task<IEnumerable<Clutch>> GetAllClutchsAsync()
         {
-            throw new NotImplementedException();
+            return await _clutchRepository.GetAllAsync();
         }
 
-        public Task<IEnumerable<Clutch>> GetAllClutchsByBreedingId(object breedingId)
+        public async Task<IEnumerable<Clutch>> GetAllClutchsByBreedingId(object breedingId)
         {
-            throw new NotImplementedException();
+            return await _clutchRepository.GetAllClutchsByBreedingId(breedingId);
         }
 
-        public Task<IEnumerable<Clutch>> GetAllClutchsByCreatedById(object CreatedById)
+        public async Task<IEnumerable<Clutch>> GetAllClutchsByCreatedById(object CreatedById)
         {
-            throw new NotImplementedException();
+            return await _clutchRepository.GetAllClutchsByCreatedById(CreatedById);
         }
 
         public Task<Clutch?> GetClutchByIdAsync(object clutchId)

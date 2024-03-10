@@ -13,6 +13,6 @@ namespace BusinessObjects.IService
         void UpdateBirdSpecies(BirdSpecy birdSpecy);
         void DeleteBirdSpecies(BirdSpecy birdSpecy);
         Task<IEnumerable<BirdSpecy>> GetBirdSpeciesAsync();
-        Task<BirdSpecy> GetBirdSpeciesByIdAsync(object BirdSpecyId);
+        Task<BirdSpecy?> GetBirdSpeciesByIdAsync(object BirdSpecyId);
     }
 }

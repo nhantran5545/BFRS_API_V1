@@ -17,9 +17,10 @@ namespace BusinessObjects.IService.Implements
             _cageRepository = cageRepository;
         }
 
-        public Task CreateCageAsync(Cage cage)
+        public async Task CreateCageAsync(Cage cage)
         {
-            throw new NotImplementedException();
+            await _cageRepository.AddAsync(cage);
+            _cageRepository.SaveChanges();
         }
 
         public void DeleteCage(Cage cage)
@@ -34,12 +35,12 @@ namespace BusinessObjects.IService.Implements
 
         public Task<IEnumerable<Cage>> GetAllCagesAsync()
         {
-            throw new NotImplementedException();
+            return _cageRepository.GetAllAsync();
         }
 
         public Task<Cage?> GetCageByIdAsync(object cageId)
         {
-            throw new NotImplementedException();
+            return _cageRepository.GetByIdAsync(cageId);
         }
 
         public void UpdateCage(Cage cage)

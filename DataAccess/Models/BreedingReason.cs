@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
     public partial class BreedingReason
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid BreedingReasonId { get; set; }
         public Guid? BreedingId { get; set; }
         public string? Description { get; set; }

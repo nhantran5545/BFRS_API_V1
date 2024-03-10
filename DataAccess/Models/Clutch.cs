@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
@@ -13,7 +11,6 @@ namespace DataAccess.Models
             Eggs = new HashSet<Egg>();
         }
 
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid ClutchId { get; set; }
         public Guid? BreedingId { get; set; }
         public DateTime? BroodStartDate { get; set; }

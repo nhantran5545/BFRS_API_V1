@@ -17,9 +17,10 @@ namespace BusinessObjects.IService.Implements
             _farmRepository = farmRepository;
         }
 
-        public Task CreateFarmAsync(Farm farm)
+        public async Task CreateFarmAsync(Farm farm)
         {
-            throw new NotImplementedException();
+            await _farmRepository.AddAsync(farm);
+            _farmRepository.SaveChanges();
         }
 
         public void DeleteFarm(Farm farm)
@@ -32,14 +33,14 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Farm>> GetAllFarmsAsync()
+        public async Task<IEnumerable<Farm>> GetAllFarmsAsync()
         {
-            throw new NotImplementedException();
+            return await _farmRepository.GetAllAsync();
         }
 
-        public Task<Farm?> GetFarmByIdAsync(object farmId)
+        public async Task<Farm?> GetFarmByIdAsync(object farmId)
         {
-            throw new NotImplementedException();
+            return await _farmRepository.GetByIdAsync(farmId);
         }
 
         public void UpdateFarm(Farm farm)

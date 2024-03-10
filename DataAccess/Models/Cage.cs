@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
@@ -14,7 +12,6 @@ namespace DataAccess.Models
             Clutches = new HashSet<Clutch>();
         }
 
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid CageId { get; set; }
         public DateTime? ManufacturedDate { get; set; }
         public string? ManufacturedAt { get; set; }
