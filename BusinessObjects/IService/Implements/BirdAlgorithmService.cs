@@ -24,13 +24,19 @@ namespace BusinessObjects.IService.Implements
             _birdRepository = birdRepository;
         }
 
-        public async Task<Dictionary<string, object>> Pedigree(Guid birdId)
+        public async Task<Dictionary<string, object>> GetPedigree(Guid birdId)
         {
             pedigree.Add("", birdId);
             await TrackAncestorsAsync("", birdId);
             return pedigree;
         }
 
+        public async Task<double> GetInbreedingCoefficientAsync(Guid birdId)
+        {
+            await GetPedigree(birdId);
+            var InbreedingCoefficientPercentage = DoCalculation();
+            return InbreedingCoefficientPercentage;
+        }
         private async Task TrackAncestorsAsync(string ancestor, Guid birdId)
         {
             Bird? bird = await _birdRepository.GetByIdAsync(birdId);

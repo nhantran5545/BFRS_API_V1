@@ -22,5 +22,15 @@ namespace DataAccess.IRepositories.Implements
                 .Where(b => b.FarmId.Equals(farmId))
                 .ToListAsync();
         }
+
+        public override async Task<Bird?> GetByIdAsync(object id)
+        {
+            return await _context.Birds
+                .Include(b => b.BirdSpecies)
+                .Include(b => b.Cage)
+                .Include(b => b.BirdMutations)
+                .Where(b => b.BirdId.Equals(id))
+                .FirstOrDefaultAsync();
+        }
     }
 }

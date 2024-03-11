@@ -17,8 +17,7 @@ namespace BusinessObjects.ResponseModels
         public Guid? BirdSpeciesId { get; set; }
         public string? BirdSpeciesName { get; set; }
         public string? Image { get; set; }
-        public Guid? MutationId { get; set; }
-        public string? MutationName { get; set; }
+        public List<IndividualMutation>? IndividualMutations { get; set; }
         public string? LifeStage { get; set; }
         public string? Status { get; set; }
     }
