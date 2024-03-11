@@ -12,18 +12,18 @@ namespace BusinessObjects.IService.Implements
     {
         private readonly IBreedingRepository _breedingRepository;
         private readonly IBirdRepository _birdRepository;
-        private readonly BirdAlgorithmService birdAlgorithmService;
 
         public BreedingService(IBreedingRepository breedingRepository, IBirdRepository birdRepository)
         {
             _breedingRepository = breedingRepository;
             _birdRepository = birdRepository;
-            birdAlgorithmService = new BirdAlgorithmService(birdRepository);
         }
 
-        public Task<float> CalculateInbreedingPercentage(Bird FatherBird, Bird MotherBird)
+        public async Task<double> CalculateInbreedingPercentage(Guid fatherBirdId, Guid motherBirdId)
         {
-            throw new NotImplementedException();
+            BirdAlgorithmService birdAlgorithmService = new BirdAlgorithmService(_birdRepository);
+            var InbreedingPercentage = await birdAlgorithmService.GetInbreedingCoefficientOfParentsAsync(fatherBirdId, motherBirdId);
+            return InbreedingPercentage;
         }
 
         public async Task CreateBreeding(Breeding breeding)

@@ -9,7 +9,7 @@ namespace BusinessObjects.IService
 {
     public interface IBreedingService
     {
-        Task<float> CalculateInbreedingPercentage(Bird FatherBird, Bird MotherBird);
+        Task<double> CalculateInbreedingPercentage(Guid fatherBirdId, Guid motherBirdId);
         Task CreateBreeding(Breeding breeding);
         void UpdateBreeding(Breeding breeding);
         void DeleteBreeding(Breeding breeding);

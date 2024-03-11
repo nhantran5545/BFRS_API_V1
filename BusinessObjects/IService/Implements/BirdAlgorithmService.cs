@@ -26,6 +26,7 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<Dictionary<string, object>> GetPedigree(Guid birdId)
         {
+            pedigree.Clear();
             pedigree.Add("", birdId);
             await TrackAncestorsAsync("", birdId);
             return pedigree;
@@ -37,6 +38,22 @@ namespace BusinessObjects.IService.Implements
             var InbreedingCoefficientPercentage = DoCalculation();
             return InbreedingCoefficientPercentage;
         }
+
+        public async Task<double> GetInbreedingCoefficientOfParentsAsync(Guid fatherBirdId, Guid motherBirdId)
+        {
+            pedigree.Clear();
+            await TrackPedigreeOfAParent("s", fatherBirdId);
+            await TrackPedigreeOfAParent("d", motherBirdId);
+            var InbreedingCoefficientPercentage = DoCalculation();
+            return InbreedingCoefficientPercentage;
+        }
+
+        private async Task TrackPedigreeOfAParent(string indexCode, Guid parentId)
+        {
+            pedigree.Add(indexCode, parentId);
+            await TrackAncestorsAsync(indexCode, parentId);
+        }
+
         private async Task TrackAncestorsAsync(string ancestor, Guid birdId)
         {
             Bird? bird = await _birdRepository.GetByIdAsync(birdId);

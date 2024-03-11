@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using BusinessObjects.IService;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -13,40 +14,56 @@ namespace BFRS_API_V1.Controllers
     [ApiController]
     public class BreedingsController : ControllerBase
     {
-        private readonly BFRS_dbContext _context;
+        private readonly IBreedingService _breedingService;
+        private readonly IBirdService _birdService;
 
-        public BreedingsController(BFRS_dbContext context)
+        public BreedingsController(IBreedingService breedingService, IBirdService birdService)
         {
-            _context = context;
+            _breedingService = breedingService;
+            _birdService = birdService;
+        }
+
+        [HttpGet("InbreedingCoefficient")]
+        public async Task<IActionResult> GetInbreedingCoefficientPercentage(Guid fatherBirdId, Guid motherBirdId)
+        {
+            var fatherBird = await _birdService.GetBirdByIdAsync(fatherBirdId);
+            if (fatherBird == null || fatherBird.Gender != "Male")
+            {
+                return NotFound("Wrong male bird id");
+            }
+
+            var motherBird = await _birdService.GetBirdByIdAsync(motherBirdId);
+            if (motherBird == null || motherBird.Gender != "Female")
+            {
+                return NotFound("Wrong female bird id");
+            }
+
+            var percentage = await _breedingService.CalculateInbreedingPercentage(fatherBirdId, motherBirdId);
+            return Ok(percentage);
         }
 
         // GET: api/Breedings
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Breeding>>> GetBreedings()
         {
-          if (_context.Breedings == null)
-          {
-              return NotFound();
-          }
-            return await _context.Breedings.ToListAsync();
+            var breedings = await _breedingService.GetAllBreedings();
+            if(breedings != null)
+            {
+                return Ok(breedings);
+            }
+            return NotFound("There are no breeding!");
         }
 
         // GET: api/Breedings/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Breeding>> GetBreeding(Guid id)
         {
-          if (_context.Breedings == null)
-          {
-              return NotFound();
-          }
-            var breeding = await _context.Breedings.FindAsync(id);
-
-            if (breeding == null)
+            var breeding = await _breedingService.GetBreedingById(id);
+            if(breeding != null)
             {
-                return NotFound();
+                return Ok(breeding);
             }
-
-            return breeding;
+            return NotFound("Breeding not found");
         }
 
         // PUT: api/Breedings/5
@@ -54,7 +71,7 @@ namespace BFRS_API_V1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBreeding(Guid id, Breeding breeding)
         {
-            if (id != breeding.BreedingId)
+            /*if (id != breeding.BreedingId)
             {
                 return BadRequest();
             }
@@ -75,7 +92,7 @@ namespace BFRS_API_V1.Controllers
                 {
                     throw;
                 }
-            }
+            }*/
 
             return NoContent();
         }
@@ -85,26 +102,7 @@ namespace BFRS_API_V1.Controllers
         [HttpPost]
         public async Task<ActionResult<Breeding>> PostBreeding(Breeding breeding)
         {
-          if (_context.Breedings == null)
-          {
-              return Problem("Entity set 'BFRS_dbContext.Breedings'  is null.");
-          }
-            _context.Breedings.Add(breeding);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (BreedingExists(breeding.BreedingId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _breedingService.CreateBreeding(breeding);
 
             return CreatedAtAction("GetBreeding", new { id = breeding.BreedingId }, breeding);
         }
@@ -113,7 +111,7 @@ namespace BFRS_API_V1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBreeding(Guid id)
         {
-            if (_context.Breedings == null)
+            /*if (_context.Breedings == null)
             {
                 return NotFound();
             }
@@ -124,14 +122,9 @@ namespace BFRS_API_V1.Controllers
             }
 
             _context.Breedings.Remove(breeding);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();*/
 
             return NoContent();
-        }
-
-        private bool BreedingExists(Guid id)
-        {
-            return (_context.Breedings?.Any(e => e.BreedingId == id)).GetValueOrDefault();
         }
     }
 }
