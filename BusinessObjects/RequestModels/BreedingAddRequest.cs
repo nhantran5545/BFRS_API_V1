@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.RequestModels
 {
-    internal class BreedingRequest
+    public class BreedingAddRequest
     {
+        public Guid? FatherBirdId { get; set; }
+        public Guid? MotherBirdId { get; set; }
+        public Guid? CageId { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using DataAccess.IRepositories;
+﻿using AutoMapper;
+using BusinessObjects.RequestModels;
+using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -12,21 +14,23 @@ namespace BusinessObjects.IService.Implements
     {
         private readonly IBreedingRepository _breedingRepository;
         private readonly IBirdRepository _birdRepository;
+        private readonly IMapper _mapper;
 
-        public BreedingService(IBreedingRepository breedingRepository, IBirdRepository birdRepository)
+        public BreedingService(IBreedingRepository breedingRepository, IBirdRepository birdRepository, IMapper mapper)
         {
             _breedingRepository = breedingRepository;
             _birdRepository = birdRepository;
+            _mapper = mapper;
         }
 
         public async Task<double> CalculateInbreedingPercentage(Guid fatherBirdId, Guid motherBirdId)
         {
-            BirdAlgorithmService birdAlgorithmService = new BirdAlgorithmService(_birdRepository);
+            var birdAlgorithmService = new BirdAlgorithmService(_birdRepository);
             var InbreedingPercentage = await birdAlgorithmService.GetInbreedingCoefficientOfParentsAsync(fatherBirdId, motherBirdId);
             return InbreedingPercentage;
         }
 
-        public async Task CreateBreeding(Breeding breeding)
+        public async Task CreateBreeding(BreedingAddRequest breeding)
         {
             await _breedingRepository.AddAsync(breeding);
             _breedingRepository.SaveChanges();
