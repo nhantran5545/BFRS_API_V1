@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.Models;
 using System;
@@ -31,6 +32,11 @@ namespace BusinessObjects.Mapper
             CreateMap<Cage, CageDetailResponse>()
                 .ForMember(dest => dest.AreaName,
                             opt => opt.MapFrom(src => src.Area != null ? src.Area.AreaName : string.Empty))
+                .ReverseMap();
+            #endregion
+
+            #region Mapper_Request
+            CreateMap<BreedingAddRequest, Breeding>()
                 .ReverseMap();
             #endregion
         }

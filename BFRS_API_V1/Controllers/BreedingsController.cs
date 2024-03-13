@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using BusinessObjects.IService;
+using BusinessObjects.RequestModels;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -100,11 +101,12 @@ namespace BFRS_API_V1.Controllers
         // POST: api/Breedings
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Breeding>> PostBreeding(Breeding breeding)
+        public async Task<ActionResult<Breeding>> PostBreeding(BreedingAddRequest breeding)
         {
             await _breedingService.CreateBreeding(breeding);
 
-            return CreatedAtAction("GetBreeding", new { id = breeding.BreedingId }, breeding);
+            //return CreatedAtAction("GetBreeding", new { id = breeding.BreedingId }, breeding);
+            return CreatedAtAction("GetBreeding", new { id = 0 }, breeding);
         }
 
         // DELETE: api/Breedings/5

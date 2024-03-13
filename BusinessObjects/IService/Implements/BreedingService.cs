@@ -30,13 +30,14 @@ namespace BusinessObjects.IService.Implements
             return InbreedingPercentage;
         }
 
-        public async Task CreateBreeding(BreedingAddRequest breeding)
+        public async Task CreateBreeding(BreedingAddRequest breedingRequest)
         {
+            var breeding = _mapper.Map<Breeding>(breedingRequest);
             await _breedingRepository.AddAsync(breeding);
             _breedingRepository.SaveChanges();
         }
 
-        public void DeleteBreeding(Breeding breeding)
+        public void DeleteBreeding(BreedingAddRequest breeding)
         {
             throw new NotImplementedException();
         }
@@ -61,7 +62,7 @@ namespace BusinessObjects.IService.Implements
             return await _breedingRepository.GetByIdAsync(breedingId);
         }
 
-        public void UpdateBreeding(Breeding breeding)
+        public void UpdateBreeding(BreedingAddRequest breeding)
         {
             throw new NotImplementedException();
         }
