@@ -48,15 +48,15 @@ namespace DataAccess.IRepositories.Implements
             _context.Set<T>().Remove(entity);
         }
 
-        public void SaveChanges()
+        public int SaveChanges()
         {
             try
             {
-                _context.SaveChanges();
+                return _context.SaveChanges();
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return -1;
             }
         }
     }

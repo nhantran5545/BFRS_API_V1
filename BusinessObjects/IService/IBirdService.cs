@@ -9,7 +9,7 @@ namespace BusinessObjects.IService
 {
     public interface IBirdService
     {
-        Task CreateBirdAsync(Bird bird);
+        Task<int> CreateBirdAsync(Bird bird);
         void UpdateBird(Bird bird);
         void DeleteBird(Bird bird); 
         void DeleteBirdById(object birdId);

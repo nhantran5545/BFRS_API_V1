@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using BusinessObjects.IService;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -13,40 +14,46 @@ namespace BFRS_API_V1.Controllers
     [ApiController]
     public class BirdsController : ControllerBase
     {
-        private readonly BFRS_dbContext _context;
+        private readonly IBirdService _birdService;
 
-        public BirdsController(BFRS_dbContext context)
+        public BirdsController(IBirdService birdService)
         {
-            _context = context;
+            _birdService = birdService;
         }
 
         // GET: api/Birds
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Bird>>> GetBirds()
+        public async Task<ActionResult<IEnumerable<Bird>>> GetAllBirds()
         {
-          if (_context.Birds == null)
-          {
-              return NotFound();
-          }
-            return await _context.Birds.ToListAsync();
+            var birds = await _birdService.GetAllBirdsAsync();
+            if (birds == null)
+            {
+                return NotFound("There are no birds");
+            }
+            return Ok(birds);
+        }
+
+        [HttpGet("Farm")]
+        public async Task<ActionResult<IEnumerable<Bird>>> GetAllBirdsByFarmId(Guid FarmId)
+        {
+            var birds = await _birdService.GetAllBirdsByFarmId(FarmId);
+            if (birds == null)
+            {
+                return NotFound("There are no birds");
+            }
+            return Ok(birds);
         }
 
         // GET: api/Birds/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Bird>> GetBird(Guid id)
         {
-          if (_context.Birds == null)
-          {
-              return NotFound();
-          }
-            var bird = await _context.Birds.FindAsync(id);
-
+            var bird = await _birdService.GetBirdByIdAsync(id);
             if (bird == null)
             {
-                return NotFound();
+                return NotFound("Birds not found");
             }
-
-            return bird;
+            return Ok(bird);
         }
 
         // PUT: api/Birds/5
@@ -54,7 +61,7 @@ namespace BFRS_API_V1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBird(Guid id, Bird bird)
         {
-            if (id != bird.BirdId)
+            /*if (id != bird.BirdId)
             {
                 return BadRequest();
             }
@@ -75,7 +82,7 @@ namespace BFRS_API_V1.Controllers
                 {
                     throw;
                 }
-            }
+            }*/
 
             return NoContent();
         }
@@ -85,26 +92,6 @@ namespace BFRS_API_V1.Controllers
         [HttpPost]
         public async Task<ActionResult<Bird>> PostBird(Bird bird)
         {
-          if (_context.Birds == null)
-          {
-              return Problem("Entity set 'BFRS_dbContext.Birds'  is null.");
-          }
-            _context.Birds.Add(bird);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (BirdExists(bird.BirdId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return CreatedAtAction("GetBird", new { id = bird.BirdId }, bird);
         }
@@ -113,25 +100,8 @@ namespace BFRS_API_V1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBird(Guid id)
         {
-            if (_context.Birds == null)
-            {
-                return NotFound();
-            }
-            var bird = await _context.Birds.FindAsync(id);
-            if (bird == null)
-            {
-                return NotFound();
-            }
-
-            _context.Birds.Remove(bird);
-            await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool BirdExists(Guid id)
-        {
-            return (_context.Birds?.Any(e => e.BirdId == id)).GetValueOrDefault();
         }
     }
 }

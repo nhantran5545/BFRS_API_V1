@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using BusinessObjects.IService;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -13,40 +14,35 @@ namespace BFRS_API_V1.Controllers
     [ApiController]
     public class BirdSpeciesController : ControllerBase
     {
-        private readonly BFRS_dbContext _context;
+        private readonly IBirdSpeciesService _birdSpeciesService;
 
-        public BirdSpeciesController(BFRS_dbContext context)
+        public BirdSpeciesController(IBirdSpeciesService birdSpeciesService)
         {
-            _context = context;
+            _birdSpeciesService = birdSpeciesService;
         }
 
         // GET: api/BirdSpecies
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BirdSpecy>>> GetBirdSpecies()
         {
-          if (_context.BirdSpecies == null)
-          {
-              return NotFound();
-          }
-            return await _context.BirdSpecies.ToListAsync();
+            var birdSpecies = await _birdSpeciesService.GetBirdSpeciesAsync();
+            if (birdSpecies == null)
+            {
+                return NotFound("There are no bird species");
+            }
+            return Ok(birdSpecies);
         }
 
         // GET: api/BirdSpecies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BirdSpecy>> GetBirdSpecy(Guid id)
         {
-          if (_context.BirdSpecies == null)
-          {
-              return NotFound();
-          }
-            var birdSpecy = await _context.BirdSpecies.FindAsync(id);
-
-            if (birdSpecy == null)
+            var birdspecy = await _birdSpeciesService.GetBirdSpeciesByIdAsync(id);
+            if(birdspecy == null)
             {
-                return NotFound();
+                return NotFound("There are no bird species");
             }
-
-            return birdSpecy;
+            return Ok(birdspecy);
         }
 
         // PUT: api/BirdSpecies/5
@@ -54,28 +50,6 @@ namespace BFRS_API_V1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBirdSpecy(Guid id, BirdSpecy birdSpecy)
         {
-            if (id != birdSpecy.BirdSpeciesId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(birdSpecy).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BirdSpecyExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return NoContent();
         }
@@ -85,26 +59,6 @@ namespace BFRS_API_V1.Controllers
         [HttpPost]
         public async Task<ActionResult<BirdSpecy>> PostBirdSpecy(BirdSpecy birdSpecy)
         {
-          if (_context.BirdSpecies == null)
-          {
-              return Problem("Entity set 'BFRS_dbContext.BirdSpecies'  is null.");
-          }
-            _context.BirdSpecies.Add(birdSpecy);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (BirdSpecyExists(birdSpecy.BirdSpeciesId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return CreatedAtAction("GetBirdSpecy", new { id = birdSpecy.BirdSpeciesId }, birdSpecy);
         }
@@ -113,25 +67,8 @@ namespace BFRS_API_V1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBirdSpecy(Guid id)
         {
-            if (_context.BirdSpecies == null)
-            {
-                return NotFound();
-            }
-            var birdSpecy = await _context.BirdSpecies.FindAsync(id);
-            if (birdSpecy == null)
-            {
-                return NotFound();
-            }
-
-            _context.BirdSpecies.Remove(birdSpecy);
-            await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool BirdSpecyExists(Guid id)
-        {
-            return (_context.BirdSpecies?.Any(e => e.BirdSpeciesId == id)).GetValueOrDefault();
         }
     }
 }

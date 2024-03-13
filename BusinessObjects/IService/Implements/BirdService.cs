@@ -17,10 +17,10 @@ namespace BusinessObjects.IService.Implements
             _birdRepository = birdRepository;
         }
 
-        public async Task CreateBirdAsync(Bird bird)
+        public async Task<int> CreateBirdAsync(Bird bird)
         {
             await _birdRepository.AddAsync(bird);
-            _birdRepository.SaveChanges();
+            return _birdRepository.SaveChanges();
         }
 
         public void DeleteBird(Bird bird)
