@@ -10,9 +10,9 @@ namespace BusinessObjects.IService
     public interface IEggService
     {
         Task CreateEggAsync(Egg egg);
-        void UpdateEgg(Egg checkList);
-        void DeleteEgg(Egg checkList);
-        void DeleteEggById(object checkListId);
+        void UpdateEgg(Egg egg);
+        void DeleteEgg(Egg egg);
+        void DeleteEggById(object eggId);
         Task<IEnumerable<Egg>> GetAllEggsAsync();
         Task<IEnumerable<Egg>> GetAllEggsByClutchIdAsync(object clutchId);
         Task<Egg?> GetEggByIdAsync(object eggId);

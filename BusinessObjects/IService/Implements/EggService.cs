@@ -17,12 +17,17 @@ namespace BusinessObjects.IService.Implements
             _eggRepository = eggRepository;
         }
 
-        public async Task CreateEggAsync(Egg checkList)
+        public async Task CreateEggAsync(Egg egg)
         {
-            await _eggRepository.
+            await _eggRepository.AddAsync(egg);
         }
 
         public void DeleteEgg(CheckList checkList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteEgg(Egg egg)
         {
             throw new NotImplementedException();
         }
@@ -52,7 +57,7 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public void UpdateEgg(CheckList checkList)
+        public void UpdateEgg(Egg egg)
         {
             throw new NotImplementedException();
         }
