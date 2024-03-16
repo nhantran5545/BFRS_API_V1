@@ -9,7 +9,7 @@ namespace BusinessObjects.ResponseModels
     public class BirdDetailResponse
     {
         public Guid BirdId { get; set; }
-        public string? Sex { get; set; }
+        public string? Gender { get; set; }
         public DateTime? HatchedDate { get; set; }
         public string? PurchaseFrom { get; set; }
         public DateTime? AcquisitionDate { get; set; }

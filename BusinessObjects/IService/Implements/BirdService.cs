@@ -1,4 +1,7 @@
-﻿using DataAccess.IRepositories;
+﻿using AutoMapper;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
+using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -11,14 +14,21 @@ namespace BusinessObjects.IService.Implements
     public class BirdService : IBirdService
     {
         private readonly IBirdRepository _birdRepository;
+        private readonly IMapper _mapper;
 
-        public BirdService(IBirdRepository birdRepository)
+        public BirdService(IBirdRepository birdRepository, IMapper mapper)
         {
             _birdRepository = birdRepository;
+            _mapper = mapper;
         }
 
-        public async Task<int> CreateBirdAsync(Bird bird)
+        public async Task<int> CreateBirdAsync(BirdAddRequest birdAddRequest)
         {
+            var bird = _mapper.Map<Bird>(birdAddRequest);
+            if (bird == null)
+            {
+                return -1;
+            }
             await _birdRepository.AddAsync(bird);
             return _birdRepository.SaveChanges();
         }
@@ -33,19 +43,22 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Bird>> GetAllBirdsAsync()
+        public async Task<IEnumerable<BirdResponse>> GetAllBirdsAsync()
         {
-            return await _birdRepository.GetAllAsync();
+            var birds = await _birdRepository.GetAllAsync();
+            return birds.Select(b => _mapper.Map<BirdResponse>(b));
         }
 
-        public async Task<IEnumerable<Bird>> GetAllBirdsByFarmId(object farmId)
+        public async Task<IEnumerable<BirdResponse>> GetAllBirdsByFarmId(object farmId)
         {
-            return await _birdRepository.GetAllBirdsByFarmId(farmId);
+            var birds = await _birdRepository.GetAllBirdsByFarmId(farmId);
+            return birds.Select(b => _mapper.Map<BirdResponse>(b));
         }
 
-        public async Task<Bird?> GetBirdByIdAsync(object birdId)
+        public async Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId)
         {
-            return await _birdRepository.GetByIdAsync(birdId);
+            var bird = await _birdRepository.GetByIdAsync(birdId);
+            return _mapper.Map<BirdDetailResponse?>(bird);
         }
 
         public void UpdateBird(Bird bird)

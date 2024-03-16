@@ -1,4 +1,6 @@
-﻿using DataAccess.Models;
+﻿using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +11,12 @@ namespace BusinessObjects.IService
 {
     public interface IBirdService
     {
-        Task<int> CreateBirdAsync(Bird bird);
+        Task<int> CreateBirdAsync(BirdAddRequest birdAddRequest);
         void UpdateBird(Bird bird);
         void DeleteBird(Bird bird); 
         void DeleteBirdById(object birdId);
-        Task<IEnumerable<Bird>> GetAllBirdsAsync();
-        Task<IEnumerable<Bird>> GetAllBirdsByFarmId(object farmId);
-        Task<Bird?> GetBirdByIdAsync(object birdId);
+        Task<IEnumerable<BirdResponse>> GetAllBirdsAsync();
+        Task<IEnumerable<BirdResponse>> GetAllBirdsByFarmId(object farmId);
+        Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId);
     }
 }

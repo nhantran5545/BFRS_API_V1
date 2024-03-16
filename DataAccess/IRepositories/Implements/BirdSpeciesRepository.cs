@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.IRepositories.Implements
 {
-    internal class BirdSpeciesRepository : GenericRepository<BirdSpecy>, IBirdSpeciesRepository
+    public class BirdSpeciesRepository : GenericRepository<BirdSpecy>, IBirdSpeciesRepository
     {
         public BirdSpeciesRepository(BFRS_dbContext context) : base(context)
         {

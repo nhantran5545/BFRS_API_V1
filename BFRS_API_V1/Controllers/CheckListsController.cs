@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using BusinessObjects.IService;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -13,40 +14,35 @@ namespace BFRS_API_V1.Controllers
     [ApiController]
     public class CheckListsController : ControllerBase
     {
-        private readonly BFRS_dbContext _context;
+        private readonly ICheckListService _checkListService;
 
-        public CheckListsController(BFRS_dbContext context)
+        public CheckListsController(ICheckListService checkListService)
         {
-            _context = context;
+            _checkListService = checkListService;
         }
 
         // GET: api/CheckLists
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CheckList>>> GetCheckLists()
         {
-          if (_context.CheckLists == null)
-          {
-              return NotFound();
-          }
-            return await _context.CheckLists.ToListAsync();
+            var checkLists = await _checkListService.GetAllCheckListsAsync();
+            if(checkLists == null)
+            {
+                return NotFound("CheckList not found");
+            }
+            return Ok(checkLists);
         }
 
         // GET: api/CheckLists/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CheckList>> GetCheckList(Guid id)
         {
-          if (_context.CheckLists == null)
-          {
-              return NotFound();
-          }
-            var checkList = await _context.CheckLists.FindAsync(id);
-
-            if (checkList == null)
+            var checkList = await _checkListService.GetCheckListByIdAsync(id);
+            if(checkList == null)
             {
-                return NotFound();
+                return NotFound("Checklist not found");
             }
-
-            return checkList;
+            return Ok(checkList);
         }
 
         // PUT: api/CheckLists/5
@@ -54,28 +50,6 @@ namespace BFRS_API_V1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCheckList(Guid id, CheckList checkList)
         {
-            if (id != checkList.CheckListId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(checkList).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CheckListExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return NoContent();
         }
@@ -85,26 +59,6 @@ namespace BFRS_API_V1.Controllers
         [HttpPost]
         public async Task<ActionResult<CheckList>> PostCheckList(CheckList checkList)
         {
-          if (_context.CheckLists == null)
-          {
-              return Problem("Entity set 'BFRS_dbContext.CheckLists'  is null.");
-          }
-            _context.CheckLists.Add(checkList);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CheckListExists(checkList.CheckListId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return CreatedAtAction("GetCheckList", new { id = checkList.CheckListId }, checkList);
         }
@@ -113,25 +67,8 @@ namespace BFRS_API_V1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCheckList(Guid id)
         {
-            if (_context.CheckLists == null)
-            {
-                return NotFound();
-            }
-            var checkList = await _context.CheckLists.FindAsync(id);
-            if (checkList == null)
-            {
-                return NotFound();
-            }
-
-            _context.CheckLists.Remove(checkList);
-            await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool CheckListExists(Guid id)
-        {
-            return (_context.CheckLists?.Any(e => e.CheckListId == id)).GetValueOrDefault();
         }
     }
 }

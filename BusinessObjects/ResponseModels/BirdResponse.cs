@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.ResponseModels
 {
-    public class BirdReponse
+    public class BirdResponse
     {
         public Guid BirdId { get; set; }
-        public string? Sex { get; set; }
+        public string? Gender { get; set; }
         public DateTime? HatchedDate { get; set; }
         public Guid? CageId { get; set; }
         public Guid? BirdSpeciesId { get; set; }
