@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.ResponseModels
 {
-    public class ClutchResponse
+    public class ClutchDetailResponse
     {
     }
 }

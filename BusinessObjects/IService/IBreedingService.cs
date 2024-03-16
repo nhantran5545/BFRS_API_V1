@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,8 @@ namespace BusinessObjects.IService
         void UpdateBreeding(BreedingAddRequest breeding);
         void DeleteBreeding(BreedingAddRequest breeding);
         void DeleteBreedingById(object breedingId);
-        Task<IEnumerable<Breeding>> GetAllBreedings();
-        Task<IEnumerable<Breeding>> GetAllBreedingsByManagerId(object managerId);
-        Task<Breeding?> GetBreedingById(object breedingId);
+        Task<IEnumerable<BreedingResponse>> GetAllBreedings();
+        Task<IEnumerable<BreedingResponse>> GetAllBreedingsByManagerId(object managerId);
+        Task<BreedingDetailResponse?> GetBreedingById(object breedingId);
     }
 }

@@ -9,5 +9,7 @@ namespace DataAccess.IRepositories
 {
     public interface IEggRepository : IGenericRepository<Egg>
     {
+        Task<IEnumerable<Egg>> GetAllEggsByClutchIdAsync(object clutchId);
+        Task<Egg?> GetEggByBirdIdAsync(object birdId);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
@@ -47,19 +48,22 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Breeding>> GetAllBreedings()
+        public async Task<IEnumerable<BreedingResponse>> GetAllBreedings()
         {
-            return await _breedingRepository.GetAllAsync();
+            var breedings = await _breedingRepository.GetAllAsync();
+            return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 
-        public Task<IEnumerable<Breeding>> GetAllBreedingsByManagerId(object managerId)
+        public async Task<IEnumerable<BreedingResponse>> GetAllBreedingsByManagerId(object managerId)
         {
-            throw new NotImplementedException();
+            var breedings = await _breedingRepository.GetAllBreedingsByManagerId(managerId);
+            return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 
-        public async Task<Breeding?> GetBreedingById(object breedingId)
+        public async Task<BreedingDetailResponse?> GetBreedingById(object breedingId)
         {
-            return await _breedingRepository.GetByIdAsync(breedingId);
+            var breeding = await _breedingRepository.GetByIdAsync(breedingId);
+            return _mapper.Map<BreedingDetailResponse>(breeding);
         }
 
         public void UpdateBreeding(BreedingAddRequest breeding)

@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace BusinessObjects.IService
         Task CreateBirdSpeciesAsync(BirdSpecy birdSpecy);
         void UpdateBirdSpecies(BirdSpecy birdSpecy);
         void DeleteBirdSpecies(BirdSpecy birdSpecy);
-        Task<IEnumerable<BirdSpecy>> GetBirdSpeciesAsync();
-        Task<BirdSpecy?> GetBirdSpeciesByIdAsync(object BirdSpecyId);
+        Task<IEnumerable<BirdSpeciesResponse>> GetBirdSpeciesAsync();
+        Task<BirdSpeciesDetailResponse?> GetBirdSpeciesByIdAsync(object BirdSpecyId);
     }
 }

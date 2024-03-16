@@ -15,7 +15,7 @@ namespace BusinessObjects.Mapper
         public Mapper() 
         {
             #region Mapper_Response
-            CreateMap<Bird, BirdReponse>()
+            CreateMap<Bird, BirdResponse>()
                 .ForMember(dest => dest.BirdSpeciesName,
                             opt => opt.MapFrom(src => src.BirdSpecies != null ? src.BirdSpecies.BirdSpeciesName : string.Empty))
                 .ReverseMap();
@@ -24,6 +24,10 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.BirdSpecies != null ? src.BirdSpecies.BirdSpeciesName : string.Empty))
                 /*.ForMember(dest => dest.MutationName,
                             opt => opt.MapFrom(src => src.Mutation != null ? src.Mutation.MutationName : string.Empty))*/
+                .ReverseMap();
+            CreateMap<BirdSpecy, BirdSpeciesResponse>()
+                .ReverseMap();
+            CreateMap<BirdSpecy, BirdSpeciesDetailResponse>()
                 .ReverseMap();
             CreateMap<Cage, CageResponse>()
                 .ForMember(dest => dest.AreaName,

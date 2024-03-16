@@ -1,4 +1,6 @@
-﻿using DataAccess.IRepositories;
+﻿using AutoMapper;
+using BusinessObjects.ResponseModels;
+using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +13,12 @@ namespace BusinessObjects.IService.Implements
     public class EggService : IEggService
     {
         private readonly IEggRepository _eggRepository;
+        private readonly IMapper _mapper;
 
-        public EggService(IEggRepository eggRepository)
+        public EggService(IEggRepository eggRepository, IMapper mapper)
         {
             _eggRepository = eggRepository;
+            _mapper = mapper;
         }
 
         public async Task CreateEggAsync(Egg egg)
@@ -37,24 +41,28 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Egg>> GetAllEggsAsync()
+        public async Task<IEnumerable<EggResponse>> GetAllEggsAsync()
         {
-            throw new NotImplementedException();
+            var eggs = await _eggRepository.GetAllAsync();
+            return eggs.Select(e => _mapper.Map<EggResponse>(e));
         }
 
-        public Task<IEnumerable<Egg>> GetAllEggsByClutchIdAsync(object clutchId)
+        public async Task<IEnumerable<EggResponse>> GetAllEggsByClutchIdAsync(object clutchId)
         {
-            throw new NotImplementedException();
+            var eggs = await _eggRepository.GetAllEggsByClutchIdAsync(clutchId);
+            return eggs.Select(e => _mapper.Map<EggResponse>(e));
         }
 
-        public Task<Egg?> GetEggByBirdIdAsync(object birdId)
+        public async Task<EggResponse?> GetEggByBirdIdAsync(object birdId)
         {
-            throw new NotImplementedException();
+            var egg = await _eggRepository.GetByIdAsync(birdId);
+            return _mapper.Map<EggResponse>(egg);
         }
 
-        public Task<Egg?> GetEggByIdAsync(object checkListId)
+        public async Task<EggResponse?> GetEggByIdAsync(object eggId)
         {
-            throw new NotImplementedException();
+            var egg = await _eggRepository.GetByIdAsync(eggId);
+            return _mapper.Map<EggResponse>(egg);
         }
 
         public void UpdateEgg(Egg egg)

@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.ResponseModels
 {
-    public class ClutchResponse
+    public class BirdSpeciesResponse
     {
+        public Guid BirdSpeciesId { get; set; }
+        public string? BirdSpeciesName { get; set; }
     }
 }

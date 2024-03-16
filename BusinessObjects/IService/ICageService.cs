@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace BusinessObjects.IService
         void UpdateCage(Cage cage);
         void DeleteCage(Cage cage);
         void DeleteCageById(object cageId);
-        Task<IEnumerable<Cage>> GetAllCagesAsync();
-        Task<Cage?> GetCageByIdAsync(object cageId);
+        Task<IEnumerable<CageResponse>> GetAllCagesAsync();
+        Task<CageDetailResponse?> GetCageByIdAsync(object cageId);
     }
 }

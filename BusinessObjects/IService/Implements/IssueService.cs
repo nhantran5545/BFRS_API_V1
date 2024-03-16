@@ -1,4 +1,5 @@
-﻿using DataAccess.IRepositories;
+﻿using AutoMapper;
+using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,11 @@ namespace BusinessObjects.IService.Implements
     public class IssueService : IIssueService
     {
         private readonly IIssueRepository _issueRepository;
-
-        public IssueService(IIssueRepository issueRepository)
+        private readonly IMapper _mapper;
+        public IssueService(IIssueRepository issueRepository, IMapper mapper)
         {
             _issueRepository = issueRepository;
+            _mapper = mapper;
         }
 
         public Task CreateIssueAsync(Issue issue)

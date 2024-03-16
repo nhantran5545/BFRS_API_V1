@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace BusinessObjects.IService
         void UpdateClutch(Clutch clutch);
         void DeleteClutch(Clutch clutch);
         void DeleteClutchtById(object clutchId);
-        Task<IEnumerable<Clutch>> GetAllClutchsAsync();
-        Task<IEnumerable<Clutch>> GetAllClutchsByBreedingId(object breedingId);
-        Task<IEnumerable<Clutch>> GetAllClutchsByCreatedById(object CreatedById);
-        Task<Clutch?> GetClutchByIdAsync(object clutchId);
+        Task<IEnumerable<ClutchResponse>> GetAllClutchsAsync();
+        Task<IEnumerable<ClutchResponse>> GetAllClutchsByBreedingId(object breedingId);
+        Task<IEnumerable<ClutchResponse>> GetAllClutchsByCreatedById(object CreatedById);
+        Task<ClutchDetailResponse?> GetClutchByIdAsync(object clutchId);
     }
 }

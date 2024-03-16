@@ -1,4 +1,6 @@
-﻿using DataAccess.IRepositories;
+﻿using AutoMapper;
+using BusinessObjects.ResponseModels;
+using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +13,12 @@ namespace BusinessObjects.IService.Implements
     public class BirdSpeciesService : IBirdSpeciesService
     {
         private readonly IBirdSpeciesRepository _birdSpeciesRepository;
+        private readonly IMapper _mapper;
 
-        public BirdSpeciesService(IBirdSpeciesRepository birdSpeciesRepository)
+        public BirdSpeciesService(IBirdSpeciesRepository birdSpeciesRepository, IMapper mapper)
         {
             _birdSpeciesRepository = birdSpeciesRepository;
+            _mapper = mapper;
         }
 
         public async Task CreateBirdSpeciesAsync(BirdSpecy birdSpecy)
@@ -28,14 +32,16 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<BirdSpecy>> GetBirdSpeciesAsync()
+        public async Task<IEnumerable<BirdSpeciesResponse>> GetBirdSpeciesAsync()
         {
-            return await _birdSpeciesRepository.GetAllAsync();
+            var birdSpecies = await _birdSpeciesRepository.GetAllAsync();
+            return birdSpecies.Select(bs => _mapper.Map<BirdSpeciesResponse>(bs));
         }
 
-        public async Task<BirdSpecy?> GetBirdSpeciesByIdAsync(object BirdSpecyId)
+        public async Task<BirdSpeciesDetailResponse?> GetBirdSpeciesByIdAsync(object BirdSpecyId)
         {
-            return await _birdSpeciesRepository.GetByIdAsync(BirdSpecyId);
+            var birdSpecies = await _birdSpeciesRepository.GetByIdAsync(BirdSpecyId);
+            return _mapper.Map<BirdSpeciesDetailResponse>(birdSpecies);
         }
 
         public void UpdateBirdSpecies(BirdSpecy birdSpecy)

@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,9 @@ namespace BusinessObjects.IService
         void UpdateEgg(Egg egg);
         void DeleteEgg(Egg egg);
         void DeleteEggById(object eggId);
-        Task<IEnumerable<Egg>> GetAllEggsAsync();
-        Task<IEnumerable<Egg>> GetAllEggsByClutchIdAsync(object clutchId);
-        Task<Egg?> GetEggByIdAsync(object eggId);
-        Task<Egg?> GetEggByBirdIdAsync(object birdId);
+        Task<IEnumerable<EggResponse>> GetAllEggsAsync();
+        Task<IEnumerable<EggResponse>> GetAllEggsByClutchIdAsync(object clutchId);
+        Task<EggResponse?> GetEggByIdAsync(object eggId);
+        Task<EggResponse?> GetEggByBirdIdAsync(object birdId);
     }
 }

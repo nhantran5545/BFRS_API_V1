@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.ResponseModels
 {
-    internal class EggResponse
+    public class EggResponse
     {
     }
 }

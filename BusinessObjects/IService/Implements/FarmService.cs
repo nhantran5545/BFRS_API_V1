@@ -1,4 +1,5 @@
-﻿using DataAccess.IRepositories;
+﻿using AutoMapper;
+using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace BusinessObjects.IService.Implements
     public class FarmService : IFarmService
     {
         private readonly IFarmRepository _farmRepository;
+        private readonly IMapper _mapper;
 
-        public FarmService(IFarmRepository farmRepository)
+        public FarmService(IFarmRepository farmRepository, IMapper mapper)
         {
             _farmRepository = farmRepository;
+            _mapper = mapper;
         }
 
         public async Task CreateFarmAsync(Farm farm)

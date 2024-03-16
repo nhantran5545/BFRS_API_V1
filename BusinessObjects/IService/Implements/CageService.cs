@@ -1,4 +1,6 @@
-﻿using DataAccess.IRepositories;
+﻿using AutoMapper;
+using BusinessObjects.ResponseModels;
+using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +13,11 @@ namespace BusinessObjects.IService.Implements
     public class CageService : ICageService
     {
         private readonly ICageRepository _cageRepository;
-
-        public CageService(ICageRepository cageRepository)
+        private readonly IMapper _mapper;
+        public CageService(ICageRepository cageRepository, IMapper mapper)
         {
             _cageRepository = cageRepository;
+            _mapper = mapper;
         }
 
         public async Task CreateCageAsync(Cage cage)
@@ -33,14 +36,16 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Cage>> GetAllCagesAsync()
+        public async Task<IEnumerable<CageResponse>> GetAllCagesAsync()
         {
-            return _cageRepository.GetAllAsync();
+            var cages = await _cageRepository.GetAllAsync();
+            return cages.Select(c => _mapper.Map<CageResponse>(c));
         }
 
-        public Task<Cage?> GetCageByIdAsync(object cageId)
+        public async Task<CageDetailResponse?> GetCageByIdAsync(object cageId)
         {
-            return _cageRepository.GetByIdAsync(cageId);
+            var cage = await _cageRepository.GetByIdAsync(cageId);
+            return _mapper.Map<CageDetailResponse>(cage);
         }
 
         public void UpdateCage(Cage cage)

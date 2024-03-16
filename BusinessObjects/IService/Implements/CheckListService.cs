@@ -1,4 +1,5 @@
-﻿using DataAccess.IRepositories;
+﻿using AutoMapper;
+using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace BusinessObjects.IService.Implements
     public class CheckListService : ICheckListService
     {
         private readonly ICheckListRepository _checkListRepository;
+        private readonly IMapper _mapper;
 
-        public CheckListService(ICheckListRepository checkListRepository)
+        public CheckListService(ICheckListRepository checkListRepository, IMapper mapper)
         {
             _checkListRepository = checkListRepository;
+            _mapper = mapper;
         }
 
         public async Task CreateCheckListAsync(CheckList checkList)

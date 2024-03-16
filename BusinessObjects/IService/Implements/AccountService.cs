@@ -1,4 +1,5 @@
-﻿using DataAccess.IRepositories;
+﻿using AutoMapper;
+using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace BusinessObjects.IService.Implements
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
+        private readonly IMapper _mapper;
 
         public AccountService(IAccountRepository accountRepository)
         {

@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface IBreedingRepository : IGenericRepository<Breeding>
     {
+        Task<IEnumerable<Breeding>> GetAllBreedingsByManagerId(object managerId);
     }
 }
