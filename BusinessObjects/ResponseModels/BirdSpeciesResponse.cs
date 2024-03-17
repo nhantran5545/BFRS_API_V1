@@ -10,5 +10,7 @@ namespace BusinessObjects.ResponseModels
     {
         public Guid BirdSpeciesId { get; set; }
         public string? BirdSpeciesName { get; set; }
+        public Guid? BirdTypeId { get; set; }
+        public string? BirdTypeName { get; set; }
     }
 }

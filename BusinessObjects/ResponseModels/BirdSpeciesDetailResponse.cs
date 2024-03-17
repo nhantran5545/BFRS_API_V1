@@ -12,6 +12,7 @@ namespace BusinessObjects.ResponseModels
         public string? BirdSpeciesName { get; set; }
         public string? Description { get; set; }
         public Guid? BirdTypeId { get; set; }
+        public string? BirdTypeName { get; set; }
         public int? HatchingPhaseFrom { get; set; }
         public int? HatchingPhaseTo { get; set; }
         public int? NestlingPhaseFrom { get; set; }
