@@ -15,12 +15,12 @@ namespace DataAccess.Models
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid CageId { get; set; }
+        public int CageId { get; set; }
         public DateTime? ManufacturedDate { get; set; }
         public string? ManufacturedAt { get; set; }
         public DateTime? PurchasedDate { get; set; }
-        public Guid? AreaId { get; set; }
-        public Guid? AccountId { get; set; }
+        public int? AreaId { get; set; }
+        public int? AccountId { get; set; }
         public string? Status { get; set; }
 
         public virtual Account? Account { get; set; }

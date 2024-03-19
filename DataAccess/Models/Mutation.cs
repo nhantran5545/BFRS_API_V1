@@ -14,7 +14,7 @@ namespace DataAccess.Models
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid MutationId { get; set; }
+        public int MutationId { get; set; }
         public string? MutationName { get; set; }
         public string? Status { get; set; }
 

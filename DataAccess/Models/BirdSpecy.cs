@@ -16,10 +16,10 @@ namespace DataAccess.Models
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid BirdSpeciesId { get; set; }
+        public int BirdSpeciesId { get; set; }
         public string? BirdSpeciesName { get; set; }
         public string? Description { get; set; }
-        public Guid? BirdTypeId { get; set; }
+        public int? BirdTypeId { get; set; }
         public int? HatchingPhaseFrom { get; set; }
         public int? HatchingPhaseTo { get; set; }
         public int? NestlingPhaseFrom { get; set; }

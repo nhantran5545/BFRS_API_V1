@@ -13,10 +13,10 @@ namespace DataAccess.Models
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid AreaId { get; set; }
+        public int AreaId { get; set; }
         public string? AreaName { get; set; }
         public string? Description { get; set; }
-        public Guid? FarmId { get; set; }
+        public int? FarmId { get; set; }
         public string? Status { get; set; }
 
         public virtual Farm? Farm { get; set; }

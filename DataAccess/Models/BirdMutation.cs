@@ -5,8 +5,8 @@ namespace DataAccess.Models
 {
     public partial class BirdMutation
     {
-        public Guid BirdId { get; set; }
-        public Guid MutationId { get; set; }
+        public int BirdId { get; set; }
+        public int MutationId { get; set; }
         public string? Status { get; set; }
 
         public virtual Bird Bird { get; set; } = null!;

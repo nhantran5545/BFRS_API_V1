@@ -8,8 +8,8 @@ namespace DataAccess.Models
     public partial class BreedingNorm
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid BreedingNormId { get; set; }
-        public Guid? BirdSpeciesId { get; set; }
+        public int BreedingNormId { get; set; }
+        public int? BirdSpeciesId { get; set; }
         public DateTime? BreedingStartMonth { get; set; }
         public DateTime? BreedingEndMonth { get; set; }
         public string? WeatherFeatures { get; set; }
