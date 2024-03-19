@@ -21,7 +21,7 @@ builder.Services.AddCors();
 
 //DbContext
 builder.Services.AddDbContext<BFRS_dbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("LaundryDB")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("BFRSDB")));
 
 //Repositories
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));

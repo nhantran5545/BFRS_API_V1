@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
     public partial class BreedingNorm
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid BreedingNormId { get; set; }
         public Guid? BirdSpeciesId { get; set; }
         public DateTime? BreedingStartMonth { get; set; }

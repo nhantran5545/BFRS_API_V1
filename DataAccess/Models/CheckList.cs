@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
@@ -10,6 +12,7 @@ namespace DataAccess.Models
             CheckListDetails = new HashSet<CheckListDetail>();
         }
 
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid CheckListId { get; set; }
         public string? DurationName { get; set; }
         public string? CheckListName { get; set; }

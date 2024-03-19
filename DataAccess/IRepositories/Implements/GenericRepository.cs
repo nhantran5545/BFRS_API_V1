@@ -56,6 +56,7 @@ namespace DataAccess.IRepositories.Implements
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return -1;
             }
         }

@@ -23,6 +23,22 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Bird>> GetAllBirdsBySpeciesId(object SpeciesId)
+        {
+            return await _context.Birds
+                .Include(b => b.BirdSpecies)
+                .Include(b => b.Farm)
+                .Where(b => b.BirdSpeciesId.Equals(SpeciesId))
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Bird>> GetAllInRestBirdsBySpeciesId(object SpeciesId)
+        {
+            return await _context.Birds
+                .Where(b => b.BirdSpeciesId.Equals(SpeciesId))
+                .ToListAsync();
+        }
+
         public override async Task<Bird?> GetByIdAsync(object id)
         {
             return await _context.Birds

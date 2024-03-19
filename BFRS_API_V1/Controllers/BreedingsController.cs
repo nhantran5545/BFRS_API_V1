@@ -103,10 +103,12 @@ namespace BFRS_API_V1.Controllers
         [HttpPost]
         public async Task<ActionResult<Breeding>> PostBreeding(BreedingAddRequest breeding)
         {
-            await _breedingService.CreateBreeding(breeding);
-
-            //return CreatedAtAction("GetBreeding", new { id = breeding.BreedingId }, breeding);
-            return CreatedAtAction("GetBreeding", new { id = 0 }, breeding);
+            var result = await _breedingService.CreateBreeding(breeding);
+            if(result.Item1 == -1)
+            {
+                return BadRequest("Something is wrong with the server, please try again!");
+            }
+            return CreatedAtAction("GetBreeding", new { id = result.Item2 }, breeding);
         }
 
         // DELETE: api/Breedings/5
