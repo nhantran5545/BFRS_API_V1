@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -45,6 +46,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Breedings
         [HttpGet]
+        [EnableQuery]
         public async Task<ActionResult<IEnumerable<Breeding>>> GetBreedings()
         {
             var breedings = await _breedingService.GetAllBreedings();
@@ -57,6 +59,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Breedings/5
         [HttpGet("{id}")]
+        [EnableQuery]
         public async Task<ActionResult<Breeding>> GetBreeding(Guid id)
         {
             var breeding = await _breedingService.GetBreedingById(id);

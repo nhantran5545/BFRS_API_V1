@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -24,6 +25,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/BirdSpecies
         [HttpGet]
+        [EnableQuery]
         public async Task<ActionResult<IEnumerable<BirdSpeciesResponse>>> GetBirdSpecies()
         {
             var birdSpecies = await _birdSpeciesService.GetBirdSpeciesAsync();
@@ -36,6 +38,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/BirdSpecies/5
         [HttpGet("{id}")]
+        [EnableQuery]
         public async Task<ActionResult<BirdSpeciesResponse>> GetBirdSpecy(Guid id)
         {
             var birdspecy = await _birdSpeciesService.GetBirdSpeciesByIdAsync(id);

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -24,6 +25,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Birds
         [HttpGet]
+        [EnableQuery]
         public async Task<ActionResult<IEnumerable<Bird>>> GetAllBirds()
         {
             var birds = await _birdService.GetAllBirdsAsync();
@@ -35,6 +37,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("InFarm")]
+        [EnableQuery]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsByFarmId(int FarmId)
         {
             var birds = await _birdService.GetBirdsByFarmId(FarmId);
@@ -46,9 +49,10 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("BySpeciesAndFarm")]
+        [EnableQuery]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsBySpeciesIdAndFarmId([FromBody]int SpeciesId, int FarmId)
         {
-            var birds = await _birdService.GetInReproductionBirdsBySpeciesIdAndFarmId(SpeciesId, FarmId);
+            var birds = await _birdService.GetInRestBirdsBySpeciesIdAndFarmId(SpeciesId, FarmId);
             if (birds == null)
             {
                 return NotFound("There are no birds");
@@ -58,6 +62,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Birds/5
         [HttpGet("{id}")]
+        [EnableQuery]
         public async Task<ActionResult<Bird>> GetBird(int id)
         {
             var bird = await _birdService.GetBirdByIdAsync(id);

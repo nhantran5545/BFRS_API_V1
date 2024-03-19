@@ -32,11 +32,11 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Bird>> GetInReproductionBirdsBySpeciesIdAndFarmId(object SpeciesId, object FarmId)
+        public async Task<IEnumerable<Bird>> GetInRestBirdsBySpeciesIdAndFarmId(object SpeciesId, object FarmId)
         {
             return await _context.Birds
                 .Where(b => b.BirdSpeciesId.Equals(SpeciesId) && b.FarmId.Equals(FarmId) 
-                            && b.Status != null && b.Status.Equals("InReproductionPeriod"))
+                            && b.Status != null && b.Status.Equals("InRestPeriod"))
                 .ToListAsync();
         }
 

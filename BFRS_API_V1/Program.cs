@@ -5,12 +5,15 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects.IService;
 using BusinessObjects.IService.Implements;
 using AutoMapper;
+using Microsoft.AspNetCore.OData;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddControllers().AddOData(options =>
+                options.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
