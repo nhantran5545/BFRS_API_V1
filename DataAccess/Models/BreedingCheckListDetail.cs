@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
     public partial class BreedingCheckListDetail
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid BreedingCheckListDetailId { get; set; }
         public Guid? BreedingId { get; set; }
         public Guid? CheckListDetailId { get; set; }

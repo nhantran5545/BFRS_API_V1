@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
@@ -11,6 +13,7 @@ namespace DataAccess.Models
             Birds = new HashSet<Bird>();
         }
 
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid FarmId { get; set; }
         public string? FarmName { get; set; }
         public string? Address { get; set; }

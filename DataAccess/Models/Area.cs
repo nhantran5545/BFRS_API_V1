@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
@@ -10,6 +12,7 @@ namespace DataAccess.Models
             Cages = new HashSet<Cage>();
         }
 
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid AreaId { get; set; }
         public string? AreaName { get; set; }
         public string? Description { get; set; }

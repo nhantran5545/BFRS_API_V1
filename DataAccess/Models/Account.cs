@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
@@ -22,6 +24,7 @@ namespace DataAccess.Models
             IssueUpdatedByNavigations = new HashSet<Issue>();
         }
 
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid AccountId { get; set; }
         public string? Username { get; set; }
         public string? Password { get; set; }
