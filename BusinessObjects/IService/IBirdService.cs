@@ -17,7 +17,7 @@ namespace BusinessObjects.IService
         void DeleteBirdById(object birdId);
         Task<IEnumerable<BirdResponse>> GetAllBirdsAsync();
         Task<IEnumerable<BirdResponse>> GetBirdsByFarmId(object farmId);
-        Task<IEnumerable<BirdResponse>> GetInReproductionBirdsBySpeciesIdAndFarmId(object speciesId, object farmId);
+        Task<IEnumerable<BirdResponse>> GetInRestBirdsBySpeciesIdAndFarmId(object speciesId, object farmId);
         Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId);
     }
 }

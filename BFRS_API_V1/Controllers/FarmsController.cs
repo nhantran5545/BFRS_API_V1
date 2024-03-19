@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using BusinessObjects.IService;
+using Microsoft.AspNetCore.OData.Query;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -23,6 +24,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Farms
         [HttpGet]
+        [EnableQuery]
         public async Task<ActionResult<IEnumerable<Farm>>> GetFarms()
         {
             var farm = await _farmService.GetAllFarmsAsync();
@@ -36,6 +38,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Farms/5
         [HttpGet("{id}")]
+        [EnableQuery]
         public async Task<ActionResult<Farm>> GetFarm(Guid id)
         {
             var farm = await _farmService.GetFarmByIdAsync(id);

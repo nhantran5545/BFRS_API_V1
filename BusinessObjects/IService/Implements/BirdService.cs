@@ -61,9 +61,9 @@ namespace BusinessObjects.IService.Implements
             return _mapper.Map<BirdDetailResponse?>(bird);
         }
 
-        public async Task<IEnumerable<BirdResponse>> GetInReproductionBirdsBySpeciesIdAndFarmId(object speciesId, object farmId)
+        public async Task<IEnumerable<BirdResponse>> GetInRestBirdsBySpeciesIdAndFarmId(object speciesId, object farmId)
         {
-            var birds = await _birdRepository.GetInReproductionBirdsBySpeciesIdAndFarmId(speciesId, farmId);
+            var birds = await _birdRepository.GetInRestBirdsBySpeciesIdAndFarmId(speciesId, farmId);
             return birds.Select(b => _mapper.Map<BirdResponse>(b));
         }
 
