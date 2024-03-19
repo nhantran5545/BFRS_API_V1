@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using BusinessObjects.IService;
+using BusinessObjects.ResponseModels;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -33,10 +34,21 @@ namespace BFRS_API_V1.Controllers
             return Ok(birds);
         }
 
-        [HttpGet("Farm")]
-        public async Task<ActionResult<IEnumerable<Bird>>> GetAllBirdsByFarmId(Guid FarmId)
+        [HttpGet("InFarm")]
+        public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsByFarmId(int FarmId)
         {
-            var birds = await _birdService.GetAllBirdsByFarmId(FarmId);
+            var birds = await _birdService.GetBirdsByFarmId(FarmId);
+            if (birds == null)
+            {
+                return NotFound("There are no birds");
+            }
+            return Ok(birds);
+        }
+
+        [HttpGet("BySpeciesAndFarm")]
+        public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsBySpeciesIdAndFarmId([FromBody]int SpeciesId, int FarmId)
+        {
+            var birds = await _birdService.GetInReproductionBirdsBySpeciesIdAndFarmId(SpeciesId, FarmId);
             if (birds == null)
             {
                 return NotFound("There are no birds");
@@ -46,7 +58,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Birds/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Bird>> GetBird(Guid id)
+        public async Task<ActionResult<Bird>> GetBird(int id)
         {
             var bird = await _birdService.GetBirdByIdAsync(id);
             if (bird == null)
@@ -59,7 +71,7 @@ namespace BFRS_API_V1.Controllers
         // PUT: api/Birds/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBird(Guid id, Bird bird)
+        public async Task<IActionResult> PutBird(int id, Bird bird)
         {
             /*if (id != bird.BirdId)
             {
@@ -98,7 +110,7 @@ namespace BFRS_API_V1.Controllers
 
         // DELETE: api/Birds/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBird(Guid id)
+        public async Task<IActionResult> DeleteBird(int id)
         {
 
             return NoContent();

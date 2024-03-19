@@ -24,14 +24,14 @@ namespace BusinessObjects.IService.Implements
             _mapper = mapper;
         }
 
-        public async Task<double> CalculateInbreedingPercentage(Guid fatherBirdId, Guid motherBirdId)
+        public async Task<double> CalculateInbreedingPercentage(int fatherBirdId, int motherBirdId)
         {
             var birdAlgorithmService = new BirdAlgorithmService(_birdRepository);
             var InbreedingPercentage = await birdAlgorithmService.GetInbreedingCoefficientOfParentsAsync(fatherBirdId, motherBirdId);
             return InbreedingPercentage;
         }
 
-        public async Task<(int, Guid?)> CreateBreeding(BreedingAddRequest breedingRequest)
+        public async Task<(int, int?)> CreateBreeding(BreedingAddRequest breedingRequest)
         {
             var breeding = _mapper.Map<Breeding>(breedingRequest);
             await _breedingRepository.AddAsync(breeding);

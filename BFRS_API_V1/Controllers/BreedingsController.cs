@@ -25,7 +25,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("InbreedingCoefficient")]
-        public async Task<IActionResult> GetInbreedingCoefficientPercentage(Guid fatherBirdId, Guid motherBirdId)
+        public async Task<IActionResult> GetInbreedingCoefficientPercentage(int fatherBirdId, int motherBirdId)
         {
             var fatherBird = await _birdService.GetBirdByIdAsync(fatherBirdId);
             if (fatherBird == null || fatherBird.Gender != "Male")

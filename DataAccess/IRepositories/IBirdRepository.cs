@@ -9,8 +9,8 @@ namespace DataAccess.IRepositories
 {
     public interface IBirdRepository : IGenericRepository<Bird>
     {
-        Task<IEnumerable<Bird>> GetAllBirdsByFarmId(object farmId);
-        Task<IEnumerable<Bird>> GetAllBirdsBySpeciesId(object SpeciesId);
-        Task<IEnumerable<Bird>> GetAllInRestBirdsBySpeciesId(object SpeciesId);
+        Task<IEnumerable<Bird>> GetBirdsByFarmId(object farmId);
+        Task<IEnumerable<Bird>> GetBirdsBySpeciesId(object SpeciesId);
+        Task<IEnumerable<Bird>> GetInReproductionBirdsBySpeciesIdAndFarmId(object SpeciesId, object FarmId);
     }
 }
