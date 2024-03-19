@@ -24,21 +24,21 @@ namespace BusinessObjects.IService.Implements
             _birdRepository = birdRepository;
         }
 
-        public async Task<Dictionary<string, object>> GetPedigree(Guid birdId)
+        public async Task<Dictionary<string, object>> GetPedigree(int birdId)
         {
             pedigree.Clear();
             await TrackAncestorsAsync("", birdId);
             return pedigree;
         }
 
-        public async Task<double> GetInbreedingCoefficientAsync(Guid birdId)
+        public async Task<double> GetInbreedingCoefficientAsync(int birdId)
         {
             await GetPedigree(birdId);
             var InbreedingCoefficientPercentage = DoCalculation();
             return InbreedingCoefficientPercentage;
         }
 
-        public async Task<double> GetInbreedingCoefficientOfParentsAsync(Guid fatherBirdId, Guid motherBirdId)
+        public async Task<double> GetInbreedingCoefficientOfParentsAsync(int fatherBirdId, int motherBirdId)
         {
             pedigree.Clear();
             await TrackAncestorsAsync("s", fatherBirdId);
@@ -47,7 +47,7 @@ namespace BusinessObjects.IService.Implements
             return InbreedingCoefficientPercentage;
         }
 
-        private async Task TrackAncestorsAsync(string ancestor, Guid birdId)
+        private async Task TrackAncestorsAsync(string ancestor, int birdId)
         {
             Bird? bird = await _birdRepository.GetByIdAsync(birdId);
 
@@ -57,14 +57,14 @@ namespace BusinessObjects.IService.Implements
             if (bird.FatherBirdId != null)
             {
                 string fatherAncestor = ancestor + "s";
-                Guid FatherBirdId = bird.FatherBirdId.Value;
+                int FatherBirdId = bird.FatherBirdId.Value;
                 await TrackAncestorsAsync(fatherAncestor, FatherBirdId);
             }
 
             if (bird.MotherBirdId != null)
             {
                 string motherAncestor = ancestor + "d";
-                Guid MotherBirdId = bird.MotherBirdId.Value;
+                int MotherBirdId = bird.MotherBirdId.Value;
                 await TrackAncestorsAsync(motherAncestor, MotherBirdId);
             }
 

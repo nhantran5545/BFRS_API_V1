@@ -54,28 +54,6 @@ namespace BFRS_API_V1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAccount(Guid id, Account account)
         {
-            if (id != account.AccountId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(account).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AccountExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return NoContent();
         }
@@ -85,26 +63,6 @@ namespace BFRS_API_V1.Controllers
         [HttpPost]
         public async Task<ActionResult<Account>> PostAccount(Account account)
         {
-          if (_context.Accounts == null)
-          {
-              return Problem("Entity set 'BFRS_dbContext.Accounts'  is null.");
-          }
-            _context.Accounts.Add(account);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (AccountExists(account.AccountId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return CreatedAtAction("GetAccount", new { id = account.AccountId }, account);
         }
@@ -127,11 +85,6 @@ namespace BFRS_API_V1.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool AccountExists(Guid id)
-        {
-            return (_context.Accounts?.Any(e => e.AccountId == id)).GetValueOrDefault();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
-        public async Task<IEnumerable<Bird>> GetAllBirdsByFarmId(object farmId)
+        public async Task<IEnumerable<Bird>> GetBirdsByFarmId(object farmId)
         {
             return await _context.Birds
                 .Include(b => b.BirdSpecies)
@@ -23,7 +23,7 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Bird>> GetAllBirdsBySpeciesId(object SpeciesId)
+        public async Task<IEnumerable<Bird>> GetBirdsBySpeciesId(object SpeciesId)
         {
             return await _context.Birds
                 .Include(b => b.BirdSpecies)
@@ -32,10 +32,11 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Bird>> GetAllInRestBirdsBySpeciesId(object SpeciesId)
+        public async Task<IEnumerable<Bird>> GetInReproductionBirdsBySpeciesIdAndFarmId(object SpeciesId, object FarmId)
         {
             return await _context.Birds
-                .Where(b => b.BirdSpeciesId.Equals(SpeciesId))
+                .Where(b => b.BirdSpeciesId.Equals(SpeciesId) && b.FarmId.Equals(FarmId) 
+                            && b.Status != null && b.Status.Equals("InReproductionPeriod"))
                 .ToListAsync();
         }
 
