@@ -8,16 +8,16 @@ namespace DataAccess.Models
     public partial class Issue
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid IssueId { get; set; }
+        public int IssueId { get; set; }
         public string? IssueName { get; set; }
-        public Guid? BreedingId { get; set; }
+        public int? BreedingId { get; set; }
         public string? Description { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public Guid? CreatedBy { get; set; }
-        public Guid? AssignedTo { get; set; }
+        public int? CreatedBy { get; set; }
+        public int? AssignedTo { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        public Guid? UpdatedBy { get; set; }
-        public Guid? IssueTypeId { get; set; }
+        public int? UpdatedBy { get; set; }
+        public int? IssueTypeId { get; set; }
         public string? Status { get; set; }
 
         public virtual Account? AssignedToNavigation { get; set; }

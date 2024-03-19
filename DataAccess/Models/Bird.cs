@@ -18,16 +18,16 @@ namespace DataAccess.Models
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid BirdId { get; set; }
+        public int BirdId { get; set; }
         public string? Gender { get; set; }
         public DateTime? HatchedDate { get; set; }
         public string? PurchaseFrom { get; set; }
         public DateTime? AcquisitionDate { get; set; }
-        public Guid? BirdSpeciesId { get; set; }
-        public Guid? CageId { get; set; }
-        public Guid? FarmId { get; set; }
-        public Guid? FatherBirdId { get; set; }
-        public Guid? MotherBirdId { get; set; }
+        public int? BirdSpeciesId { get; set; }
+        public int? CageId { get; set; }
+        public int? FarmId { get; set; }
+        public int? FatherBirdId { get; set; }
+        public int? MotherBirdId { get; set; }
         public int? BandNumber { get; set; }
         public string? Image { get; set; }
         public string? LifeStage { get; set; }

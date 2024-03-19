@@ -44,7 +44,7 @@ namespace DataAccess.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=BFRS_db;Persist Security Info=True;User ID=sa;Password=123456");
+                optionsBuilder.UseSqlServer("Server=(local);Database=BFRS_db;Trusted_Connection=True;uid=sa;password=123456");
             }
         }
 
@@ -53,8 +53,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.ToTable("Account");
-
-                entity.Property(e => e.AccountId).ValueGeneratedNever();
 
                 entity.Property(e => e.Address).HasMaxLength(255);
 
@@ -81,8 +79,6 @@ namespace DataAccess.Models
             {
                 entity.ToTable("Area");
 
-                entity.Property(e => e.AreaId).ValueGeneratedNever();
-
                 entity.Property(e => e.AreaName).HasMaxLength(255);
 
                 entity.Property(e => e.Description).HasMaxLength(255);
@@ -98,8 +94,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<Bird>(entity =>
             {
                 entity.ToTable("Bird");
-
-                entity.Property(e => e.BirdId).ValueGeneratedNever();
 
                 entity.Property(e => e.AcquisitionDate).HasColumnType("date");
 
@@ -169,9 +163,7 @@ namespace DataAccess.Models
             modelBuilder.Entity<BirdSpecy>(entity =>
             {
                 entity.HasKey(e => e.BirdSpeciesId)
-                    .HasName("PK__BirdSpec__D9DA595F795A9562");
-
-                entity.Property(e => e.BirdSpeciesId).ValueGeneratedNever();
+                    .HasName("PK__BirdSpec__D9DA595F3082182C");
 
                 entity.Property(e => e.BirdSpeciesName).HasMaxLength(255);
 
@@ -189,8 +181,6 @@ namespace DataAccess.Models
             {
                 entity.ToTable("BirdType");
 
-                entity.Property(e => e.BirdTypeId).ValueGeneratedNever();
-
                 entity.Property(e => e.BirdTypeName).HasMaxLength(255);
 
                 entity.Property(e => e.Description).HasMaxLength(255);
@@ -203,8 +193,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<Breeding>(entity =>
             {
                 entity.ToTable("Breeding");
-
-                entity.Property(e => e.BreedingId).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedDate).HasColumnType("date");
 
@@ -244,8 +232,6 @@ namespace DataAccess.Models
             {
                 entity.ToTable("BreedingCheckListDetail");
 
-                entity.Property(e => e.BreedingCheckListDetailId).ValueGeneratedNever();
-
                 entity.Property(e => e.CheckDate).HasColumnType("date");
 
                 entity.Property(e => e.Status).HasMaxLength(50);
@@ -264,8 +250,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<BreedingNorm>(entity =>
             {
                 entity.ToTable("BreedingNorm");
-
-                entity.Property(e => e.BreedingNormId).ValueGeneratedNever();
 
                 entity.Property(e => e.BreedingEndMonth).HasColumnType("date");
 
@@ -287,8 +271,6 @@ namespace DataAccess.Models
             {
                 entity.ToTable("BreedingReason");
 
-                entity.Property(e => e.BreedingReasonId).ValueGeneratedNever();
-
                 entity.Property(e => e.CreatedDate).HasColumnType("date");
 
                 entity.Property(e => e.Description).HasMaxLength(255);
@@ -309,8 +291,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<Cage>(entity =>
             {
                 entity.ToTable("Cage");
-
-                entity.Property(e => e.CageId).ValueGeneratedNever();
 
                 entity.Property(e => e.ManufacturedAt).HasMaxLength(255);
 
@@ -335,8 +315,6 @@ namespace DataAccess.Models
             {
                 entity.ToTable("CheckList");
 
-                entity.Property(e => e.CheckListId).ValueGeneratedNever();
-
                 entity.Property(e => e.CheckListName).HasMaxLength(255);
 
                 entity.Property(e => e.DurationName).HasMaxLength(255);
@@ -353,8 +331,6 @@ namespace DataAccess.Models
             {
                 entity.ToTable("CheckListDetail");
 
-                entity.Property(e => e.CheckListDetailId).ValueGeneratedNever();
-
                 entity.Property(e => e.Frequency).HasMaxLength(255);
 
                 entity.Property(e => e.QuestionName).HasMaxLength(255);
@@ -370,8 +346,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<Clutch>(entity =>
             {
                 entity.ToTable("Clutch");
-
-                entity.Property(e => e.ClutchId).ValueGeneratedNever();
 
                 entity.Property(e => e.BroodEndDate).HasColumnType("date");
 
@@ -408,8 +382,6 @@ namespace DataAccess.Models
             {
                 entity.ToTable("ClutchReason");
 
-                entity.Property(e => e.ClutchReasonId).ValueGeneratedNever();
-
                 entity.Property(e => e.CreatedDate).HasColumnType("date");
 
                 entity.Property(e => e.Description).HasMaxLength(255);
@@ -430,8 +402,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<Egg>(entity =>
             {
                 entity.ToTable("Egg");
-
-                entity.Property(e => e.EggId).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedDate).HasColumnType("date");
 
@@ -484,8 +454,6 @@ namespace DataAccess.Models
             {
                 entity.ToTable("EggReason");
 
-                entity.Property(e => e.EggReasonId).ValueGeneratedNever();
-
                 entity.Property(e => e.CreatedDate).HasColumnType("date");
 
                 entity.Property(e => e.Description).HasMaxLength(255);
@@ -507,8 +475,6 @@ namespace DataAccess.Models
             {
                 entity.ToTable("Farm");
 
-                entity.Property(e => e.FarmId).ValueGeneratedNever();
-
                 entity.Property(e => e.Address).HasMaxLength(255);
 
                 entity.Property(e => e.Description).HasMaxLength(255);
@@ -527,8 +493,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<Issue>(entity =>
             {
                 entity.ToTable("Issue");
-
-                entity.Property(e => e.IssueId).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedDate).HasColumnType("date");
 
@@ -570,8 +534,6 @@ namespace DataAccess.Models
             {
                 entity.ToTable("IssueType");
 
-                entity.Property(e => e.IssueTypeId).ValueGeneratedNever();
-
                 entity.Property(e => e.Description).HasMaxLength(255);
 
                 entity.Property(e => e.IssueName).HasMaxLength(255);
@@ -582,8 +544,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<Mutation>(entity =>
             {
                 entity.ToTable("Mutation");
-
-                entity.Property(e => e.MutationId).ValueGeneratedNever();
 
                 entity.Property(e => e.MutationName).HasMaxLength(255);
 

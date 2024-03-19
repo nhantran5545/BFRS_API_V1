@@ -5,8 +5,8 @@ namespace DataAccess.Models
 {
     public partial class EggBird
     {
-        public Guid EggId { get; set; }
-        public Guid BirdId { get; set; }
+        public int EggId { get; set; }
+        public int BirdId { get; set; }
         public string? Status { get; set; }
 
         public virtual Bird Bird { get; set; } = null!;

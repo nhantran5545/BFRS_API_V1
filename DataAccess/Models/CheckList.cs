@@ -13,10 +13,10 @@ namespace DataAccess.Models
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid CheckListId { get; set; }
+        public int CheckListId { get; set; }
         public string? DurationName { get; set; }
         public string? CheckListName { get; set; }
-        public Guid? SpeciesId { get; set; }
+        public int? SpeciesId { get; set; }
         public string? Status { get; set; }
 
         public virtual BirdSpecy? Species { get; set; }

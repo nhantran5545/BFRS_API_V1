@@ -13,8 +13,8 @@ namespace DataAccess.Models
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid CheckListDetailId { get; set; }
-        public Guid? CheckListId { get; set; }
+        public int CheckListDetailId { get; set; }
+        public int? CheckListId { get; set; }
         public string? QuestionName { get; set; }
         public string? Frequency { get; set; }
         public string? Status { get; set; }

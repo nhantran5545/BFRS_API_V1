@@ -8,11 +8,11 @@ namespace DataAccess.Models
     public partial class EggReason
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid EggReasonId { get; set; }
-        public Guid? EggId { get; set; }
+        public int EggReasonId { get; set; }
+        public int? EggId { get; set; }
         public string? Description { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public Guid? CreatedBy { get; set; }
+        public int? CreatedBy { get; set; }
         public string? Status { get; set; }
 
         public virtual Account? CreatedByNavigation { get; set; }

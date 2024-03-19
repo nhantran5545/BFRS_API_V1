@@ -14,7 +14,7 @@ namespace DataAccess.Models
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid FarmId { get; set; }
+        public int FarmId { get; set; }
         public string? FarmName { get; set; }
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }

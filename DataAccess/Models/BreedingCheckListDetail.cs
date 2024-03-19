@@ -8,9 +8,9 @@ namespace DataAccess.Models
     public partial class BreedingCheckListDetail
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid BreedingCheckListDetailId { get; set; }
-        public Guid? BreedingId { get; set; }
-        public Guid? CheckListDetailId { get; set; }
+        public int BreedingCheckListDetailId { get; set; }
+        public int? BreedingId { get; set; }
+        public int? CheckListDetailId { get; set; }
         public DateTime? CheckDate { get; set; }
         public int? CheckValue { get; set; }
         public bool? Compulsory { get; set; }

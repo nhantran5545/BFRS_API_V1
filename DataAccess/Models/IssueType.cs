@@ -13,7 +13,7 @@ namespace DataAccess.Models
         }
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid IssueTypeId { get; set; }
+        public int IssueTypeId { get; set; }
         public string? IssueName { get; set; }
         public string? Description { get; set; }
         public string? Status { get; set; }
