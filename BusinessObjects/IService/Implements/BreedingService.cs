@@ -38,6 +38,7 @@ namespace BusinessObjects.IService.Implements
             {
                 return -1;
             }
+            breeding.Status = "Openned";
             await _breedingRepository.AddAsync(breeding);
             var result = _breedingRepository.SaveChanges();
             if(result < 1)

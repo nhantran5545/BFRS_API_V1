@@ -14,6 +14,13 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
+        public override async Task<Breeding?> GetByIdAsync(object id)
+        {
+            return await _context.Breedings
+                .Where(br => br.BreedingId.Equals(id))
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<Breeding>> GetAllBreedingsByManagerId(object managerId)
         {
             return await _context.Breedings

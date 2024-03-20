@@ -1,4 +1,5 @@
-﻿using BusinessObjects.ResponseModels;
+﻿using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,12 @@ namespace BusinessObjects.IService
 {
     public interface IEggService
     {
-        Task CreateEggAsync(Egg egg);
+        Task<int> CreateEggAsync(EggAddRequest eggAddRequest);
         void UpdateEgg(Egg egg);
         void DeleteEgg(Egg egg);
         void DeleteEggById(object eggId);
         Task<IEnumerable<EggResponse>> GetAllEggsAsync();
-        Task<IEnumerable<EggResponse>> GetAllEggsByClutchIdAsync(object clutchId);
+        Task<IEnumerable<EggResponse>> GetEggsByClutchIdAsync(object clutchId);
         Task<EggResponse?> GetEggByIdAsync(object eggId);
         Task<EggResponse?> GetEggByBirdIdAsync(object birdId);
     }

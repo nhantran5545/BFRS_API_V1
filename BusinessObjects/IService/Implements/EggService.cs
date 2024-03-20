@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
 using DataAccess.Models;
@@ -21,9 +22,21 @@ namespace BusinessObjects.IService.Implements
             _mapper = mapper;
         }
 
-        public async Task CreateEggAsync(Egg egg)
+        public async Task<int> CreateEggAsync(EggAddRequest eggAddRequest)
         {
+            var egg = _mapper.Map<Egg>(eggAddRequest);
+            if(egg == null)
+            {
+                return -1;
+            }
+            egg.CreatedDate = DateTime.Now;
             await _eggRepository.AddAsync(egg);
+            var result = _eggRepository.SaveChanges();
+            if(result < 1)
+            {
+                return result;
+            }
+            return egg.EggId;
         }
 
         public void DeleteEgg(CheckList checkList)
@@ -47,9 +60,9 @@ namespace BusinessObjects.IService.Implements
             return eggs.Select(e => _mapper.Map<EggResponse>(e));
         }
 
-        public async Task<IEnumerable<EggResponse>> GetAllEggsByClutchIdAsync(object clutchId)
+        public async Task<IEnumerable<EggResponse>> GetEggsByClutchIdAsync(object clutchId)
         {
-            var eggs = await _eggRepository.GetAllEggsByClutchIdAsync(clutchId);
+            var eggs = await _eggRepository.GetEggsByClutchIdAsync(clutchId);
             return eggs.Select(e => _mapper.Map<EggResponse>(e));
         }
 

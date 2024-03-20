@@ -9,6 +9,7 @@ using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
 using Microsoft.AspNetCore.OData.Query;
+using BusinessObjects.ResponseModels;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -44,67 +45,45 @@ namespace BFRS_API_V1.Controllers
             return Ok(percentage);
         }
 
-        // GET: api/Breedings
         [HttpGet]
         [EnableQuery]
-        public async Task<ActionResult<IEnumerable<Breeding>>> GetBreedings()
+        public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedings()
         {
             var breedings = await _breedingService.GetAllBreedings();
-            if(breedings != null)
+            if(breedings == null)
             {
-                return Ok(breedings);
+                return NotFound("There are no breeding!");
             }
-            return NotFound("There are no breeding!");
+            return Ok(breedings); 
         }
 
-        // GET: api/Breedings/5
         [HttpGet("{id}")]
         [EnableQuery]
-        public async Task<ActionResult<Breeding>> GetBreeding(Guid id)
+        public async Task<ActionResult<BreedingResponse>> GetBreeding(int id)
         {
             var breeding = await _breedingService.GetBreedingById(id);
-            if(breeding != null)
+            if(breeding == null)
             {
-                return Ok(breeding);
+                return NotFound("Breeding not found");
             }
-            return NotFound("Breeding not found");
+            return Ok(breeding);
         }
 
-        // PUT: api/Breedings/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBreeding(Guid id, Breeding breeding)
+        public async Task<IActionResult> PutBirdsTogether(int breedingId, int staffId)
         {
-            /*if (id != breeding.BreedingId)
+            var breeding = await _breedingService.GetBreedingById(breedingId);
+            if (breeding == null)
             {
-                return BadRequest();
+                return NotFound("Breeding not found");
             }
-
-            _context.Entry(breeding).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BreedingExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }*/
-
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/Breedings
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Breeding>> PostBreeding(BreedingAddRequest breeding)
+        public async Task<ActionResult<Breeding>> OpenBreeding(BreedingAddRequest breeding)
         {
             var result = await _breedingService.CreateBreeding(breeding);
             if(result < 1)

@@ -14,7 +14,7 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
-        public async Task<IEnumerable<Egg>> GetAllEggsByClutchIdAsync(object clutchId)
+        public async Task<IEnumerable<Egg>> GetEggsByClutchIdAsync(object clutchId)
         {
             return await _context.Eggs
                 .Where(e => e.ClutchId.Equals(clutchId))

@@ -40,7 +40,11 @@ namespace BusinessObjects.Mapper
             #endregion
 
             #region Mapper_Request
+            CreateMap<BirdAddRequest, Bird>()
+                .ReverseMap();
             CreateMap<BreedingAddRequest, Breeding>()
+                .ReverseMap();
+            CreateMap<ClutchAddRequest, Clutch>()
                 .ReverseMap();
             #endregion
         }
