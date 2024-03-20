@@ -31,16 +31,20 @@ namespace BusinessObjects.IService.Implements
             return InbreedingPercentage;
         }
 
-        public async Task<(int, int?)> CreateBreeding(BreedingAddRequest breedingRequest)
+        public async Task<int> CreateBreeding(BreedingAddRequest breedingAddRequest)
         {
-            var breeding = _mapper.Map<Breeding>(breedingRequest);
+            var breeding = _mapper.Map<Breeding>(breedingAddRequest);
+            if(breeding == null)
+            {
+                return -1;
+            }
             await _breedingRepository.AddAsync(breeding);
             var result = _breedingRepository.SaveChanges();
-            if(result == -1)
+            if(result < 1)
             {
-                return (result, null);
+                return result;
             }
-            return (result, breeding.BreedingId);
+            return breeding.BreedingId;
         }
 
         public void DeleteBreeding(BreedingAddRequest breeding)

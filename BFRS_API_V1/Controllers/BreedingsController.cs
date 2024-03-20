@@ -107,11 +107,11 @@ namespace BFRS_API_V1.Controllers
         public async Task<ActionResult<Breeding>> PostBreeding(BreedingAddRequest breeding)
         {
             var result = await _breedingService.CreateBreeding(breeding);
-            if(result.Item1 == -1)
+            if(result < 1)
             {
                 return BadRequest("Something is wrong with the server, please try again!");
             }
-            return CreatedAtAction("GetBreeding", new { id = result.Item2 }, breeding);
+            return CreatedAtAction("GetBreeding", new { id = result }, breeding);
         }
 
         // DELETE: api/Breedings/5

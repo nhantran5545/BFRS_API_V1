@@ -14,7 +14,7 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
-        public async Task<IEnumerable<Clutch>> GetAllClutchsByBreedingId(object breedingId)
+        public async Task<IEnumerable<Clutch>> GetClutchsByBreedingId(object breedingId)
         {
             return await _context.Clutches
                 .Include(c => c.Breeding)
@@ -24,7 +24,7 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Clutch>> GetAllClutchsByCreatedById(object createdById)
+        public async Task<IEnumerable<Clutch>> GetClutchsByCreatedById(object createdById)
         {
             return await _context.Clutches
                 .Include(c => c.Breeding)

@@ -30,7 +30,12 @@ namespace BusinessObjects.IService.Implements
                 return -1;
             }
             await _birdRepository.AddAsync(bird);
-            return _birdRepository.SaveChanges();
+            var result = _birdRepository.SaveChanges();
+            if(result < 1)
+            {
+                return result;
+            }
+            return bird.BirdId;
         }
 
         public void DeleteBird(Bird bird)

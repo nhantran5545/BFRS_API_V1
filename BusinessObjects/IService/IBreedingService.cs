@@ -12,7 +12,7 @@ namespace BusinessObjects.IService
     public interface IBreedingService
     {
         Task<double> CalculateInbreedingPercentage(int fatherBirdId, int motherBirdId);
-        Task<(int, int?)> CreateBreeding(BreedingAddRequest breeding);
+        Task<int> CreateBreeding(BreedingAddRequest breedingAddRequest);
         void UpdateBreeding(BreedingAddRequest breeding);
         void DeleteBreeding(BreedingAddRequest breeding);
         void DeleteBreedingById(object breedingId);
