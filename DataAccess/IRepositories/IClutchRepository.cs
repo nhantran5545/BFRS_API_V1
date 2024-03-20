@@ -9,7 +9,7 @@ namespace DataAccess.IRepositories
 {
     public interface IClutchRepository : IGenericRepository<Clutch>
     {
-        Task<IEnumerable<Clutch>> GetAllClutchsByBreedingId(object breedingId);
-        Task<IEnumerable<Clutch>> GetAllClutchsByCreatedById(object createdById);
+        Task<IEnumerable<Clutch>> GetClutchsByBreedingId(object breedingId);
+        Task<IEnumerable<Clutch>> GetClutchsByCreatedById(object createdById);
     }
 }

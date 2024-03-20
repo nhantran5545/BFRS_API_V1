@@ -1,4 +1,5 @@
-﻿using BusinessObjects.ResponseModels;
+﻿using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,13 @@ namespace BusinessObjects.IService
 {
     public interface IClutchService
     {
-        Task CreateClutchAsync(Clutch clutch);
+        Task<int> CreateClutchAsync(ClutchAddRequest clutchAddRequest);
         void UpdateClutch(Clutch clutch);
         void DeleteClutch(Clutch clutch);
         void DeleteClutchtById(object clutchId);
         Task<IEnumerable<ClutchResponse>> GetAllClutchsAsync();
-        Task<IEnumerable<ClutchResponse>> GetAllClutchsByBreedingId(object breedingId);
-        Task<IEnumerable<ClutchResponse>> GetAllClutchsByCreatedById(object CreatedById);
+        Task<IEnumerable<ClutchResponse>> GetClutchsByBreedingId(object breedingId);
+        Task<IEnumerable<ClutchResponse>> GetClutchsByCreatedById(object CreatedById);
         Task<ClutchDetailResponse?> GetClutchByIdAsync(object clutchId);
     }
 }

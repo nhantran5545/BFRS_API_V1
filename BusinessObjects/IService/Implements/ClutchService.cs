@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
 using DataAccess.Models;
@@ -21,10 +22,21 @@ namespace BusinessObjects.IService.Implements
             _mapper = mapper;
         }
 
-        public async Task CreateClutchAsync(Clutch clutch)
+        public async Task<int> CreateClutchAsync(ClutchAddRequest clutchAddRequest)
         {
+            var clutch = _mapper.Map<Clutch>(clutchAddRequest);
+            if(clutch == null)
+            {
+                return -1;
+            }
+            clutch.CreatedDate = DateTime.Now;
             await _clutchRepository.AddAsync(clutch);
-            _clutchRepository.SaveChanges();
+            var result = _clutchRepository.SaveChanges();
+            if(result < 1)
+            {
+                return result;
+            }
+            return clutch.ClutchId;
         }
 
         public void DeleteClutch(Clutch clutch)
@@ -43,15 +55,15 @@ namespace BusinessObjects.IService.Implements
             return clutchs.Select(c => _mapper.Map<ClutchResponse>(c));
         }
 
-        public async Task<IEnumerable<ClutchResponse>> GetAllClutchsByBreedingId(object breedingId)
+        public async Task<IEnumerable<ClutchResponse>> GetClutchsByBreedingId(object breedingId)
         {
-            var clutchs = await _clutchRepository.GetAllClutchsByBreedingId(breedingId);
+            var clutchs = await _clutchRepository.GetClutchsByBreedingId(breedingId);
             return clutchs.Select(c => _mapper.Map<ClutchResponse>(c));
         }
 
-        public async Task<IEnumerable<ClutchResponse>> GetAllClutchsByCreatedById(object CreatedById)
+        public async Task<IEnumerable<ClutchResponse>> GetClutchsByCreatedById(object CreatedById)
         {
-            var clutchs = await _clutchRepository.GetAllClutchsByCreatedById(CreatedById);
+            var clutchs = await _clutchRepository.GetClutchsByCreatedById(CreatedById);
             return clutchs.Select(c => _mapper.Map<ClutchResponse>(c));
         }
 
