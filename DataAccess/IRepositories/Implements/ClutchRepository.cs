@@ -14,6 +14,16 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
+        public override async Task<Clutch?> GetByIdAsync(object id)
+        {
+            return await _context.Clutches
+               .Include(c => c.Breeding)
+               .Include(c => c.Cage)
+               .Include(c => c.Eggs)
+               .Where(c => c.ClutchId.Equals(id))
+               .FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<Clutch>> GetClutchsByBreedingId(object breedingId)
         {
             return await _context.Clutches
