@@ -23,6 +23,7 @@ namespace DataAccess.Models
         public virtual DbSet<BirdSpecy> BirdSpecies { get; set; } = null!;
         public virtual DbSet<BirdType> BirdTypes { get; set; } = null!;
         public virtual DbSet<Breeding> Breedings { get; set; } = null!;
+        public virtual DbSet<BreedingCheckList> BreedingCheckLists { get; set; } = null!;
         public virtual DbSet<BreedingCheckListDetail> BreedingCheckListDetails { get; set; } = null!;
         public virtual DbSet<BreedingNorm> BreedingNorms { get; set; } = null!;
         public virtual DbSet<BreedingReason> BreedingReasons { get; set; } = null!;
@@ -163,7 +164,7 @@ namespace DataAccess.Models
             modelBuilder.Entity<BirdSpecy>(entity =>
             {
                 entity.HasKey(e => e.BirdSpeciesId)
-                    .HasName("PK__BirdSpec__D9DA595F3082182C");
+                    .HasName("PK__BirdSpec__D9DA595F439456F6");
 
                 entity.Property(e => e.BirdSpeciesName).HasMaxLength(255);
 
@@ -198,7 +199,7 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.NextCheck).HasColumnType("date");
 
-                entity.Property(e => e.Status).HasMaxLength(1);
+                entity.Property(e => e.Status).HasMaxLength(50);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("date");
 
@@ -228,18 +229,45 @@ namespace DataAccess.Models
                     .HasConstraintName("FK_UpdatedByBreeding");
             });
 
-            modelBuilder.Entity<BreedingCheckListDetail>(entity =>
+            modelBuilder.Entity<BreedingCheckList>(entity =>
             {
-                entity.ToTable("BreedingCheckListDetail");
+                entity.ToTable("BreedingCheckList");
 
-                entity.Property(e => e.CheckDate).HasColumnType("date");
+                entity.Property(e => e.CreateDate).HasColumnType("date");
 
                 entity.Property(e => e.Status).HasMaxLength(50);
 
                 entity.HasOne(d => d.Breeding)
-                    .WithMany(p => p.BreedingCheckListDetails)
+                    .WithMany(p => p.BreedingCheckLists)
                     .HasForeignKey(d => d.BreedingId)
-                    .HasConstraintName("FK_BreedingBreedingCheckListDetail");
+                    .HasConstraintName("FK_BreedingBreedingCheckList");
+
+                entity.HasOne(d => d.CheckList)
+                    .WithMany(p => p.BreedingCheckLists)
+                    .HasForeignKey(d => d.CheckListId)
+                    .HasConstraintName("FK_CheckListBreedingCheckList");
+
+                entity.HasOne(d => d.Clutch)
+                    .WithMany(p => p.BreedingCheckLists)
+                    .HasForeignKey(d => d.ClutchId)
+                    .HasConstraintName("FK_ClutchBreedingCheckList");
+
+                entity.HasOne(d => d.Egg)
+                    .WithMany(p => p.BreedingCheckLists)
+                    .HasForeignKey(d => d.EggId)
+                    .HasConstraintName("FK_EggBreedingCheckList");
+            });
+
+            modelBuilder.Entity<BreedingCheckListDetail>(entity =>
+            {
+                entity.ToTable("BreedingCheckListDetail");
+
+                entity.Property(e => e.Status).HasMaxLength(50);
+
+                entity.HasOne(d => d.BreedingCheckList)
+                    .WithMany(p => p.BreedingCheckListDetails)
+                    .HasForeignKey(d => d.BreedingCheckListId)
+                    .HasConstraintName("FK_BreedingCheckListBreedingCheckListDetail");
 
                 entity.HasOne(d => d.CheckListDetail)
                     .WithMany(p => p.BreedingCheckListDetails)
@@ -317,8 +345,6 @@ namespace DataAccess.Models
 
                 entity.Property(e => e.CheckListName).HasMaxLength(255);
 
-                entity.Property(e => e.DurationName).HasMaxLength(255);
-
                 entity.Property(e => e.Status).HasMaxLength(50);
 
                 entity.HasOne(d => d.Species)
@@ -330,8 +356,6 @@ namespace DataAccess.Models
             modelBuilder.Entity<CheckListDetail>(entity =>
             {
                 entity.ToTable("CheckListDetail");
-
-                entity.Property(e => e.Frequency).HasMaxLength(255);
 
                 entity.Property(e => e.QuestionName).HasMaxLength(255);
 

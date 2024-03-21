@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
     public partial class ClutchReason
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ClutchReasonId { get; set; }
         public int? ClutchId { get; set; }
         public string? Description { get; set; }

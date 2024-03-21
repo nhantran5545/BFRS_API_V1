@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
     public partial class Issue
     {
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IssueId { get; set; }
         public string? IssueName { get; set; }
         public int? BreedingId { get; set; }

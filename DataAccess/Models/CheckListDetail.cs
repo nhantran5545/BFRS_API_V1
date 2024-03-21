@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
@@ -12,11 +10,12 @@ namespace DataAccess.Models
             BreedingCheckListDetails = new HashSet<BreedingCheckListDetail>();
         }
 
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CheckListDetailId { get; set; }
         public int? CheckListId { get; set; }
         public string? QuestionName { get; set; }
-        public string? Frequency { get; set; }
+        public bool? Compulsory { get; set; }
+        public bool? Positive { get; set; }
+        public int? Priority { get; set; }
         public string? Status { get; set; }
 
         public virtual CheckList? CheckList { get; set; }

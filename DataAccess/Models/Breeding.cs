@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 
 namespace DataAccess.Models
 {
@@ -9,13 +7,12 @@ namespace DataAccess.Models
     {
         public Breeding()
         {
-            BreedingCheckListDetails = new HashSet<BreedingCheckListDetail>();
+            BreedingCheckLists = new HashSet<BreedingCheckList>();
             BreedingReasons = new HashSet<BreedingReason>();
             Clutches = new HashSet<Clutch>();
             Issues = new HashSet<Issue>();
         }
 
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BreedingId { get; set; }
         public int? FatherBirdId { get; set; }
         public int? MotherBirdId { get; set; }
@@ -33,7 +30,7 @@ namespace DataAccess.Models
         public virtual Bird? FatherBird { get; set; }
         public virtual Bird? MotherBird { get; set; }
         public virtual Account? UpdatedByNavigation { get; set; }
-        public virtual ICollection<BreedingCheckListDetail> BreedingCheckListDetails { get; set; }
+        public virtual ICollection<BreedingCheckList> BreedingCheckLists { get; set; }
         public virtual ICollection<BreedingReason> BreedingReasons { get; set; }
         public virtual ICollection<Clutch> Clutches { get; set; }
         public virtual ICollection<Issue> Issues { get; set; }
