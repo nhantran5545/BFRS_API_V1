@@ -8,5 +8,7 @@ namespace BusinessObjects.RequestModels
 {
     public class BreedingUpdateRequest
     {
+        public int BreedingId { get; set; }
+        public int StaffId { get; set; }
     }
 }
