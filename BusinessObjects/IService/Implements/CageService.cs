@@ -13,10 +13,12 @@ namespace BusinessObjects.IService.Implements
     public class CageService : ICageService
     {
         private readonly ICageRepository _cageRepository;
+        private readonly IBirdRepository _birdRepository;
         private readonly IMapper _mapper;
-        public CageService(ICageRepository cageRepository, IMapper mapper)
+        public CageService(ICageRepository cageRepository, IBirdRepository birdRepository, IMapper mapper)
         {
             _cageRepository = cageRepository;
+            _birdRepository = birdRepository;
             _mapper = mapper;
         }
 
@@ -46,6 +48,31 @@ namespace BusinessObjects.IService.Implements
         {
             var cage = await _cageRepository.GetByIdAsync(cageId);
             return _mapper.Map<CageDetailResponse>(cage);
+        }
+
+        public async Task<IEnumerable<CageResponse>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId)
+        {
+            List<Cage> cages = new List<Cage>();
+            var fatherBird = await _birdRepository.GetByIdAsync(fatherBirdId);
+            if (fatherBird != null && fatherBird.CageId != null)
+            {
+                var fatherCage = await _cageRepository.GetByIdAsync(fatherBird.CageId);
+                if(fatherCage != null)
+                    cages.Add(fatherCage);
+            }
+            var motherBird = await _birdRepository.GetByIdAsync(motherBirdId);
+            if (motherBird != null && motherBird.CageId != null)
+            {
+                var motherCage = await _cageRepository.GetByIdAsync(motherBird.CageId);
+                if (motherCage != null)
+                    cages.Add(motherCage);
+            }
+            var emptyCages = await _cageRepository.GetEmptyCagesByFarmId(farmId);
+            if(emptyCages.Any())
+            {
+                cages.AddRange(emptyCages);
+            }
+            return cages.Select(c => _mapper.Map<CageResponse>(c));
         }
 
         public void UpdateCage(Cage cage)

@@ -15,6 +15,7 @@ namespace BusinessObjects.IService
         void DeleteCage(Cage cage);
         void DeleteCageById(object cageId);
         Task<IEnumerable<CageResponse>> GetAllCagesAsync();
+        Task<IEnumerable<CageResponse>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId);
         Task<CageDetailResponse?> GetCageByIdAsync(object cageId);
     }
 }
