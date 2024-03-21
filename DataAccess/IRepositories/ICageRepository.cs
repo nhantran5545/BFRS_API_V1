@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface ICageRepository : IGenericRepository<Cage>
     {
+        Task<IEnumerable<Cage>> GetEmptyCagesByFarmId(int farmId);
     }
 }
