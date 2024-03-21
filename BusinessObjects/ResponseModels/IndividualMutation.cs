@@ -8,7 +8,7 @@ namespace BusinessObjects.ResponseModels
 {
     public class IndividualMutation
     {
-        public Guid MutationId { get; set; }
+        public int MutationId { get; set; }
         public string? MutationName { get; set; }
     }
 }

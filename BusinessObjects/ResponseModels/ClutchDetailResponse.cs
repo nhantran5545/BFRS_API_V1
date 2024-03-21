@@ -8,17 +8,17 @@ namespace BusinessObjects.ResponseModels
 {
     public class ClutchDetailResponse
     {
-        public Guid ClutchId { get; set; }
-        public Guid? BreedingId { get; set; }
+        public int ClutchId { get; set; }
+        public int BreedingId { get; set; }
         public DateTime? BroodStartDate { get; set; }
         public DateTime? BroodEndDate { get; set; }
-        public Guid? CageId { get; set; }
+        public int CageId { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public Guid? CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
         public string? CreatedByFirstName { get; set; }
         public string? CreatedByLastName { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        public Guid? UpdatedBy { get; set; }
+        public int? UpdatedBy { get; set; }
         public string? UpdatedByFirstName { get; set; }
         public string? UpdatedByLastName { get; set; }
         public string? Status { get; set; }

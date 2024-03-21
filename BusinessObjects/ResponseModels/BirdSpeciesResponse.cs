@@ -8,9 +8,9 @@ namespace BusinessObjects.ResponseModels
 {
     public class BirdSpeciesResponse
     {
-        public Guid BirdSpeciesId { get; set; }
+        public int BirdSpeciesId { get; set; }
         public string? BirdSpeciesName { get; set; }
-        public Guid? BirdTypeId { get; set; }
+        public int BirdTypeId { get; set; }
         public string? BirdTypeName { get; set; }
     }
 }

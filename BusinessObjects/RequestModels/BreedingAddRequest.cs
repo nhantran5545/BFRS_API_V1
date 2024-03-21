@@ -8,8 +8,8 @@ namespace BusinessObjects.RequestModels
 {
     public class BreedingAddRequest
     {
-        public Guid? FatherBirdId { get; set; }
-        public Guid? MotherBirdId { get; set; }
-        public Guid? CageId { get; set; }
+        public int FatherBirdId { get; set; }
+        public int MotherBirdId { get; set; }
+        public int CageId { get; set; }
     }
 }

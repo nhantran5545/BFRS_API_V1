@@ -19,11 +19,13 @@ namespace BFRS_API_V1.Controllers
     {
         private readonly IBreedingService _breedingService;
         private readonly IBirdService _birdService;
+        private readonly ICageService _cageService;
 
-        public BreedingsController(IBreedingService breedingService, IBirdService birdService)
+        public BreedingsController(IBreedingService breedingService, IBirdService birdService, ICageService cageService)
         {
             _breedingService = breedingService;
             _birdService = birdService;
+            _cageService = cageService;
         }
 
         [HttpGet("InbreedingCoefficient")]
@@ -70,12 +72,18 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBirdsTogether(int breedingId, int staffId)
+        public async Task<IActionResult> PutBirdsTogether(BreedingUpdateRequest breedingUpdateRequest)
         {
-            var breeding = await _breedingService.GetBreedingById(breedingId);
+            var breeding = await _breedingService.GetBreedingById(breedingUpdateRequest.BreedingId);
             if (breeding == null)
             {
                 return NotFound("Breeding not found");
+            }
+
+            var cage = await _cageService.GetCageByIdAsync(breeding.CageId);
+            if(cage == null || cage.AccountId != breedingUpdateRequest.StaffId)
+            {
+
             }
             return Ok();
         }

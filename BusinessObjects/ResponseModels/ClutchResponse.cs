@@ -8,11 +8,11 @@ namespace BusinessObjects.ResponseModels
 {
     public class ClutchResponse
     {
-        public Guid ClutchId { get; set; }
-        public Guid? BreedingId { get; set; }
+        public int ClutchId { get; set; }
+        public int BreedingId { get; set; }
         public DateTime? BroodStartDate { get; set; }
         public DateTime? BroodEndDate { get; set; }
-        public Guid? CageId { get; set; }
+        public int CageId { get; set; }
         public string? Status { get; set; }
     }
 }
