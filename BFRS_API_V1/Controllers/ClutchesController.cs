@@ -47,8 +47,6 @@ namespace BFRS_API_V1.Controllers
             return Ok(clutch);
         }
 
-        // PUT: api/Clutches/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutClutch(int id, Clutch clutch)
         {
@@ -59,14 +57,15 @@ namespace BFRS_API_V1.Controllers
         // POST: api/Clutches
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<ClutchResponse>> PostClutch(ClutchAddRequest clutchAddRequest)
+        public async Task<ActionResult<ClutchResponse>> CreateClutch(ClutchAddRequest clutchAddRequest)
         {
             var result = await _clutchService.CreateClutchAsync(clutchAddRequest);
             if (result < 1)
             {
                 return BadRequest("Something is wrong with the server, please try again!");
             }
-            return CreatedAtAction("GetClutch", new { id = result });
+            var clutch = await _clutchService.GetClutchByIdAsync(result);
+            return Ok(clutch);
         }
 
         // DELETE: api/Clutches/5

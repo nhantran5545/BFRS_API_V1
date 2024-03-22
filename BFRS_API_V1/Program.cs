@@ -55,7 +55,7 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBirdService, BirdService>();
 builder.Services.AddScoped<IBirdSpeciesService, BirdSpeciesService>();
 builder.Services.AddScoped<IBreedingService, BreedingService>();
-builder.Services.AddScoped<ICageRepository, CageRepository>();
+builder.Services.AddScoped<ICageService, CageService>();
 builder.Services.AddScoped<ICheckListService, CheckListService>();
 builder.Services.AddScoped<IClutchService, ClutchService>();
 builder.Services.AddScoped<IEggService, EggService>();

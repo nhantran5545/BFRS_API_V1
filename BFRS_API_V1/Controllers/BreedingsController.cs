@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
 using Microsoft.AspNetCore.OData.Query;
@@ -72,14 +71,15 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Breeding>> OpenBreeding(BreedingAddRequest breeding)
+        public async Task<ActionResult<BreedingResponse>> OpenBreeding(BreedingAddRequest breedingAddRequest)
         {
-            var result = await _breedingService.CreateBreeding(breeding);
+            var result = await _breedingService.CreateBreeding(breedingAddRequest);
             if(result < 1)
             {
                 return BadRequest("Something is wrong with the server, please try again!");
             }
-            return CreatedAtAction("GetBreeding", new { id = result }, breeding);
+            var breeding = await _breedingService.GetBreedingById(result);
+            return Ok(breeding);
         }
 
         [HttpPut("PutBirdsTogether")]
