@@ -71,25 +71,6 @@ namespace BFRS_API_V1.Controllers
             return Ok(breeding);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutBirdsTogether(BreedingUpdateRequest breedingUpdateRequest)
-        {
-            var breeding = await _breedingService.GetBreedingById(breedingUpdateRequest.BreedingId);
-            if (breeding == null)
-            {
-                return NotFound("Breeding not found");
-            }
-
-            var cage = await _cageService.GetCageByIdAsync(breeding.CageId);
-            if(cage == null || cage.AccountId != breedingUpdateRequest.StaffId)
-            {
-
-            }
-            return Ok();
-        }
-
-        // POST: api/Breedings
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Breeding>> OpenBreeding(BreedingAddRequest breeding)
         {
@@ -99,6 +80,83 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Something is wrong with the server, please try again!");
             }
             return CreatedAtAction("GetBreeding", new { id = result }, breeding);
+        }
+
+        [HttpPut("PutBirdsTogether")]
+        public async Task<IActionResult> PutBirdsTogether(BreedingUpdateRequest breedingUpdateRequest)
+        {
+            var breeding = await _breedingService.GetBreedingById(breedingUpdateRequest.BreedingId);
+            if (breeding == null)
+            {
+                return NotFound("Breeding not found");
+            }
+
+            var cage = await _cageService.GetCageByIdAsync(breeding.CageId);
+            if (cage == null || cage.AccountId != breedingUpdateRequest.StaffId)
+            {
+                return BadRequest("You are not in charge of this breeding!");
+            }
+
+            if (await _breedingService.PutBirdsToBreeding(breedingUpdateRequest))
+            {
+                return Ok("Update Successfully");
+            }
+            return BadRequest("Something is wrong with the server please try again!");
+        }
+
+        [HttpPut("BreedingInProgress")]
+        public async Task<IActionResult> BreedingInProgress(BreedingUpdateRequest breedingUpdateRequest)
+        {
+            var breeding = await _breedingService.GetBreedingById(breedingUpdateRequest.BreedingId);
+            if (breeding == null)
+            {
+                return NotFound("Breeding not found");
+            }
+
+            var cage = await _cageService.GetCageByIdAsync(breeding.CageId);
+            if (cage == null || cage.AccountId != breedingUpdateRequest.StaffId)
+            {
+                return BadRequest("You are not in charge of this breeding!");
+            }
+
+            if (await _breedingService.BreedingInProgress(breedingUpdateRequest))
+            {
+                return Ok("Update Successfully");
+            }
+            return BadRequest("Something is wrong with the server please try again!");
+        }
+
+        [HttpPut("closeBreeding")]
+        public async Task<IActionResult> CloseBreeding(BreedingCloseRequest breedingCloseRequest)
+        {
+            var breeding = await _breedingService.GetBreedingById(breedingCloseRequest.BreedingId);
+            if (breeding == null)
+            {
+                return NotFound("Breeding not found");
+            }
+
+            if(breeding.CreatedBy != breedingCloseRequest.ManagerId)
+            {
+                return BadRequest("This is not your breeding");
+            }
+
+            var fatherCage = await _cageService.GetCageByIdAsync(breedingCloseRequest.FatherCageId); 
+            if (fatherCage == null || fatherCage.Status == "Maintaining" || fatherCage.Status == "Breeding")
+            {
+                return BadRequest("Father can not move to this cage");
+            }
+
+            var motherCage = await _cageService.GetCageByIdAsync(breedingCloseRequest.MotherCageId);
+            if (motherCage == null || motherCage.Status == "Maintaining" || motherCage.Status == "Breeding")
+            {
+                return BadRequest("Mother can not move to this cage");
+            }
+
+            if (await _breedingService.CloseBreeding(breedingCloseRequest))
+            {
+                return Ok("Update Successfully");
+            }
+            return BadRequest("Something is wrong with the server please try again!");
         }
 
         // DELETE: api/Breedings/5
