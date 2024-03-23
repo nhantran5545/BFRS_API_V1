@@ -1,4 +1,7 @@
-﻿using DataAccess.Models;
+﻿using BusinessObjects.InheritanceClass;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +12,8 @@ namespace BusinessObjects.IService
 {
     public interface IAccountService
     {
-        Task Login(string username, string password);
+        Task<Account?> LoginAsync(AccountLoginRequest account);
+        string CreateToken(int accountId);
         Task CreateAccountAsync(Account account);
         void UpdateAccount(Account account);
         void DeleteAccount(Account account);

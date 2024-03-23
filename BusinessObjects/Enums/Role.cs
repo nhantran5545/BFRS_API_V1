@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.Enums
 {
-    internal enum Role
+    public enum Role
     {
         Admin = 1,
         Manager = 2,
