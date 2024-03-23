@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.ResponseModels
 {
-    internal class AccountResponse
+    public class AccountResponse
     {
+        public string? AccountId { get; set; }
+        public string AccessToken { get; set; }
+        public Enums.Role Role { get; set; }
+
     }
 }
