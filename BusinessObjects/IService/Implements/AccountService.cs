@@ -12,13 +12,15 @@ namespace BusinessObjects.IService.Implements
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IConfiguration _configuration;
+        private readonly IMemoryCache _memoryCache;
 
 
-        public AccountService(IAccountRepository accountRepository, IConfiguration configuration)
+        public AccountService(IAccountRepository accountRepository, IConfiguration configuration, IMemoryCache memoryCache)
         {
             _accountRepository = accountRepository;
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            ProvideToken.Initialize(_configuration);
+            _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
+            ProvideToken.Initialize(_configuration, _memoryCache);
         }
 
 
@@ -48,11 +50,11 @@ namespace BusinessObjects.IService.Implements
             return await _accountRepository.GetAllAsync();
         }
 
-        public string CreateToken(int accountId)
+        public string CreateToken(int accountId, string role)
         {
 
             // Generate token using ProvideToken.Instance
-            return ProvideToken.Instance.GenerateToken(accountId);
+            return ProvideToken.Instance.GenerateToken(accountId, role);
         }
 
 
@@ -67,8 +69,6 @@ namespace BusinessObjects.IService.Implements
             }
             return null; 
         }
-
-
 
 
         public void UpdateAccount(Account account)

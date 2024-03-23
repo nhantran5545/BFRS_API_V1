@@ -13,7 +13,7 @@ namespace BusinessObjects.IService
     public interface IAccountService
     {
         Task<Account?> LoginAsync(AccountLoginRequest account);
-        string CreateToken(int accountId);
+        string CreateToken(int accountId, string role);
         Task CreateAccountAsync(Account account);
         void UpdateAccount(Account account);
         void DeleteAccount(Account account);

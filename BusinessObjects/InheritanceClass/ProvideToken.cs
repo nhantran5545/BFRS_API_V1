@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,25 +11,21 @@ namespace BusinessObjects.InheritanceClass
     public class ProvideToken
     {
         private readonly IConfiguration _configuration;
-
-        // Constructor with IConfiguration injection
-        public ProvideToken(IConfiguration configuration)
+        private readonly IMemoryCache _memoryCache;
+        private static ProvideToken _instance;
+        public static ProvideToken Instance => _instance;
+        private ProvideToken(IConfiguration configuration, IMemoryCache memoryCache)
         {
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _configuration = configuration;
+            _memoryCache = memoryCache;
+        }
+        public static void Initialize(IConfiguration configuration, IMemoryCache memoryCache)
+        {
+            if (_instance == null)
+                _instance = new ProvideToken(configuration, memoryCache);
         }
 
-        // Static method for initializing ProvideToken.Instance
-        public static void Initialize(IConfiguration configuration)
-        {
-            if (Instance == null)
-                Instance = new ProvideToken(configuration);
-        }
-
-        // Static property for accessing ProvideToken.Instance
-        public static ProvideToken Instance { get; private set; }
-
-        // Method for generating token
-        public virtual string GenerateToken(int accountId)
+        public virtual string GenerateToken(int accountId, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var secretKey = _configuration["AppSettings:SecretKey"];
@@ -37,22 +34,26 @@ namespace BusinessObjects.InheritanceClass
                 return "Not Found SecretKey";
             }
             var key = Encoding.ASCII.GetBytes(secretKey);
-
-            // Create token descriptor
+            // Tiếp tục với việc tạo token bằng key
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    // Add necessary claims here (e.g., UserId)
-                    new Claim(ClaimTypes.UserData, accountId.ToString()),
+            // Thêm các claim cần thiết vào đây (ví dụ: UserId)
+            new Claim("AccountId", accountId.ToString()),
+            new Claim(ClaimTypes.Role, role),
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(60), // Token expiration time (e.g., 60 minutes)
+                Expires = DateTime.UtcNow.AddMinutes(10), // Thời gian hiệu lực của token (vd: 30 phút)
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
-            // Create token
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            // Lưu trữ token trong bộ nhớ
+            _memoryCache.Set(accountId.ToString(), tokenString, TimeSpan.FromMinutes(10));
+
+            return tokenString;
         }
     }
-}
+}   
