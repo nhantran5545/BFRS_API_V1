@@ -39,7 +39,7 @@ namespace BFRS_API_V1.Controllers
         // GET: api/BirdSpecies/5
         [HttpGet("{id}")]
         [EnableQuery]
-        public async Task<ActionResult<BirdSpeciesResponse>> GetBirdSpecy(Guid id)
+        public async Task<ActionResult<BirdSpeciesResponse>> GetBirdSpecy(int id)
         {
             var birdspecy = await _birdSpeciesService.GetBirdSpeciesByIdAsync(id);
             if(birdspecy == null)
@@ -52,7 +52,7 @@ namespace BFRS_API_V1.Controllers
         // PUT: api/BirdSpecies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBirdSpecy(Guid id, BirdSpecy birdSpecy)
+        public async Task<IActionResult> PutBirdSpecy(int id, BirdSpecy birdSpecy)
         {
 
             return NoContent();
@@ -69,7 +69,7 @@ namespace BFRS_API_V1.Controllers
 
         // DELETE: api/BirdSpecies/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBirdSpecy(Guid id)
+        public async Task<IActionResult> DeleteBirdSpecy(int id)
         {
 
             return NoContent();

@@ -59,7 +59,7 @@ builder.Services.AddScoped<ICageService, CageService>();
 builder.Services.AddScoped<ICheckListService, CheckListService>();
 builder.Services.AddScoped<IClutchService, ClutchService>();
 builder.Services.AddScoped<IEggService, EggService>();
-builder.Services.AddScoped<IFarmRepository, FarmRepository>();
+builder.Services.AddScoped<IFarmService, FarmService>();
 builder.Services.AddScoped<IIssueService, IssueService>();
 
 // Mapper
@@ -74,11 +74,11 @@ builder.Services.AddSingleton(mapper);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 

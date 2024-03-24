@@ -12,7 +12,7 @@ namespace BusinessObjects.IService
     public interface IEggService
     {
         Task<int> CreateEggAsync(EggAddRequest eggAddRequest);
-        void UpdateEgg(Egg egg);
+        Task<int> UpdateEgg(EggUpdateRequest eggUpdateRequest);
         void DeleteEgg(Egg egg);
         void DeleteEggById(object eggId);
         Task<IEnumerable<EggResponse>> GetAllEggsAsync();

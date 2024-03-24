@@ -10,7 +10,6 @@ namespace BusinessObjects.RequestModels
     {
         public int? BreedingId { get; set; }
         public DateTime? BroodStartDate { get; set; }
-        public int? CageId { get; set; }
         public int? CreatedBy { get; set; }
     }
 }

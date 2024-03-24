@@ -30,6 +30,7 @@ namespace BusinessObjects.IService.Implements
                 return -1;
             }
             egg.CreatedDate = DateTime.Now;
+            egg.Status = eggAddRequest.Status;
             await _eggRepository.AddAsync(egg);
             var result = _eggRepository.SaveChanges();
             if(result < 1)
@@ -78,9 +79,29 @@ namespace BusinessObjects.IService.Implements
             return _mapper.Map<EggResponse>(egg);
         }
 
-        public void UpdateEgg(Egg egg)
+        public async Task<int> UpdateEgg(EggUpdateRequest eggUpdateRequest)
         {
-            throw new NotImplementedException();
+            var egg = await _eggRepository.GetByIdAsync(eggUpdateRequest.EggId);
+            if (egg == null)
+            {
+                return -1;
+            }
+
+            if(eggUpdateRequest.HatchedDate != null)
+            {
+                egg.HatchedDate = eggUpdateRequest.HatchedDate;
+            }
+
+            egg.Status = eggUpdateRequest.Status;
+            egg.UpdatedBy = eggUpdateRequest.UpdatedBy;
+            egg.UpdatedDate = DateTime.Now;
+
+            var result = _eggRepository.SaveChanges();
+            if (result < 1)
+            {
+                return result;
+            }
+            return egg.EggId;
         }
     }
 }

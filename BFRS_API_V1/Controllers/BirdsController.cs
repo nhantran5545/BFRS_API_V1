@@ -50,7 +50,7 @@ namespace BFRS_API_V1.Controllers
 
         [HttpGet("BySpeciesAndFarm")]
         [EnableQuery]
-        public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsBySpeciesIdAndFarmId([FromBody]int SpeciesId, int FarmId)
+        public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsBySpeciesIdAndFarmId(int SpeciesId, int FarmId)
         {
             var birds = await _birdService.GetInRestBirdsBySpeciesIdAndFarmId(SpeciesId, FarmId);
             if (birds == null)

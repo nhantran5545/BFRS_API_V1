@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.RequestModels
 {
-    public class EggAddRequest
+    public class EggUpdateRequest
     {
-        public int? ClutchId { get; set; }
-        public DateTime? LayDate { get; set; }
+        public int EggId { get; set; }
+        public DateTime? HatchedDate { get; set; }
+        public int UpdatedBy { get; set; }
         public string? Status { get; set; }
-        public int? CreatedBy { get; set; }
     }
 }

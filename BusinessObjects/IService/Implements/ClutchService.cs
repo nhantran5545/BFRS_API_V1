@@ -14,12 +14,14 @@ namespace BusinessObjects.IService.Implements
     public class ClutchService : IClutchService
     {
         private readonly IClutchRepository _clutchRepository;
+        private readonly IBreedingService _breedingService;
         private readonly IMapper _mapper;
 
-        public ClutchService(IClutchRepository clutchRepository, IMapper mapper)
+        public ClutchService(IClutchRepository clutchRepository,  IMapper mapper, IBreedingService breedingService)
         {
             _clutchRepository = clutchRepository;
             _mapper = mapper;
+            _breedingService = breedingService;
         }
 
         public async Task<int> CreateClutchAsync(ClutchAddRequest clutchAddRequest)
@@ -29,6 +31,13 @@ namespace BusinessObjects.IService.Implements
             {
                 return -1;
             }
+
+            var breeding = await _breedingService.GetBreedingById(clutchAddRequest.BreedingId);
+            if(breeding == null || breeding.Status != "InProgress")
+            {
+                return -1;
+            }
+            clutch.Status = "Created";
             clutch.CreatedDate = DateTime.Now;
             await _clutchRepository.AddAsync(clutch);
             var result = _clutchRepository.SaveChanges();
