@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessObjects.RequestModels
+namespace BusinessObjects.InheritanceClass
 {
-    public class BirdAddRequest
+    public class JwtAuth
     {
-
+        public string Key { get; set; }
     }
 }

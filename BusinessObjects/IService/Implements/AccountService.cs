@@ -1,23 +1,26 @@
-﻿using AutoMapper;
+﻿using BusinessObjects.InheritanceClass;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
 using DataAccess.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 
 namespace BusinessObjects.IService.Implements
 {
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public AccountService(IAccountRepository accountRepository)
+
+        public AccountService(IAccountRepository accountRepository, IConfiguration configuration)
         {
             _accountRepository = accountRepository;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            ProvideToken.Initialize(_configuration);
         }
+
 
         public async Task CreateAccountAsync(Account account)
         {
@@ -40,15 +43,33 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Account>> GetAllAccountsAsync()
+        public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
-            throw new NotImplementedException();
+            return await _accountRepository.GetAllAsync();
         }
 
-        public Task Login(string username, string password)
+        public string CreateToken(int accountId)
         {
-            throw new NotImplementedException();
+
+            // Generate token using ProvideToken.Instance
+            return ProvideToken.Instance.GenerateToken(accountId);
         }
+
+
+        public async Task<Account?> LoginAsync(AccountLoginRequest account)
+        {
+            IEnumerable<Account> users = await GetAllAccountsAsync();
+            var checkLogin = (from u in users where u.Username == account.Username && u.Password == account.Password select u)
+                            .FirstOrDefault();
+            if (checkLogin != null)
+            {
+                return checkLogin; 
+            }
+            return null; 
+        }
+
+
+
 
         public void UpdateAccount(Account account)
         {

@@ -6,6 +6,9 @@ using BusinessObjects.IService;
 using BusinessObjects.IService.Implements;
 using AutoMapper;
 using Microsoft.AspNetCore.OData;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +28,9 @@ builder.Services.AddCors();
 //DbContext
 builder.Services.AddDbContext<BFRS_dbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("BFRSDB")));
+
+// C?u hình Memory Cache
+builder.Services.AddMemoryCache();
 
 //Repositories
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -71,6 +77,28 @@ var mapperConfig = new MapperConfiguration(mc =>
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
+// Token
+var serect = builder.Configuration["AppSettings:SecretKey"];
+var key = Encoding.ASCII.GetBytes(serect);
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.RequireHttpsMetadata = false;
+    x.SaveToken = true;
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -81,6 +109,8 @@ var app = builder.Build();
 //}
 
 app.UseHttpsRedirection();
+
+app.UseAuthorization();
 
 app.UseAuthorization();
 

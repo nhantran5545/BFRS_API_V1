@@ -9,6 +9,7 @@ using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
 using Microsoft.AspNetCore.OData.Query;
 using BusinessObjects.ResponseModels;
+using AutoMapper;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -19,12 +20,14 @@ namespace BFRS_API_V1.Controllers
         private readonly IBreedingService _breedingService;
         private readonly IBirdService _birdService;
         private readonly ICageService _cageService;
+        private readonly IMapper _mapper;
 
-        public BreedingsController(IBreedingService breedingService, IBirdService birdService, ICageService cageService)
+        public BreedingsController(IBreedingService breedingService, IBirdService birdService, ICageService cageService, IMapper mapper)
         {
             _breedingService = breedingService;
             _birdService = birdService;
             _cageService = cageService;
+            _mapper = mapper;
         }
 
         [HttpGet("InbreedingCoefficient")]
