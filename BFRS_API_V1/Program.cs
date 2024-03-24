@@ -113,7 +113,15 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseAuthorization();
+app.UseCors(builder =>
+{
+    builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    ;
 
+});
 app.MapControllers();
 
 app.Run();

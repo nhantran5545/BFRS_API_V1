@@ -72,53 +72,20 @@ namespace BusinessObjects.IService.Implements
         public async Task<IEnumerable<BreedingResponse>> GetAllBreedings()
         {
             var breedings = await _breedingRepository.GetAllAsync();
-            return breedings.Select(br => new BreedingResponse
-            {
-                BreedingId = br.BreedingId,
-                FatherBirdId = br.FatherBirdId.HasValue ? br.FatherBirdId.Value : 0,
-                MotherBirdId = br.MotherBirdId.HasValue ? br.MotherBirdId.Value : 0,
-                CoupleSeperated = br.CoupleSeperated,
-                CageId = br.CageId.HasValue ? br.CageId.Value : 0,
-                NextCheck = br.NextCheck
-            });
+            return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 
         public async Task<IEnumerable<BreedingResponse>> GetAllBreedingsByManagerId(object managerId)
         {
             var breedings = await _breedingRepository.GetAllBreedingsByManagerId(managerId);
-            return breedings.Select(br => new BreedingResponse
-            {
-                BreedingId = br.BreedingId,
-                FatherBirdId = br.FatherBirdId.HasValue ? br.FatherBirdId.Value : 0,
-                MotherBirdId = br.MotherBirdId.HasValue ? br.MotherBirdId.Value : 0,
-                CoupleSeperated = br.CoupleSeperated,
-                CageId = br.CageId.HasValue ? br.CageId.Value : 0,
-                NextCheck = br.NextCheck
-            });
+            return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 
 
         public async Task<BreedingDetailResponse?> GetBreedingById(object breedingId)
         {
             var breeding = await _breedingRepository.GetByIdAsync(breedingId);
-            if (breeding == null)
-            {
-                return null;
-            }
-
-            return new BreedingDetailResponse
-            {
-                BreedingId = breeding.BreedingId,
-                FatherBirdId = breeding.FatherBirdId.HasValue ? breeding.FatherBirdId.Value : 0,
-                MotherBirdId = breeding.MotherBirdId.HasValue ? breeding.MotherBirdId.Value : 0,
-                CoupleSeperated = breeding.CoupleSeperated,
-                CageId = breeding.CageId.HasValue ? breeding.CageId.Value : 0,
-                NextCheck = breeding.NextCheck,
-                CreatedDate = breeding.CreatedDate,
-                UpdatedDate = breeding.UpdatedDate,
-                UpdatedBy = breeding.UpdatedBy.HasValue ? breeding.UpdatedBy.Value : 0,
-                Status = breeding.Status
-            };
+            return _mapper.Map<BreedingDetailResponse>(breeding);
         }
 
 

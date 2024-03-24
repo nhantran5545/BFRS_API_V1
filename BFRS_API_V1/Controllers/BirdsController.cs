@@ -26,7 +26,7 @@ namespace BFRS_API_V1.Controllers
         // GET: api/Birds
         [HttpGet]
         [EnableQuery]
-        public async Task<ActionResult<IEnumerable<Bird>>> GetAllBirds()
+        public async Task<ActionResult<IEnumerable<BirdResponse>>> GetAllBirds()
         {
             var birds = await _birdService.GetAllBirdsAsync();
             if (birds == null)

@@ -63,7 +63,7 @@ namespace BusinessObjects.IService.Implements
         public async Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId)
         {
             var bird = await _birdRepository.GetByIdAsync(birdId);
-            return _mapper.Map<BirdDetailResponse?>(bird);
+            return _mapper.Map<BirdDetailResponse>(bird);
         }
 
         public async Task<IEnumerable<BirdResponse>> GetInRestBirdsBySpeciesIdAndFarmId(object speciesId, object farmId)
