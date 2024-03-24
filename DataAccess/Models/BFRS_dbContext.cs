@@ -43,10 +43,6 @@ namespace DataAccess.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=(local);Database=BFRS_db;Trusted_Connection=True;uid=sa;password=123456");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
