@@ -14,5 +14,6 @@ namespace BusinessObjects.ResponseModels
         public bool? CoupleSeperated { get; set; }
         public int CageId { get; set; }
         public DateTime? NextCheck { get; set; }
+        public string? Status { get; set; }
     }
 }

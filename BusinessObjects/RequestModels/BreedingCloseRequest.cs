@@ -8,9 +8,9 @@ namespace BusinessObjects.RequestModels
 {
     public class BreedingCloseRequest
     {
-        public int BreedingId;
-        public int ManagerId;
-        public int FatherCageId;
-        public int MotherCageId;
+        public int BreedingId { get; set; }
+        public int ManagerId { get; set; }
+        public int? FatherCageId { get; set; }
+        public int? MotherCageId { get; set; }
     }
 }
