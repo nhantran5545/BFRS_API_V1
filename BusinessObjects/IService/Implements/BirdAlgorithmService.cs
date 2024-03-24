@@ -11,6 +11,7 @@ namespace BusinessObjects.IService.Implements
     internal class BirdAlgorithmService
     {
         private Dictionary<string, object> pedigree = new Dictionary<string, object>();
+        private Dictionary<string, Bird> pedigreeIndividual = new Dictionary<string, Bird>();
         private Dictionary<string, Dictionary<string, object>> ancestors = new Dictionary<string, Dictionary<string, object>>();
         private Dictionary<int, Dictionary<string, object>> generations = new Dictionary<int, Dictionary<string, object>>();
         private Dictionary<string, double> ancestorCache = new Dictionary<string, double>();
@@ -21,16 +22,38 @@ namespace BusinessObjects.IService.Implements
             _birdRepository = birdRepository;
         }
 
-        public async Task<Dictionary<string, object>> GetPedigree(int birdId)
+        public async Task<Dictionary<string, Bird>> GetPedigree(int birdId)
         {
+            await TrackPedigreeAsync("", birdId);
+            return pedigreeIndividual;
+        }
 
-            await TrackAncestorsAsync("", birdId);
-            return pedigree;
+        private async Task TrackPedigreeAsync(string ancestor, int birdId)
+        {
+            Bird? bird = await _birdRepository.GetByIdAsync(birdId);
+
+            if (bird == null) { return; }
+            pedigreeIndividual.Add(ancestor, bird);
+
+            if (bird.FatherBirdId != null)
+            {
+                string fatherAncestor = ancestor + "s";
+                int FatherBirdId = bird.FatherBirdId.Value;
+                await TrackAncestorsAsync(fatherAncestor, FatherBirdId);
+            }
+
+            if (bird.MotherBirdId != null)
+            {
+                string motherAncestor = ancestor + "d";
+                int MotherBirdId = bird.MotherBirdId.Value;
+                await TrackAncestorsAsync(motherAncestor, MotherBirdId);
+            }
+            return;
         }
 
         public async Task<double> GetInbreedingCoefficientAsync(int birdId)
         {
-            await GetPedigree(birdId);
+            await TrackAncestorsAsync("", birdId);
             var InbreedingCoefficientPercentage = DoCalculation();
             return InbreedingCoefficientPercentage;
         }
@@ -49,6 +72,7 @@ namespace BusinessObjects.IService.Implements
 
             if (bird == null) { return; }
             AddInd(ancestor, birdId);
+            pedigreeIndividual.Add(ancestor, bird);
 
             if (bird.FatherBirdId != null)
             {

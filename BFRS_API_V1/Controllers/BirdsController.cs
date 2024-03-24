@@ -28,7 +28,7 @@ namespace BFRS_API_V1.Controllers
         [HttpGet]
         [EnableQuery]
         //[Authorize]
-        public async Task<ActionResult<IEnumerable<Bird>>> GetAllBirds()
+        public async Task<ActionResult<IEnumerable<BirdResponse>>> GetAllBirds()
         {
             var birds = await _birdService.GetAllBirdsAsync();
             if (birds == null || !birds.Any())
@@ -73,6 +73,14 @@ namespace BFRS_API_V1.Controllers
                 return NotFound("Bird not found");
             }
             return Ok(bird);
+        }
+
+        [HttpGet("Pedigree/{id}")]
+        [EnableQuery]
+        public async Task<IActionResult> GetBirdPedigree(int id)
+        {
+            var pedigree = await _birdService.GetPedigreeOfABird(id);
+            return Ok(pedigree);
         }
 
         // PUT: api/Birds/5

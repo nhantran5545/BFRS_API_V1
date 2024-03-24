@@ -76,5 +76,17 @@ namespace BusinessObjects.IService.Implements
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Dictionary<string, BirdPedi>> GetPedigreeOfABird(int birdId)
+        {
+            var birdAlgorithmService = new BirdAlgorithmService(_birdRepository);
+            Dictionary<string, BirdPedi> pairs = new Dictionary<string, BirdPedi>();
+            var pedigree = await birdAlgorithmService.GetPedigree(birdId);
+            foreach (var item in pedigree)
+            {
+                pairs.Add(item.Key, _mapper.Map<BirdPedi>(item.Value));
+            }
+            return pairs;
+        }
     }
 }

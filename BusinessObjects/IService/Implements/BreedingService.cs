@@ -112,7 +112,7 @@ namespace BusinessObjects.IService.Implements
                 try
                 {
                     var breeding = await _breedingRepository.GetByIdAsync(breedingUpdateRequest.BreedingId);
-                    if (breeding == null || breeding.Status != "Openned")
+                    if (breeding == null || breeding.Status != "Opened")
                     {
                         return false;
                     }
