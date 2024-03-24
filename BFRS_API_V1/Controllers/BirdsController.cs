@@ -9,6 +9,7 @@ using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 using Microsoft.AspNetCore.OData.Query;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -26,6 +27,7 @@ namespace BFRS_API_V1.Controllers
         // GET: api/Birds
         [HttpGet]
         [EnableQuery]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Bird>>> GetAllBirds()
         {
             var birds = await _birdService.GetAllBirdsAsync();
