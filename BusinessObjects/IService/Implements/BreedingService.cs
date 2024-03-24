@@ -16,14 +16,16 @@ namespace BusinessObjects.IService.Implements
         private readonly IBreedingRepository _breedingRepository;
         private readonly IBirdRepository _birdRepository;
         private readonly ICageRepository _cageRepository;
+        private readonly IBirdSpeciesRepository _birdSpeciesRepository;
         private readonly IMapper _mapper;
 
         public BreedingService(IBreedingRepository breedingRepository, IBirdRepository birdRepository, 
-            ICageRepository cageRepository, IMapper mapper)
+            ICageRepository cageRepository, IBirdSpeciesRepository birdSpeciesRepository, IMapper mapper)
         {
             _breedingRepository = breedingRepository;
             _birdRepository = birdRepository;
             _cageRepository = cageRepository;
+            _birdSpeciesRepository = birdSpeciesRepository;
             _mapper = mapper;
         }
 
@@ -47,7 +49,7 @@ namespace BusinessObjects.IService.Implements
                 return -1;
             }
             breeding.CoupleSeperated = true;
-            breeding.Status = "Openned";
+            breeding.Status = "Opened";
             breeding.CreatedBy = breedingAddRequest.ManagerId;
             breeding.CreatedDate = DateTime.Now;
             await _breedingRepository.AddAsync(breeding);
@@ -72,7 +74,21 @@ namespace BusinessObjects.IService.Implements
         public async Task<IEnumerable<BreedingResponse>> GetAllBreedings()
         {
             var breedings = await _breedingRepository.GetAllAsync();
-            return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
+            List<BreedingResponse> breedingResponses = new List<BreedingResponse>();
+            if(breedings.Any())
+            {
+                foreach (var item in breedings)
+                {
+                    var breedingResponse = _mapper.Map<BreedingResponse>(item);
+                    var species = await _birdSpeciesRepository.GetByIdAsync(breedingResponse.SpeciesId);
+                    if(species != null)
+                    {
+                        breedingResponse.SpeciesName = species.BirdSpeciesName;
+                    }
+                    breedingResponses.Add(breedingResponse);
+                }
+            }
+            return breedingResponses;
         }
 
         public async Task<IEnumerable<BreedingResponse>> GetAllBreedingsByManagerId(object managerId)

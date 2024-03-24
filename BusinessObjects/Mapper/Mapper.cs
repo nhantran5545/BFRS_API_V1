@@ -36,10 +36,26 @@ namespace BusinessObjects.Mapper
             CreateMap<Breeding, BreedingResponse>()
                 .ForMember(dest => dest.FatherBandNumber,
                             opt => opt.MapFrom(src => src.FatherBird != null ? src.FatherBird.BandNumber : null))
+                .ForMember(dest => dest.FatherImage,
+                            opt => opt.MapFrom(src => src.FatherBird != null ? src.FatherBird.Image : null))
                 .ForMember(dest => dest.MotherBandNumber,
-                            opt => opt.MapFrom(src => src.FatherBird != null ? src.FatherBird.BandNumber : null))
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.BandNumber : null))
+                .ForMember(dest => dest.MotherImage,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.Image: null))
+                .ForMember(dest => dest.SpeciesId,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.BirdSpeciesId : null))
                 .ReverseMap();
             CreateMap<Breeding, BreedingDetailResponse>()
+                .ForMember(dest => dest.FatherBandNumber,
+                            opt => opt.MapFrom(src => src.FatherBird != null ? src.FatherBird.BandNumber : null))
+                .ForMember(dest => dest.FatherImage,
+                            opt => opt.MapFrom(src => src.FatherBird != null ? src.FatherBird.Image : null))
+                .ForMember(dest => dest.MotherBandNumber,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.BandNumber : null))
+                .ForMember(dest => dest.MotherImage,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.Image : null))
+                .ForMember(dest => dest.SpeciesId,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.BirdSpeciesId : null))
                 .ReverseMap();
             CreateMap<Cage, CageResponse>()
                 .ForMember(dest => dest.AreaName,
