@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,17 +20,40 @@ builder.Services.AddControllers().AddOData(options =>
                 options.Select().Filter().Count().OrderBy().Expand().SetMaxTop(100));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Please Enter The Token To Authenticate The Role",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                });
+});
 
 //HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddCors();
 
 //DbContext
 builder.Services.AddDbContext<BFRS_dbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("BFRSDB")));
 
-// C?u hình Memory Cache
+// C?u hï¿½nh Memory Cache
 builder.Services.AddMemoryCache();
 
 //Repositories
@@ -102,17 +126,16 @@ builder.Services.AddAuthentication(x =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+}
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseRouting();
 
-app.UseAuthorization();
 app.UseCors(builder =>
 {
     builder
@@ -120,8 +143,11 @@ app.UseCors(builder =>
     .AllowAnyMethod()
     .AllowAnyHeader()
     ;
-
 });
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

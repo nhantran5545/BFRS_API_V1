@@ -19,7 +19,6 @@ namespace BFRS_API_V1.Controllers
     public class AccountsController : ControllerBase
     {
         IAccountService _accountService;
-        private IOptions<JwtAuth> _jwtAuthOptions;
         private readonly IMapper _mapper;
 
 
@@ -36,7 +35,7 @@ namespace BFRS_API_V1.Controllers
             var user = await _accountService.LoginAsync(login);
             if (user != null)
             {
-                var token = _accountService.CreateToken(user.AccountId);
+                var token = _accountService.CreateToken(user.AccountId, user.Role);
                 return Ok(token);
             }
             else
