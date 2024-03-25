@@ -35,5 +35,17 @@ namespace DataAccess.IRepositories.Implements
                 .Where(br => br.CreatedBy.Equals(managerId))
                 .ToListAsync();
         }
+
+        public async Task<List<Breeding>> GetBreedingByAccountIdAsync(int accountId)
+        {
+            if (accountId <= 0)
+            {
+                throw new ArgumentException("AccountId must be greater than zero.");
+            }
+
+            return await _context.Breedings
+                .Where(b => b.Cage.AccountId == accountId)
+                .ToListAsync();
+        }
     }
 }
