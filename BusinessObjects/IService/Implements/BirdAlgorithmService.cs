@@ -100,24 +100,18 @@ namespace BusinessObjects.IService.Implements
             {
                 if (!node.ContainsKey(code[i].ToString()))
                 {
-                    // Nếu node does not exist, create a new dictionary for it.
                     node[code[i].ToString()] = new Dictionary<string, object>();
-                    // Thêm nút mới vào thế hệ tương ứng.
                 }
                 node = (Dictionary<string, object>)node[code[i].ToString()];
             }
 
-            // Đặt thuộc tính "birdId" của nút cuối cùng trong mã.
             node["birdId"] = birdId;
 
-            // Check if the birdId is already in the ancestors dictionary.
             if (!ancestors.ContainsKey(birdId.ToString()))
             {
-                // If not, create a new entry for the birdId in the ancestors dictionary.
                 ancestors[birdId.ToString()] = new Dictionary<string, object>();
             }
 
-            // Add the code to the ancestors dictionary for the given birdId.
             ancestors[birdId.ToString()][code] = null;
         }
 
@@ -148,7 +142,6 @@ namespace BusinessObjects.IService.Implements
             // Display the total inbreeding and breakdown for each ancestor.
             double totalInbreeding = groupedCommon.Sum(a => a.Inbreeding);
             // Multiply the total inbreeding by 2 (to increase by 100%).
-            totalInbreeding *= 2.0;
             return totalInbreeding;
 
         }
