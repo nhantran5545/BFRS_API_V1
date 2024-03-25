@@ -14,6 +14,14 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
+        public override async Task<IEnumerable<Breeding>> GetAllAsync()
+        {
+            return await _context.Breedings
+                .Include(br => br.FatherBird)
+                .Include(br => br.MotherBird)
+                .ToListAsync();
+        }
+
         public override async Task<Breeding?> GetByIdAsync(object id)
         {
             return await _context.Breedings

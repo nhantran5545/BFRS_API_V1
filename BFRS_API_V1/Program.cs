@@ -48,13 +48,12 @@ builder.Services.AddSwaggerGen(c =>
 
 //HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddCors();
 
 //DbContext
 builder.Services.AddDbContext<BFRS_dbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("BFRSDB")));
 
-// C?u hình Memory Cache
+// C?u hï¿½nh Memory Cache
 builder.Services.AddMemoryCache();
 
 //Repositories
@@ -128,17 +127,27 @@ builder.Services.AddAuthentication(x =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
+/*if (app.Environment.IsDevelopment())
+{*/
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+/*}*/
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseRouting();
+
+app.UseCors(builder =>
+{
+    builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    ;
+});
 
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

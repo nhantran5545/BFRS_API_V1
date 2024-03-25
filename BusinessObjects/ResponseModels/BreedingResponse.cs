@@ -10,7 +10,13 @@ namespace BusinessObjects.ResponseModels
     {
         public int BreedingId { get; set; }
         public int FatherBirdId { get; set; }
+        public int FatherBandNumber { get; set; }
+        public string? FatherImage { get; set; }
         public int MotherBirdId { get; set; }
+        public int MotherBandNumber { get; set; }
+        public string? MotherImage { get; set; }
+        public int SpeciesId { get; set; }
+        public string? SpeciesName { get; set; }
         public bool? CoupleSeperated { get; set; }
         public int CageId { get; set; }
         public DateTime? NextCheck { get; set; }

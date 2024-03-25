@@ -14,10 +14,20 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
+        public override async Task<IEnumerable<Bird>> GetAllAsync()
+        {
+            return await _context.Birds
+                .Include(b => b.BirdSpecies)
+                .Include(b => b.Cage)
+                .Include(b => b.Farm)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Bird>> GetBirdsByFarmId(object farmId)
         {
             return await _context.Birds
                 .Include(b => b.BirdSpecies)
+                .Include(b => b.Cage)
                 .Include(b => b.Farm)
                 .Where(b => b.FarmId.Equals(farmId))
                 .ToListAsync();
@@ -27,6 +37,7 @@ namespace DataAccess.IRepositories.Implements
         {
             return await _context.Birds
                 .Include(b => b.BirdSpecies)
+                .Include(b => b.Cage)
                 .Include(b => b.Farm)
                 .Where(b => b.BirdSpeciesId.Equals(SpeciesId))
                 .ToListAsync();

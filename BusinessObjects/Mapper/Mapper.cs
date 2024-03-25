@@ -18,10 +18,14 @@ namespace BusinessObjects.Mapper
             CreateMap<Bird, BirdResponse>()
                 .ForMember(dest => dest.BirdSpeciesName,
                             opt => opt.MapFrom(src => src.BirdSpecies != null ? src.BirdSpecies.BirdSpeciesName : string.Empty))
+                .ForMember(dest => dest.FarmName,
+                            opt => opt.MapFrom(src => src.Farm != null ? src.Farm.FarmName : string.Empty))
                 .ReverseMap();
             CreateMap<Bird, BirdDetailResponse>()
                 .ForMember(dest => dest.BirdSpeciesName,
                             opt => opt.MapFrom(src => src.BirdSpecies != null ? src.BirdSpecies.BirdSpeciesName : string.Empty))
+                .ReverseMap();
+            CreateMap<Bird, BirdPedi>()
                 .ReverseMap();
             CreateMap<BirdSpecy, BirdSpeciesResponse>()
                 .ForMember(dest => dest.BirdTypeName,
@@ -32,8 +36,28 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.BirdType != null ? src.BirdType.BirdTypeName : string.Empty))
                 .ReverseMap();
             CreateMap<Breeding, BreedingResponse>()
+                .ForMember(dest => dest.FatherBandNumber,
+                            opt => opt.MapFrom(src => src.FatherBird != null ? src.FatherBird.BandNumber : null))
+                .ForMember(dest => dest.FatherImage,
+                            opt => opt.MapFrom(src => src.FatherBird != null ? src.FatherBird.Image : null))
+                .ForMember(dest => dest.MotherBandNumber,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.BandNumber : null))
+                .ForMember(dest => dest.MotherImage,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.Image: null))
+                .ForMember(dest => dest.SpeciesId,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.BirdSpeciesId : null))
                 .ReverseMap();
             CreateMap<Breeding, BreedingDetailResponse>()
+                .ForMember(dest => dest.FatherBandNumber,
+                            opt => opt.MapFrom(src => src.FatherBird != null ? src.FatherBird.BandNumber : null))
+                .ForMember(dest => dest.FatherImage,
+                            opt => opt.MapFrom(src => src.FatherBird != null ? src.FatherBird.Image : null))
+                .ForMember(dest => dest.MotherBandNumber,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.BandNumber : null))
+                .ForMember(dest => dest.MotherImage,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.Image : null))
+                .ForMember(dest => dest.SpeciesId,
+                            opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.BirdSpeciesId : null))
                 .ReverseMap();
             CreateMap<Cage, CageResponse>()
                 .ForMember(dest => dest.AreaName,

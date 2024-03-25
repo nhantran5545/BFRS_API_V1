@@ -12,6 +12,8 @@ namespace BusinessObjects.ResponseModels
         public string? Gender { get; set; }
         public DateTime? HatchedDate { get; set; }
         public int CageId { get; set; }
+        public int FarmId { get; set; }
+        public string? FarmName { get; set; }
         public int BirdSpeciesId { get; set; }
         public string? BirdSpeciesName { get; set; }
         public string? Image { get; set; }
