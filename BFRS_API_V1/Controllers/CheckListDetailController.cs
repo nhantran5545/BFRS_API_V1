@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ namespace BFRS_API_V1.Controllers
 
         public CheckListDetailController(ICheckListDetailService checkListDetailService)
         {
-            _checkListDetailService = checkListDetailService;
+            _checkListDetailService = checkListDetailService ?? throw new ArgumentNullException(nameof(checkListDetailService));
         }
 
         [HttpPost]
@@ -32,6 +33,31 @@ namespace BFRS_API_V1.Controllers
             {
                 // Log the exception
                 return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        [HttpGet("{checkListId}")]
+        public async Task<ActionResult<List<CheckListDetailResponse>>> GetCheckListDetailsByCheckListId(int checkListId)
+        {
+            try
+            {
+                if (checkListId <= 0)
+                {
+                    return BadRequest("Invalid CheckListId. CheckListId must be greater than 0.");
+                }
+
+                var checkListDetails = await _checkListDetailService.GetCheckListDetailsByCheckListId(checkListId);
+
+                if (checkListDetails == null || checkListDetails.Count == 0)
+                {
+                    return NotFound("No CheckListDetails found for the provided CheckListId.");
+                }
+
+                return Ok(checkListDetails);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
     }
