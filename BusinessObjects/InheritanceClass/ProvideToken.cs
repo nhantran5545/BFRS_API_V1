@@ -25,25 +25,20 @@ namespace BusinessObjects.InheritanceClass
                 _instance = new ProvideToken(configuration, memoryCache);
         }
 
-        public virtual string GenerateToken(int accountId, string role)
+        public (string token, string role) GenerateToken(int accountId, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var secretKey = _configuration["AppSettings:SecretKey"];
-            if (secretKey == null)
-            {
-                return "Not Found SecretKey";
-            }
             var key = Encoding.ASCII.GetBytes(secretKey);
             // Tiếp tục với việc tạo token bằng key
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-            // Thêm các claim cần thiết vào đây (ví dụ: UserId)
-            new Claim("AccountId", accountId.ToString()),
-            new Claim(ClaimTypes.Role, role),
+                    new Claim("AccountId", accountId.ToString()),
+                    new Claim(ClaimTypes.Role, role),
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(10), // Thời gian hiệu lực của token (vd: 30 phút)
+                Expires = DateTime.UtcNow.AddHours(2), // Thời gian hiệu lực của token (vd: 30 phút)
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -53,7 +48,7 @@ namespace BusinessObjects.InheritanceClass
             // Lưu trữ token trong bộ nhớ
             _memoryCache.Set(accountId.ToString(), tokenString, TimeSpan.FromMinutes(10));
 
-            return tokenString;
+            return (tokenString, role);
         }
     }
 }   

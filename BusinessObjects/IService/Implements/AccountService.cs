@@ -50,14 +50,11 @@ namespace BusinessObjects.IService.Implements
             return await _accountRepository.GetAllAsync();
         }
 
-        public string CreateToken(int accountId, string role)
+        public (string token, string role) CreateToken(int accountId, string role)
         {
-
             // Generate token using ProvideToken.Instance
             return ProvideToken.Instance.GenerateToken(accountId, role);
         }
-
-
         public async Task<Account?> LoginAsync(AccountLoginRequest account)
         {
             IEnumerable<Account> users = await GetAllAccountsAsync();

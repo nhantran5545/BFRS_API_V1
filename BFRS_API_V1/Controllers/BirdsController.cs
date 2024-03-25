@@ -27,7 +27,7 @@ namespace BFRS_API_V1.Controllers
         // GET: api/Birds
         [HttpGet]
         [EnableQuery]
-        //[Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetAllBirds()
         {
             var birds = await _birdService.GetAllBirdsAsync();

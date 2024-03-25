@@ -32,15 +32,20 @@ namespace BFRS_API_V1.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(AccountLoginRequest login)
         {
+            if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
+            {
+                return BadRequest("Username and password are required.");
+            }
+
             var user = await _accountService.LoginAsync(login);
             if (user != null)
             {
-                var token = _accountService.CreateToken(user.AccountId, user.Role);
-                return Ok(token);
+                var (token, role) = _accountService.CreateToken(user.AccountId, user.Role);
+                return Ok(new { token, role });
             }
             else
             {
-                return BadRequest("Login failed");
+                return Unauthorized("Invalid username or password.");
             }
         }
 
