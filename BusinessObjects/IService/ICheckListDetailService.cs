@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,6 @@ namespace BusinessObjects.IService
     public interface ICheckListDetailService
     {
         Task<CheckListDetailRequest> CreateCheckListAsync(CheckListDetailRequest checkListeDetail);
+        Task<List<CheckListDetailResponse>> GetCheckListDetailsByCheckListId(int checkListId);
     }
 }

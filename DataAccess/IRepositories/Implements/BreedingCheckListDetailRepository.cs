@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,13 @@ namespace DataAccess.IRepositories.Implements
     {
         public BreedingCheckListDetailRepository(BFRS_dbContext context) : base(context)
         {
+        }
+        public async Task<List<BreedingCheckListDetail>> GetCheckListDetailsByBreedingId(int breedingId)
+        {
+            return await _context.BreedingCheckListDetails
+                .Include(c => c.CheckListDetail)
+                .Where(c => c.BreedingCheckList.BreedingId == breedingId)
+                .ToListAsync();
         }
     }
 }
