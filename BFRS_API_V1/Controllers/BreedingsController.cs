@@ -172,13 +172,13 @@ namespace BFRS_API_V1.Controllers
             }
 
             var fatherCage = await _cageService.GetCageByIdAsync(breedingCloseRequest.FatherCageId); 
-            if (fatherCage == null || fatherCage.Status == "Nourishing")
+            if (fatherCage == null || fatherCage.Status != "Nourishing")
             {
                 return BadRequest("Father can not move to this cage");
             }
 
             var motherCage = await _cageService.GetCageByIdAsync(breedingCloseRequest.MotherCageId);
-            if (motherCage == null || motherCage.Status == "Nourishing")
+            if (motherCage == null || motherCage.Status != "Nourishing")
             {
                 return BadRequest("Mother can not move to this cage");
             }

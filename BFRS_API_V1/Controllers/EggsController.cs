@@ -65,32 +65,41 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Egg not found");
             }
             
+            if(egg.Status == "Hatched")
+            {
+                return BadRequest("Invalid Status");
+            }
             if (await _eggService.UpdateEgg(eggUpdateRequest))
             {
-                return BadRequest("Something is wrong with server , please try again");
+                return Ok("Update Sucessfully");
             }
-            return Ok("Update Sucessfully");
+            return BadRequest("Something is wrong with server , please try again");
         }
 
         [HttpPut("Hatched/{id}")]
-        public async Task<IActionResult> EggHatched(int id, [FromBody]EggUpdateRequest eggUpdateRequest)
+        public async Task<IActionResult> EggHatched(int id, [FromBody]EggHatchRequest eggHatchRequest)
         {
-            if (id != eggUpdateRequest.EggId)
+            if (id != eggHatchRequest.EggId)
             {
                 return BadRequest("Egg Id conflict");
             }
 
-            var egg = await _eggService.GetEggByIdAsync(eggUpdateRequest.EggId);
+            var egg = await _eggService.GetEggByIdAsync(eggHatchRequest.EggId);
             if (egg == null)
             {
                 return BadRequest("Egg not found");
             }
 
-            if (await _eggService.UpdateEgg(eggUpdateRequest))
+            if(egg.Status != "In Development")
             {
-                return BadRequest("Something is wrong with server , please try again");
+                return BadRequest("The egg is either hatched or unavailabel");
             }
-            return Ok("Update Sucessfully");
+
+            if (await _eggService.EggHatched(eggHatchRequest))
+            {
+                return Ok("Update Sucessfully");
+            }
+            return BadRequest("Something is wrong with server , please try again");
         }
         // POST: api/Eggs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
