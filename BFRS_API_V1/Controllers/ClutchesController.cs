@@ -72,7 +72,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("Close/{id}")]
-        public async Task<IActionResult> PutClutch(int id, [FromBody]ClutchUpdateRequest clutchUpdateRequest)
+        public async Task<IActionResult> CloseClutch(int id, [FromBody]ClutchUpdateRequest clutchUpdateRequest)
         {
             if(id != clutchUpdateRequest.ClutchId)
             {

@@ -26,30 +26,40 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<int> CreateEggAsync(EggAddRequest eggAddRequest)
         {
-            var egg = _mapper.Map<Egg>(eggAddRequest);
-            if(egg == null)
+            using(var transaction = _eggRepository.BeginTransaction())
             {
-                return -1;
-            }
+                try
+                {
+                    var egg = _mapper.Map<Egg>(eggAddRequest);
+                    if (egg == null || egg.ClutchId == null)
+                    {
+                        return -1;
+                    }
 
-            var clutch = await _clutchRepository.GetByIdAsync(eggAddRequest.ClutchId);
-            if(clutch == null)
-            {
-                return -1;
-            }
-            if(clutch.Status == "Created")
-            {
-                clutch.Status = "Hatched";
-            }
+                    var clutch = await _clutchRepository.GetByIdAsync(eggAddRequest.ClutchId);
+                    if (clutch == null)
+                    {
+                        return -1;
+                    }
+                    if (clutch.Status == "Created")
+                    {
+                        clutch.Status = "Hatched";
+                        _clutchRepository.SaveChanges();
+                    }
 
-            egg.CreatedDate = DateTime.Now;
-            await _eggRepository.AddAsync(egg);
-            var result = _eggRepository.SaveChanges();
-            if(result < 1)
-            {
-                return result;
+                    egg.CreatedDate = DateTime.Now;
+                    await _eggRepository.AddAsync(egg);
+                    _eggRepository.SaveChanges();
+                    transaction.Commit();
+                    return egg.EggId;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    transaction.Rollback();
+                    return -1;
+                }
             }
-            return egg.EggId;
         }
 
         public void DeleteEgg(CheckList checkList)
@@ -93,29 +103,86 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<bool> UpdateEgg(EggUpdateRequest eggUpdateRequest)
         {
-            var egg = await _eggRepository.GetByIdAsync(eggUpdateRequest.EggId);
-            if (egg == null)
+            using(var transaction = _eggRepository.BeginTransaction())
             {
-                return false;
+                try
+                {
+                    var egg = await _eggRepository.GetByIdAsync(eggUpdateRequest.EggId);
+                    if (egg == null || egg.ClutchId == null)
+                    {
+                        return false;
+                    }
+
+                    egg.Status = eggUpdateRequest.Status;
+                    egg.UpdatedBy = eggUpdateRequest.UpdatedBy;
+                    egg.UpdatedDate = DateTime.Now;
+
+                    _eggRepository.SaveChanges();
+                    await UpdateClutchStatus(egg.ClutchId.Value);
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    transaction.Rollback();
+                    return false;
+                }
             }
+        }
 
-            egg.Status = eggUpdateRequest.Status;
-            egg.UpdatedBy = eggUpdateRequest.UpdatedBy;
-            egg.UpdatedDate = DateTime.Now;
-
-            var result = _eggRepository.SaveChanges();
-            if (result < 1)
+        public async Task<bool> EggHatched(EggHatchRequest eggHatchRequest)
+        {
+            using(var transaction =  _eggRepository.BeginTransaction())
             {
-                return false;
-            }
+                try
+                {
+                    var egg = await _eggRepository.GetByIdAsync(eggHatchRequest.EggId);
+                    if (egg == null || egg.ClutchId == null)
+                    {
+                        return false;
+                    }
 
-            var eggs = await _eggRepository.GetEggsByClutchIdAsync(egg.ClutchId);
-            if(eggs.Any())
+                    var clutch = await _clutchRepository.GetByIdAsync(egg.ClutchId);
+                    if (clutch == null)
+                    {
+                        return false;
+                    }
+                    else if(clutch.Status == "Created")
+                    {
+                        clutch.Status = "Banding";
+                        _clutchRepository.SaveChanges();
+                    }
+
+                    egg.HatchedDate = eggHatchRequest.HatchedDate;
+                    egg.Status = "Hatched";
+                    egg.UpdatedBy = eggHatchRequest.UpdatedBy;
+                    egg.UpdatedDate = DateTime.Now;
+
+                    _eggRepository.SaveChanges();
+                    await UpdateClutchStatus(egg.ClutchId.Value);
+                    transaction.Commit();
+                    return true;
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+            
+        }
+
+        private async Task UpdateClutchStatus(int clutchId)
+        {
+            var eggs = await _eggRepository.GetEggsByClutchIdAsync(clutchId);
+            if (eggs.Any())
             {
                 bool flag = true;
                 foreach (var item in eggs)
                 {
-                    if(item.Status == "In Development")
+                    if (item.Status == "In Development")
                     {
                         flag = false;
                         break;
@@ -123,50 +190,14 @@ namespace BusinessObjects.IService.Implements
                 }
                 if (flag)
                 {
-                    var clutch = await _clutchRepository.GetByIdAsync(egg.ClutchId);
-                    if(clutch != null)
+                    var clutch = await _clutchRepository.GetByIdAsync(clutchId);
+                    if (clutch != null)
                     {
                         clutch.Status = "Weaned";
                         _clutchRepository.SaveChanges();
                     }
                 }
             }
-            return true;
-        }
-
-        public async Task<bool> EggHatched(EggUpdateRequest eggUpdateRequest)
-        {
-            var egg = await _eggRepository.GetByIdAsync(eggUpdateRequest.EggId);
-            if (egg == null || egg.ClutchId == null)
-            {
-                return false;
-            }
-
-            var clutch = await _clutchRepository.GetByIdAsync(egg.ClutchId);
-            if (clutch == null)
-            {
-                return false;
-            }
-            else
-            {
-                clutch.Status = "Banding";
-            }
-
-            if (eggUpdateRequest.HatchedDate != null)
-            {
-                egg.HatchedDate = eggUpdateRequest.HatchedDate;
-            }
-
-            egg.Status = "Hatched";
-            egg.UpdatedBy = eggUpdateRequest.UpdatedBy;
-            egg.UpdatedDate = DateTime.Now;
-
-            var result = _eggRepository.SaveChanges();
-            if (result < 1)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

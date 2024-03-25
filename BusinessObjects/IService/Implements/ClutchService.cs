@@ -14,43 +14,52 @@ namespace BusinessObjects.IService.Implements
     public class ClutchService : IClutchService
     {
         private readonly IClutchRepository _clutchRepository;
-        private readonly IBreedingService _breedingService;
+        private readonly IBreedingRepository _breedingRepository;
         private readonly IMapper _mapper;
 
-        public ClutchService(IClutchRepository clutchRepository,  IMapper mapper, IBreedingService breedingService)
+        public ClutchService(IClutchRepository clutchRepository, IBreedingRepository breedingRepository, IMapper mapper)
         {
             _clutchRepository = clutchRepository;
+            _breedingRepository = breedingRepository;
             _mapper = mapper;
-            _breedingService = breedingService;
         }
 
         public async Task<int> CreateClutchAsync(ClutchAddRequest clutchAddRequest)
         {
-            var clutch = _mapper.Map<Clutch>(clutchAddRequest);
-            if(clutch == null)
+            using(var transaction = _clutchRepository.BeginTransaction())
             {
-                return -1;
-            }
+                try
+                {
+                    var clutch = _mapper.Map<Clutch>(clutchAddRequest);
+                    if (clutch == null)
+                    {
+                        return -1;
+                    }
 
-            var breeding = await _breedingService.GetBreedingById(clutchAddRequest.BreedingId);
-            if(breeding == null)
-            {
-                return -1;
-            }
-            if(breeding.Status != "InProgress")
-            {
-                breeding.Status = "InProgress";
-            }
+                    var breeding = await _breedingRepository.GetByIdAsync(clutchAddRequest.BreedingId);
+                    if (breeding == null)
+                    {
+                        return -1;
+                    }
+                    if (breeding.Status != "InProgress")
+                    {
+                        breeding.Status = "InProgress";
+                        _breedingRepository.SaveChanges();
+                    }
 
-            clutch.Status = "Created";
-            clutch.CreatedDate = DateTime.Now;
-            await _clutchRepository.AddAsync(clutch);
-            var result = _clutchRepository.SaveChanges();
-            if(result < 1)
-            {
-                return result;
+                    clutch.Status = "Created";
+                    clutch.CreatedDate = DateTime.Now;
+                    await _clutchRepository.AddAsync(clutch);
+                    _clutchRepository.SaveChanges();
+                    transaction.Commit();
+                    return clutch.ClutchId;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return -1;
+                }
             }
-            return clutch.ClutchId;
         }
 
         public void DeleteClutch(Clutch clutch)

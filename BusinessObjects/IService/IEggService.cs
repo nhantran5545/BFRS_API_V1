@@ -13,7 +13,7 @@ namespace BusinessObjects.IService
     {
         Task<int> CreateEggAsync(EggAddRequest eggAddRequest);
         Task<bool> UpdateEgg(EggUpdateRequest eggUpdateRequest);
-        Task<bool> EggHatched(EggUpdateRequest eggUpdateRequest);
+        Task<bool> EggHatched(EggHatchRequest eggHatchRequest);
         void DeleteEgg(Egg egg);
         void DeleteEggById(object eggId);
         Task<IEnumerable<EggResponse>> GetAllEggsAsync();

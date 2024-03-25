@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.RequestModels
 {
-    public class EggUpdateRequest
+    public class EggHatchRequest
     {
         public int EggId { get; set; }
+        public DateTime? HatchedDate { get; set; }
         public int UpdatedBy { get; set; }
-        public string? Status { get; set; }
     }
 }
