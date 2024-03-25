@@ -8,9 +8,9 @@ namespace BusinessObjects.RequestModels
 {
     public class EggAddRequest
     {
-        public int? ClutchId { get; set; }
-        public DateTime? LayDate { get; set; }
+        public int ClutchId { get; set; }
+        public DateTime LayDate { get; set; }
         public string? Status { get; set; }
-        public int? CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
     }
 }

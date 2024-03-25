@@ -14,12 +14,14 @@ namespace BusinessObjects.IService.Implements
     public class EggService : IEggService
     {
         private readonly IEggRepository _eggRepository;
+        private readonly IClutchRepository _clutchRepository;
         private readonly IMapper _mapper;
 
-        public EggService(IEggRepository eggRepository, IMapper mapper)
+        public EggService(IEggRepository eggRepository,  IMapper mapper, IClutchRepository clutchRepository)
         {
             _eggRepository = eggRepository;
             _mapper = mapper;
+            _clutchRepository = clutchRepository;
         }
 
         public async Task<int> CreateEggAsync(EggAddRequest eggAddRequest)
@@ -29,8 +31,18 @@ namespace BusinessObjects.IService.Implements
             {
                 return -1;
             }
+
+            var clutch = await _clutchRepository.GetByIdAsync(eggAddRequest.ClutchId);
+            if(clutch == null)
+            {
+                return -1;
+            }
+            if(egg.Status == "InDevelopment")
+            {
+                clutch.Status = "Hatched";
+            }
+
             egg.CreatedDate = DateTime.Now;
-            egg.Status = eggAddRequest.Status;
             await _eggRepository.AddAsync(egg);
             var result = _eggRepository.SaveChanges();
             if(result < 1)
@@ -87,12 +99,42 @@ namespace BusinessObjects.IService.Implements
                 return -1;
             }
 
-            if(eggUpdateRequest.HatchedDate != null)
+            egg.Status = eggUpdateRequest.Status;
+            egg.UpdatedBy = eggUpdateRequest.UpdatedBy;
+            egg.UpdatedDate = DateTime.Now;
+
+            var result = _eggRepository.SaveChanges();
+            if (result < 1)
+            {
+                return result;
+            }
+            return egg.EggId;
+        }
+
+        public async Task<int> EggHatched(EggUpdateRequest eggUpdateRequest)
+        {
+            var egg = await _eggRepository.GetByIdAsync(eggUpdateRequest.EggId);
+            if (egg == null || egg.ClutchId == null)
+            {
+                return -1;
+            }
+
+            var clutch = await _clutchRepository.GetByIdAsync(egg.ClutchId);
+            if (clutch == null)
+            {
+                return -1;
+            }
+            else
+            {
+                clutch.Status = "Banding";
+            }
+
+            if (eggUpdateRequest.HatchedDate != null)
             {
                 egg.HatchedDate = eggUpdateRequest.HatchedDate;
             }
 
-            egg.Status = eggUpdateRequest.Status;
+            egg.Status = "Hatched";
             egg.UpdatedBy = eggUpdateRequest.UpdatedBy;
             egg.UpdatedDate = DateTime.Now;
 

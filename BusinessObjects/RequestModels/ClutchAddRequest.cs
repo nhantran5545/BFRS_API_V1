@@ -8,8 +8,8 @@ namespace BusinessObjects.RequestModels
 {
     public class ClutchAddRequest
     {
-        public int? BreedingId { get; set; }
+        public int BreedingId { get; set; }
         public DateTime? BroodStartDate { get; set; }
-        public int? CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
     }
 }

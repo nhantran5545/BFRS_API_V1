@@ -33,10 +33,15 @@ namespace BusinessObjects.IService.Implements
             }
 
             var breeding = await _breedingService.GetBreedingById(clutchAddRequest.BreedingId);
-            if(breeding == null || breeding.Status != "InProgress")
+            if(breeding == null)
             {
                 return -1;
             }
+            if(breeding.Status != "InProgress")
+            {
+                breeding.Status = "InProgress";
+            }
+
             clutch.Status = "Created";
             clutch.CreatedDate = DateTime.Now;
             await _clutchRepository.AddAsync(clutch);
