@@ -92,6 +92,8 @@ builder.Services.AddScoped<IEggService, EggService>();
 builder.Services.AddScoped<IFarmService, FarmService>();
 builder.Services.AddScoped<IIssueService, IssueService>();
 builder.Services.AddScoped<ICheckListDetailService, CheckListDetailService>();
+builder.Services.AddScoped<ICheckListService, CheckListService>();
+builder.Services.AddScoped<IBreedingCheckListDetailService, BreedingCheckListDetailService>();
 
 // Mapper
 var mapperConfig = new MapperConfiguration(mc =>
