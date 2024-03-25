@@ -38,16 +38,12 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<int> CreateBreeding(BreedingAddRequest breedingAddRequest)
         {
-            var breeding = new Breeding
-            {
-                MotherBirdId = breedingAddRequest.MotherBirdId,
-                FatherBirdId = breedingAddRequest.FatherBirdId,
-                CageId = breedingAddRequest.CageId,
-            };
+            var breeding = _mapper.Map<Breeding>(breedingAddRequest);
             if(breeding == null)
             {
                 return -1;
             }
+
             breeding.CoupleSeperated = true;
             breeding.Status = "Opened";
             breeding.CreatedBy = breedingAddRequest.ManagerId;
@@ -116,6 +112,7 @@ namespace BusinessObjects.IService.Implements
                     {
                         return false;
                     }
+                    breeding.CoupleSeperated = false;
                     breeding.Status = "Mating";
                     breeding.UpdatedBy = breedingUpdateRequest.StaffId;
                     breeding.UpdatedDate = DateTime.Now;
@@ -123,11 +120,11 @@ namespace BusinessObjects.IService.Implements
 
                     var fatherBird = await _birdRepository.GetByIdAsync(breeding.FatherBirdId);
                     fatherBird.CageId = breeding.CageId;
+                    fatherBird.Status = "InReproductionPeriod";
                     var motherBird = await _birdRepository.GetByIdAsync(breeding.MotherBirdId);
                     motherBird.CageId = breeding.CageId;
-                    var cage = await _cageRepository.GetByIdAsync(breeding.CageId);
-                    cage.Status = "Breeding";
-                    _breedingRepository.SaveChanges();
+                    motherBird.Status = "InReproductionPeriod";
+                    _birdRepository.SaveChanges();
 
                     transaction.Commit();
                     return true;
@@ -168,47 +165,17 @@ namespace BusinessObjects.IService.Implements
                     {
                         return false;
                     }
-                    breeding.CoupleSeperated = false;
+                    breeding.CoupleSeperated = true;
                     breeding.Status = "Closed";
                     breeding.UpdatedBy = breedingCloseRequest.ManagerId;
                     breeding.UpdatedDate = DateTime.Now;
                     _breedingRepository.SaveChanges();
 
-                    bool flag = false;
-                    if (breeding.FatherBirdId != null && breedingCloseRequest.FatherCageId != null)
-                    {
-                        var fatherBird = await _birdRepository.GetByIdAsync(breeding.FatherBirdId);
-                        if (fatherBird != null && fatherBird.CageId != breedingCloseRequest.FatherCageId)
-                        {
-                            fatherBird.CageId = breedingCloseRequest.FatherCageId;
-                            var fatherCage = await _cageRepository.GetByIdAsync(breedingCloseRequest.FatherCageId);
-                            if(fatherCage != null)
-                            {
-                                fatherCage.Status = "Nourishing";
-                            }
-                            flag = true;
-                        }
-                    }
-
-                    if (breeding.MotherBirdId != null && breedingCloseRequest.MotherCageId != null)
-                    {
-                        var motherBird = await _birdRepository.GetByIdAsync(breeding.MotherBirdId);
-                        if (motherBird != null && motherBird.CageId != breedingCloseRequest.MotherCageId)
-                        {
-                            motherBird.CageId = breedingCloseRequest.MotherCageId;
-                            var motherCage = await _cageRepository.GetByIdAsync(breedingCloseRequest.MotherCageId);
-                            if (motherCage != null)
-                            {
-                                motherCage.Status = "Nourishing";
-                            }
-                            flag = true;
-                        }
-                    }
-
-                    if (flag)
-                    {
-                        _birdRepository.SaveChanges();
-                    }
+                    var fatherBird = await _birdRepository.GetByIdAsync(breeding.FatherBirdId);
+                    fatherBird.CageId = breedingCloseRequest.FatherCageId;
+                    var motherBird = await _birdRepository.GetByIdAsync(breeding.MotherBirdId);
+                    motherBird.CageId = breedingCloseRequest.MotherCageId;
+                    _birdRepository.SaveChanges();
 
                     transaction.Commit();
                     return true;

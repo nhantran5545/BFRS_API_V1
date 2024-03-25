@@ -37,7 +37,7 @@ namespace BusinessObjects.IService.Implements
             {
                 return -1;
             }
-            if(egg.Status == "InDevelopment")
+            if(clutch.Status == "Created")
             {
                 clutch.Status = "Hatched";
             }
@@ -91,12 +91,12 @@ namespace BusinessObjects.IService.Implements
             return _mapper.Map<EggResponse>(egg);
         }
 
-        public async Task<int> UpdateEgg(EggUpdateRequest eggUpdateRequest)
+        public async Task<bool> UpdateEgg(EggUpdateRequest eggUpdateRequest)
         {
             var egg = await _eggRepository.GetByIdAsync(eggUpdateRequest.EggId);
             if (egg == null)
             {
-                return -1;
+                return false;
             }
 
             egg.Status = eggUpdateRequest.Status;
@@ -106,23 +106,46 @@ namespace BusinessObjects.IService.Implements
             var result = _eggRepository.SaveChanges();
             if (result < 1)
             {
-                return result;
+                return false;
             }
-            return egg.EggId;
+
+            var eggs = await _eggRepository.GetEggsByClutchIdAsync(egg.ClutchId);
+            if(eggs.Any())
+            {
+                bool flag = true;
+                foreach (var item in eggs)
+                {
+                    if(item.Status == "In Development")
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag)
+                {
+                    var clutch = await _clutchRepository.GetByIdAsync(egg.ClutchId);
+                    if(clutch != null)
+                    {
+                        clutch.Status = "Weaned";
+                        _clutchRepository.SaveChanges();
+                    }
+                }
+            }
+            return true;
         }
 
-        public async Task<int> EggHatched(EggUpdateRequest eggUpdateRequest)
+        public async Task<bool> EggHatched(EggUpdateRequest eggUpdateRequest)
         {
             var egg = await _eggRepository.GetByIdAsync(eggUpdateRequest.EggId);
             if (egg == null || egg.ClutchId == null)
             {
-                return -1;
+                return false;
             }
 
             var clutch = await _clutchRepository.GetByIdAsync(egg.ClutchId);
             if (clutch == null)
             {
-                return -1;
+                return false;
             }
             else
             {
@@ -141,9 +164,9 @@ namespace BusinessObjects.IService.Implements
             var result = _eggRepository.SaveChanges();
             if (result < 1)
             {
-                return result;
+                return false;
             }
-            return egg.EggId;
+            return true;
         }
     }
 }

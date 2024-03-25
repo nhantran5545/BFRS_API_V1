@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
+using BusinessObjects.IService;
+using BusinessObjects.ResponseModels;
+using BusinessObjects.RequestModels;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -13,111 +16,109 @@ namespace BFRS_API_V1.Controllers
     [ApiController]
     public class EggsController : ControllerBase
     {
-        private readonly BFRS_dbContext _context;
+        private readonly IEggService _eggService;
+        private readonly IClutchService _clutchService;
 
-        public EggsController(BFRS_dbContext context)
+        public EggsController(IEggService eggService, IClutchService clutchService)
         {
-            _context = context;
+            _eggService = eggService;
+            _clutchService = clutchService;
         }
 
         // GET: api/Eggs
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Egg>>> GetEggs()
+        public async Task<ActionResult<IEnumerable<EggResponse>>> GetEggs()
         {
-          if (_context.Eggs == null)
-          {
-              return NotFound();
-          }
-            return await _context.Eggs.ToListAsync();
+            var eggs = await _eggService.GetAllEggsAsync();
+            if(!eggs.Any())
+            {
+                return NotFound("There are no eggs!");
+            }
+            return Ok(eggs);
         }
 
         // GET: api/Eggs/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Egg>> GetEgg(int id)
+        public async Task<ActionResult<EggResponse>> GetEgg(int id)
         {
-          if (_context.Eggs == null)
-          {
-              return NotFound();
-          }
-            var egg = await _context.Eggs.FindAsync(id);
-
-            if (egg == null)
+            var egg = await _eggService.GetEggByIdAsync(id);
+            if(egg == null)
             {
-                return NotFound();
+                return NotFound("Egg not found");
             }
-
-            return egg;
+            return Ok(egg);
         }
 
         // PUT: api/Eggs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEgg(int id, Egg egg)
+        [HttpPut("Other/{id}")]
+        public async Task<IActionResult> PutEgg(int id, [FromBody]EggUpdateRequest eggUpdateRequest)
         {
-            if (id != egg.EggId)
+            if(id != eggUpdateRequest.EggId)
             {
-                return BadRequest();
+                return BadRequest("Egg Id conflict");
             }
 
-            _context.Entry(egg).State = EntityState.Modified;
-
-            try
+            var egg = await _eggService.GetEggByIdAsync(eggUpdateRequest.EggId);
+            if (egg == null)
             {
-                await _context.SaveChangesAsync();
+                return BadRequest("Egg not found");
             }
-            catch (DbUpdateConcurrencyException)
+            
+            if (await _eggService.UpdateEgg(eggUpdateRequest))
             {
-                if (!EggExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest("Something is wrong with server , please try again");
             }
-
-            return NoContent();
+            return Ok("Update Sucessfully");
         }
 
+        [HttpPut("Hatched/{id}")]
+        public async Task<IActionResult> EggHatched(int id, [FromBody]EggUpdateRequest eggUpdateRequest)
+        {
+            if (id != eggUpdateRequest.EggId)
+            {
+                return BadRequest("Egg Id conflict");
+            }
+
+            var egg = await _eggService.GetEggByIdAsync(eggUpdateRequest.EggId);
+            if (egg == null)
+            {
+                return BadRequest("Egg not found");
+            }
+
+            if (await _eggService.UpdateEgg(eggUpdateRequest))
+            {
+                return BadRequest("Something is wrong with server , please try again");
+            }
+            return Ok("Update Sucessfully");
+        }
         // POST: api/Eggs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Egg>> PostEgg(Egg egg)
+        public async Task<ActionResult<EggResponse>> PostEgg(EggAddRequest eggAddRequest)
         {
-          if (_context.Eggs == null)
-          {
-              return Problem("Entity set 'BFRS_dbContext.Eggs'  is null.");
-          }
-            _context.Eggs.Add(egg);
-            await _context.SaveChangesAsync();
+            var clutch = await _clutchService.GetClutchByIdAsync(eggAddRequest.ClutchId);
+            if(clutch == null)
+            {
+                return BadRequest("Clutch not found!");
+            }
 
-            return CreatedAtAction("GetEgg", new { id = egg.EggId }, egg);
+            var result = await _eggService.CreateEggAsync(eggAddRequest);
+            if(result < 1)
+            {
+                return BadRequest("Something is wrong with server , please try again");
+            }
+
+            var egg = await _eggService.GetEggByIdAsync(result);
+            return Ok(egg);
         }
 
         // DELETE: api/Eggs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEgg(int id)
         {
-            if (_context.Eggs == null)
-            {
-                return NotFound();
-            }
-            var egg = await _context.Eggs.FindAsync(id);
-            if (egg == null)
-            {
-                return NotFound();
-            }
-
-            _context.Eggs.Remove(egg);
-            await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        private bool EggExists(int id)
-        {
-            return (_context.Eggs?.Any(e => e.EggId == id)).GetValueOrDefault();
         }
     }
 }

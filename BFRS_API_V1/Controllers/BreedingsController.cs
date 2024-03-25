@@ -76,6 +76,34 @@ namespace BFRS_API_V1.Controllers
         [HttpPost]
         public async Task<ActionResult<BreedingResponse>> OpenBreeding(BreedingAddRequest breedingAddRequest)
         {
+            var fatherBird = await _birdService.GetBirdByIdAsync(breedingAddRequest.FatherBirdId);
+            if (fatherBird == null || fatherBird.Gender != "Male")
+            {
+                return NotFound("Wrong male bird id");
+            }
+
+            if (fatherBird.Status != "InRestPeriod")
+            {
+                return BadRequest("Father Bird is in another breeding or sick");
+            }
+
+            var motherBird = await _birdService.GetBirdByIdAsync(breedingAddRequest.MotherBirdId);
+            if (motherBird == null || motherBird.Gender != "Female")
+            {
+                return NotFound("Wrong female bird id");
+            }
+
+            if (motherBird.Status != "InRestPeriod")
+            {
+                return BadRequest("Mother Bird is in another breeding or sick");
+            }
+
+            var cage = await _cageService.GetCageByIdAsync(breedingAddRequest.CageId);
+            if(cage == null || cage.Status != "Breeding")
+            {
+                return BadRequest("Cage is either unavailable or not for breeding");
+            }
+
             var result = await _breedingService.CreateBreeding(breedingAddRequest);
             if(result < 1)
             {
@@ -107,7 +135,7 @@ namespace BFRS_API_V1.Controllers
             return BadRequest("Something is wrong with the server please try again!");
         }
 
-        [HttpPut("BreedingInProgress")]
+        /*[HttpPut("BreedingInProgress")]
         public async Task<IActionResult> BreedingInProgress(BreedingUpdateRequest breedingUpdateRequest)
         {
             var breeding = await _breedingService.GetBreedingById(breedingUpdateRequest.BreedingId);
@@ -127,7 +155,7 @@ namespace BFRS_API_V1.Controllers
                 return Ok("Update Successfully");
             }
             return BadRequest("Something is wrong with the server please try again!");
-        }
+        }*/
 
         [HttpPut("closeBreeding")]
         public async Task<IActionResult> CloseBreeding(BreedingCloseRequest breedingCloseRequest)
@@ -144,13 +172,13 @@ namespace BFRS_API_V1.Controllers
             }
 
             var fatherCage = await _cageService.GetCageByIdAsync(breedingCloseRequest.FatherCageId); 
-            if (fatherCage == null || fatherCage.Status == "Maintaining" || fatherCage.Status == "Breeding")
+            if (fatherCage == null || fatherCage.Status == "Nourishing")
             {
                 return BadRequest("Father can not move to this cage");
             }
 
             var motherCage = await _cageService.GetCageByIdAsync(breedingCloseRequest.MotherCageId);
-            if (motherCage == null || motherCage.Status == "Maintaining" || motherCage.Status == "Breeding")
+            if (motherCage == null || motherCage.Status == "Nourishing")
             {
                 return BadRequest("Mother can not move to this cage");
             }

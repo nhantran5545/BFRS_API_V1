@@ -17,9 +17,11 @@ namespace BFRS_API_V1.Controllers
     public class ClutchesController : ControllerBase
     {
         private readonly IClutchService _clutchService;
+        private readonly IBreedingService _breedingService;
 
-        public ClutchesController(IClutchService clutchService)
+        public ClutchesController(IClutchService clutchService, IBreedingService breedingService)
         {
+            _breedingService = breedingService;
             _clutchService = clutchService;
         }
 
@@ -47,11 +49,47 @@ namespace BFRS_API_V1.Controllers
             return Ok(clutch);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutClutch(int id, Clutch clutch)
+        [HttpGet("ByBreeding/{breedingId}")]
+        public async Task<ActionResult<IEnumerable<ClutchResponse>>> GetClutchesByBreedingId(int breedingId)
         {
+            var clutches = await _clutchService.GetClutchsByBreedingId(breedingId);
+            if (clutches == null)
+            {
+                return NotFound("Clutches not found!");
+            }
+            return Ok(clutches);
+        }
 
-            return NoContent();
+        [HttpGet("ByCreated/{createdById}")]
+        public async Task<ActionResult<IEnumerable<ClutchResponse>>> GetClutchesByCreatedById(int createdById)
+        {
+            var clutches = await _clutchService.GetClutchsByCreatedById(createdById);
+            if (clutches == null)
+            {
+                return NotFound("Clutches not found!");
+            }
+            return Ok(clutches);
+        }
+
+        [HttpPut("Close/{id}")]
+        public async Task<IActionResult> PutClutch(int id, [FromBody]ClutchUpdateRequest clutchUpdateRequest)
+        {
+            if(id != clutchUpdateRequest.ClutchId)
+            {
+                return BadRequest("clutch id conflict");
+            }
+
+            var clutch = await _clutchService.GetClutchByIdAsync(id);
+            if(clutch == null)
+            {
+                return NotFound("Clutch not found");
+            }
+
+            if(await _clutchService.CloseClutch(clutchUpdateRequest))
+            {
+                return Ok("Close successfully!");
+            }
+            return BadRequest("Something wrong with the server, please try again");
         }
 
         // POST: api/Clutches
@@ -59,6 +97,11 @@ namespace BFRS_API_V1.Controllers
         [HttpPost]
         public async Task<ActionResult<ClutchResponse>> CreateClutch(ClutchAddRequest clutchAddRequest)
         {
+            var breeding = await _breedingService.GetBreedingById(clutchAddRequest.BreedingId);
+            if (breeding == null)
+            {
+                return BadRequest("Breeding not found");
+            }
             var result = await _clutchService.CreateClutchAsync(clutchAddRequest);
             if (result < 1)
             {

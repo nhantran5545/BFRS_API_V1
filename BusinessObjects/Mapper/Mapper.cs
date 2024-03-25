@@ -76,6 +76,10 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.Account != null ? src.Account.LastName : string.Empty))
                 .ReverseMap();
             CreateMap<Clutch, ClutchResponse>()
+                .ForMember(dest => dest.CreatedByFirstName,
+                            opt => opt.MapFrom(src => src.CreatedByNavigation != null ? src.CreatedByNavigation.FirstName : string.Empty))
+                .ForMember(dest => dest.CreatedByLastName,
+                            opt => opt.MapFrom(src => src.CreatedByNavigation != null ? src.CreatedByNavigation.LastName : string.Empty))
                 .ReverseMap();
             CreateMap<Clutch, ClutchDetailResponse>()
                 .ForMember(dest => dest.CreatedByFirstName,
@@ -99,6 +103,8 @@ namespace BusinessObjects.Mapper
             CreateMap<BreedingAddRequest, Breeding>()
                 .ReverseMap();
             CreateMap<ClutchAddRequest, Clutch>()
+                .ReverseMap();
+            CreateMap<EggAddRequest, Egg>()
                 .ReverseMap();
             #endregion
         }

@@ -13,6 +13,9 @@ namespace BusinessObjects.ResponseModels
         public DateTime? BroodStartDate { get; set; }
         public DateTime? BroodEndDate { get; set; }
         public int CageId { get; set; }
+        public int CreatedBy { get; set; }
+        public string? CreatedByFirstName { get; set; }
+        public string? CreatedByLastName { get; set; }
         public string? Status { get; set; }
     }
 }

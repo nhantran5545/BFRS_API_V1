@@ -12,6 +12,7 @@ namespace BusinessObjects.IService
     public interface IClutchService
     {
         Task<int> CreateClutchAsync(ClutchAddRequest clutchAddRequest);
+        Task<bool> CloseClutch(ClutchUpdateRequest clutchUpdateRequest);
         void UpdateClutch(Clutch clutch);
         void DeleteClutch(Clutch clutch);
         void DeleteClutchtById(object clutchId);

@@ -12,8 +12,8 @@ namespace BusinessObjects.IService
     public interface IEggService
     {
         Task<int> CreateEggAsync(EggAddRequest eggAddRequest);
-        Task<int> UpdateEgg(EggUpdateRequest eggUpdateRequest);
-        Task<int> EggHatched(EggUpdateRequest eggUpdateRequest);
+        Task<bool> UpdateEgg(EggUpdateRequest eggUpdateRequest);
+        Task<bool> EggHatched(EggUpdateRequest eggUpdateRequest);
         void DeleteEgg(Egg egg);
         void DeleteEggById(object eggId);
         Task<IEnumerable<EggResponse>> GetAllEggsAsync();

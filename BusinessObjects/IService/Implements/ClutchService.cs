@@ -91,5 +91,24 @@ namespace BusinessObjects.IService.Implements
         {
             throw new NotImplementedException();
         }
+
+        public async Task<bool> CloseClutch(ClutchUpdateRequest clutchUpdateRequest)
+        {
+            var clutch = await _clutchRepository.GetByIdAsync(clutchUpdateRequest.ClutchId);
+            if(clutch == null)
+            {
+                return false;
+            }
+
+            clutch.Status = "Closed";
+            clutch.UpdatedBy = clutchUpdateRequest.UpdatedBy;
+            clutch.UpdatedDate = DateTime.Now;
+            var result = _clutchRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
