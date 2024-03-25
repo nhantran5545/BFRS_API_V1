@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
+using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +47,22 @@ namespace BusinessObjects.IService.Implements
         public async Task<CheckList?> GetCheckListByIdAsync(object checkListId)
         {
             return await _checkListRepository.GetByIdAsync(checkListId);
+        }
+
+        public async Task<string> GetCheckListNameById(int checkListId)
+        {
+            var checkList = await _checkListRepository.GetByIdAsync(checkListId);
+            return checkList?.CheckListName;
+        }
+
+        public async Task<List<CheckListRespone>> GetCheckListsName()
+        {
+            var checkLists = await _checkListRepository.GetAllAsync();
+            var checkListResponses = checkLists
+                .Select(c => new CheckListRespone { CheckListId = c.CheckListId, CheckListName = c.CheckListName })
+                .ToList();
+
+            return checkListResponses;
         }
 
         public void UpdateCheckList(CheckList checkList)

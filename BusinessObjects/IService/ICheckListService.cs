@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace BusinessObjects.IService
         void DeleteCheckListById(object checkListId);
         Task<IEnumerable<CheckList>> GetAllCheckListsAsync();
         Task<CheckList?> GetCheckListByIdAsync(object checkListId);
+        Task<List<CheckListRespone>> GetCheckListsName();
     }
 }

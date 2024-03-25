@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using BusinessObjects.IService;
+using BusinessObjects.ResponseModels;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -32,6 +33,7 @@ namespace BFRS_API_V1.Controllers
             }
             return Ok(checkLists);
         }
+
 
         // GET: api/CheckLists/5
         [HttpGet("{id}")]
@@ -70,5 +72,8 @@ namespace BFRS_API_V1.Controllers
 
             return NoContent();
         }
+
+
+
     }
 }
