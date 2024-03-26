@@ -70,6 +70,23 @@ namespace BFRS_API_V1.Controllers
             return Ok(cages);
         }
 
+        [HttpGet("ForBreeding/{farmId}")]
+        public async Task<ActionResult<IEnumerable<CageResponse>>> GetCagesForBreedingByFarm(int farmId)
+        {
+            var farm = await _farmService.GetFarmByIdAsync(farmId);
+            if (farm == null)
+            {
+                return BadRequest("Farm not found");
+            }
+
+            var cages = await _cageService.GetCagesForBreeding(farmId);
+            if (cages == null)
+            {
+                return NotFound("Cages not found");
+            }
+            return Ok(cages);
+        }
+
         // GET: api/Cages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Cage>> GetCage(int id)

@@ -148,7 +148,7 @@ namespace BusinessObjects.IService.Implements
                     {
                         return false;
                     }
-                    else if(clutch.Status == "Created")
+                    else if(clutch.Status == "Hatched")
                     {
                         clutch.Status = "Banding";
                         _clutchRepository.SaveChanges();

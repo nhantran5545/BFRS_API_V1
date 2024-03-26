@@ -114,6 +114,8 @@ namespace BusinessObjects.IService.Implements
                     {
                         return false;
                     }
+
+                    breeding.CageId = null;
                     breeding.CoupleSeperated = false;
                     breeding.Status = "Mating";
                     breeding.UpdatedBy = breedingUpdateRequest.StaffId;
@@ -167,6 +169,8 @@ namespace BusinessObjects.IService.Implements
                     {
                         return false;
                     }
+
+                    breeding.CageId = null;
                     breeding.CoupleSeperated = true;
                     breeding.Status = "Closed";
                     breeding.UpdatedBy = breedingCloseRequest.ManagerId;
