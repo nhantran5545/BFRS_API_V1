@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 using Microsoft.AspNetCore.OData.Query;
@@ -91,32 +90,13 @@ namespace BFRS_API_V1.Controllers
         // PUT: api/Birds/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBird(int id, Bird bird)
+        public async Task<IActionResult> PutBird(int id, BirdUpdateRequest birdUpdateRequest)
         {
-            /*if (id != bird.BirdId)
+            if(await _birdService.UpdateBirdAsync(birdUpdateRequest))
             {
-                return BadRequest();
+                return Ok(birdUpdateRequest);
             }
-
-            _context.Entry(bird).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BirdExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }*/
-
-            return NoContent();
+            return BadRequest("Something wrong with the server Please try again");
         }
 
         // POST: api/Birds
@@ -165,11 +145,11 @@ namespace BFRS_API_V1.Controllers
         }
 
         // DELETE: api/Birds/5
-        [HttpDelete("{id}")]
+        /*[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBird(int id)
         {
 
             return NoContent();
-        }
+        }*/
     }
 }
