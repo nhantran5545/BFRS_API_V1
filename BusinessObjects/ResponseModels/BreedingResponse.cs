@@ -21,5 +21,6 @@ namespace BusinessObjects.ResponseModels
         public int CageId { get; set; }
         public DateTime? NextCheck { get; set; }
         public string? Status { get; set; }
+        public int NumOfClutches { get; set; }
     }
 }

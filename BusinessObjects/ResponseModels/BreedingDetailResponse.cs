@@ -25,5 +25,6 @@ namespace BusinessObjects.ResponseModels
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedBy { get; set; }
         public string? Status { get; set; }
+        public List<ClutchResponse>? ClutchResponses { get; set; }
     }
 }

@@ -19,12 +19,16 @@ namespace DataAccess.IRepositories.Implements
             return await _context.Breedings
                 .Include(br => br.FatherBird)
                 .Include(br => br.MotherBird)
+                .Include(br => br.Clutches)
                 .ToListAsync();
         }
 
         public override async Task<Breeding?> GetByIdAsync(object id)
         {
             return await _context.Breedings
+                .Include(br => br.FatherBird)
+                .Include(br => br.MotherBird)
+                .Include(br => br.Clutches)
                 .Where(br => br.BreedingId.Equals(id))
                 .FirstOrDefaultAsync();
         }
@@ -32,6 +36,9 @@ namespace DataAccess.IRepositories.Implements
         public async Task<IEnumerable<Breeding>> GetAllBreedingsByManagerId(object managerId)
         {
             return await _context.Breedings
+                .Include(br => br.FatherBird)
+                .Include(br => br.MotherBird)
+                .Include(br => br.Clutches)
                 .Where(br => br.CreatedBy.Equals(managerId))
                 .ToListAsync();
         }
@@ -44,6 +51,9 @@ namespace DataAccess.IRepositories.Implements
             }
 
             return await _context.Breedings
+                .Include(br => br.FatherBird)
+                .Include(br => br.MotherBird)
+                .Include(br => br.Clutches)
                 .Where(b => b.Cage.AccountId == accountId)
                 .ToListAsync();
         }

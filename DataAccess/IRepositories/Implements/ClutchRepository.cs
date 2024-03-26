@@ -14,12 +14,22 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
+        public override async Task<IEnumerable<Clutch>> GetAllAsync()
+        {
+            return await _context.Clutches
+                //.Include(c => c.Breeding)
+                .Include(c => c.Eggs)
+                .Include(c => c.CreatedByNavigation)
+                .ToListAsync();
+        }
+
         public override async Task<Clutch?> GetByIdAsync(object id)
         {
             return await _context.Clutches
-               .Include(c => c.Breeding)
-               .Include(c => c.Cage)
+               //.Include(c => c.Breeding)
                .Include(c => c.Eggs)
+               .Include(c => c.CreatedByNavigation)
+               .Include(c => c.UpdatedByNavigation)
                .Where(c => c.ClutchId.Equals(id))
                .FirstOrDefaultAsync();
         }
@@ -27,9 +37,9 @@ namespace DataAccess.IRepositories.Implements
         public async Task<IEnumerable<Clutch>> GetClutchsByBreedingId(object breedingId)
         {
             return await _context.Clutches
-                .Include(c => c.Breeding)
-                .Include(c => c.Cage)
+                //.Include(c => c.Breeding)
                 .Include(c => c.Eggs)
+                .Include(c => c.CreatedByNavigation)
                 .Where(c => c.BreedingId.Equals(breedingId))
                 .ToListAsync();
         }
@@ -37,9 +47,9 @@ namespace DataAccess.IRepositories.Implements
         public async Task<IEnumerable<Clutch>> GetClutchsByCreatedById(object createdById)
         {
             return await _context.Clutches
-                .Include(c => c.Breeding)
-                .Include(c => c.Cage)
+                //.Include(c => c.Breeding)
                 .Include(c => c.Eggs)
+                .Include(c => c.CreatedByNavigation)
                 .Where(c => c.CreatedBy.Equals(createdById))
                 .ToListAsync();
         }

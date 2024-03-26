@@ -97,11 +97,21 @@ namespace BusinessObjects.IService.Implements
         public async Task<BreedingDetailResponse?> GetBreedingById(object breedingId)
         {
             var breeding = await _breedingRepository.GetByIdAsync(breedingId);
-            return _mapper.Map<BreedingDetailResponse>(breeding);
+            if(breeding == null)
+            {
+                return null;
+            }
+
+            var breedingResponse = _mapper.Map<BreedingDetailResponse>(breeding);
+            var species = await _birdSpeciesRepository.GetByIdAsync(breedingResponse.SpeciesId);
+            if (species != null)
+            {
+                breedingResponse.SpeciesName = species.BirdSpeciesName;
+            }
+            
+            breedingResponse.ClutchResponses = breeding.Clutches.Select(c => _mapper.Map<ClutchResponse>(c)).ToList();
+            return breedingResponse;
         }
-
-
-
 
         public async Task<bool> PutBirdsToBreeding(BreedingUpdateRequest breedingUpdateRequest)
         {

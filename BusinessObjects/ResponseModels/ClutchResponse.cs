@@ -17,5 +17,6 @@ namespace BusinessObjects.ResponseModels
         public string? CreatedByFirstName { get; set; }
         public string? CreatedByLastName { get; set; }
         public string? Status { get; set; }
+        public int NumOfEggs { get; set; }
     }
 }

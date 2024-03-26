@@ -46,6 +46,8 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.Image: null))
                 .ForMember(dest => dest.SpeciesId,
                             opt => opt.MapFrom(src => src.MotherBird != null ? src.MotherBird.BirdSpeciesId : null))
+                .ForMember(dest => dest.NumOfClutches,
+                            opt => opt.MapFrom(src => src.Clutches.Count()))
                 .ReverseMap();
             CreateMap<Breeding, BreedingDetailResponse>()
                 .ForMember(dest => dest.FatherBandNumber,
@@ -80,6 +82,8 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.CreatedByNavigation != null ? src.CreatedByNavigation.FirstName : string.Empty))
                 .ForMember(dest => dest.CreatedByLastName,
                             opt => opt.MapFrom(src => src.CreatedByNavigation != null ? src.CreatedByNavigation.LastName : string.Empty))
+                .ForMember(dest => dest.NumOfEggs,
+                            opt => opt.MapFrom(src => src.Eggs.Count()))
                 .ReverseMap();
             CreateMap<Clutch, ClutchDetailResponse>()
                 .ForMember(dest => dest.CreatedByFirstName,

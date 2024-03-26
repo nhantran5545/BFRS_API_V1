@@ -93,7 +93,14 @@ namespace BusinessObjects.IService.Implements
         public async Task<ClutchDetailResponse?> GetClutchByIdAsync(object clutchId)
         {
             var clutch = await _clutchRepository.GetByIdAsync(clutchId);
-            return _mapper.Map<ClutchDetailResponse>(clutch);
+            if(clutch == null)
+            {
+                return null;
+            }
+
+            var clutchResponse = _mapper.Map<ClutchDetailResponse>(clutch);
+            clutchResponse.EggResponses = clutch.Eggs.Select(e => _mapper.Map<EggResponse>(e)).ToList();
+            return clutchResponse;
         }
 
         public void UpdateClutch(Clutch clutch)
