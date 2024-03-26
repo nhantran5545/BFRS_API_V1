@@ -64,6 +64,7 @@ builder.Services.AddScoped<IBirdRepository, BirdRepository>();
 builder.Services.AddScoped<IBirdSpeciesRepository, BirdSpeciesRepository>();
 builder.Services.AddScoped<IBirdTypeRepository, BirdTypeRepository>();
 builder.Services.AddScoped<IBreedingCheckListDetailRepository, BreedingCheckListDetailRepository>();
+builder.Services.AddScoped<IBreedingCheckListRepository, BreedingCheckListRepository>();
 builder.Services.AddScoped<IBreedingNormRepository, BreedingNormRepository>();
 builder.Services.AddScoped<IBreedingReasonRepository, BreedingReasonRepository>();
 builder.Services.AddScoped<IBreedingRepository, BreedingRepository>();
@@ -94,6 +95,7 @@ builder.Services.AddScoped<IIssueService, IssueService>();
 builder.Services.AddScoped<ICheckListDetailService, CheckListDetailService>();
 builder.Services.AddScoped<ICheckListService, CheckListService>();
 builder.Services.AddScoped<IBreedingCheckListDetailService, BreedingCheckListDetailService>();
+builder.Services.AddScoped<IBreedingCheckListService, BreedingCheckListService>();
 
 // Mapper
 var mapperConfig = new MapperConfiguration(mc =>

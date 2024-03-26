@@ -95,6 +95,12 @@ namespace BusinessObjects.Mapper
                 .ReverseMap();
             CreateMap<Mutation, IndividualMutation>()
                 .ReverseMap();
+            CreateMap<CheckList, CheckListResponse>()
+                .ReverseMap();
+
+            CreateMap<CheckListDetail, CheckListDetailResponse>()
+                .ReverseMap();
+
             #endregion
 
             #region Mapper_Request

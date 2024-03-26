@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.IService
 {
-    public interface IBreedingCheckListDetailService
+    public interface IBreedingCheckListService
     {
+        Task<List<BreedingCheckListResponse>> GetBreedingCheckListDetailsByBreedingId(int breedingId);
     }
+
 }

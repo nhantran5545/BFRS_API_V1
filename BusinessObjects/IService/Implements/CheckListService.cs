@@ -55,16 +55,6 @@ namespace BusinessObjects.IService.Implements
             return checkList?.CheckListName;
         }
 
-        public async Task<List<CheckListRespone>> GetCheckListsName()
-        {
-            var checkLists = await _checkListRepository.GetAllAsync();
-            var checkListResponses = checkLists
-                .Select(c => new CheckListRespone { CheckListId = c.CheckListId, CheckListName = c.CheckListName })
-                .ToList();
-
-            return checkListResponses;
-        }
-
         public void UpdateCheckList(CheckList checkList)
         {
             throw new NotImplementedException();

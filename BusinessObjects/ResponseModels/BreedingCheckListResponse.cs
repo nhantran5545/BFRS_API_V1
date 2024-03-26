@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.ResponseModels
 {
-    public class CheckListDetailResponse
+    public class BreedingCheckListResponse
     {
         public string CheckListName { get; set; }
         public int Phase { get; set; }
@@ -14,7 +14,5 @@ namespace BusinessObjects.ResponseModels
         public bool Compulsory { get; set; }
         public bool Positive { get; set; }
         public int Priority { get; set; }
-        public string Status { get; set; }
     }
 }
-

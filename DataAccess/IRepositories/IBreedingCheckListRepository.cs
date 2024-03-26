@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.IRepositories
 {
-    public interface IBreedingCheckListDetailRepository : IGenericRepository<BreedingCheckListDetail>
+    public interface IBreedingCheckListRepository : IGenericRepository<BreedingCheckList>
     {
+        Task<List<BreedingCheckList>> GetBreedingCheckListDetailsByBreedingId(int breedingId);
     }
 }
+
