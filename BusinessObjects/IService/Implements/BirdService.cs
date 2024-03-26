@@ -38,16 +38,6 @@ namespace BusinessObjects.IService.Implements
             return bird.BirdId;
         }
 
-        public void DeleteBird(Bird bird)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteBirdById(object birdId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IEnumerable<BirdResponse>> GetAllBirdsAsync()
         {
             var birds = await _birdRepository.GetAllAsync();
@@ -60,23 +50,23 @@ namespace BusinessObjects.IService.Implements
             return birds.Select(b => _mapper.Map<BirdResponse>(b));
         }
 
-        public async Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId)
-        {
-            var bird = await _birdRepository.GetByIdAsync(birdId);
-            return _mapper.Map<BirdDetailResponse>(bird);
-        }
-
         public async Task<IEnumerable<BirdResponse>> GetInRestBirdsBySpeciesIdAndFarmId(object speciesId, object farmId)
         {
             var birds = await _birdRepository.GetInRestBirdsBySpeciesIdAndFarmId(speciesId, farmId);
             return birds.Select(b => _mapper.Map<BirdResponse>(b));
         }
 
-        public void UpdateBird(Bird bird)
+        public async Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId)
         {
-            throw new NotImplementedException();
+            var bird = await _birdRepository.GetByIdAsync(birdId);
+            return _mapper.Map<BirdDetailResponse>(bird);
         }
 
+        public async Task<BirdDetailResponse?> GetBirdByEggIdAsync(object eggId)
+        {
+            var bird = await _birdRepository.GetByIdAsync(eggId);
+            return _mapper.Map<BirdDetailResponse>(bird);
+        }
         public async Task<Dictionary<string, BirdPedi>> GetPedigreeOfABird(int birdId)
         {
             var birdAlgorithmService = new BirdAlgorithmService(_birdRepository);
@@ -88,8 +78,5 @@ namespace BusinessObjects.IService.Implements
             }
             return pairs;
         }
-
-
-
     }
 }

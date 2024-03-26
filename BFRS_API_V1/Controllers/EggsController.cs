@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 using BusinessObjects.RequestModels;
@@ -37,12 +36,45 @@ namespace BFRS_API_V1.Controllers
             return Ok(eggs);
         }
 
+        [HttpGet("ByClutch/{clutchId}")]
+        public async Task<ActionResult<IEnumerable<EggResponse>>> GetEggsByClutchId(int clutchId)
+        {
+            var eggs = await _eggService.GetEggsByClutchIdAsync(clutchId);
+            if (!eggs.Any())
+            {
+                return NotFound("There are no eggs!");
+            }
+            return Ok(eggs);
+        }
+
+        [HttpGet("ByBreeding/{breedingId}")]
+        public async Task<ActionResult<IEnumerable<EggResponse>>> GetEggsByBreedingId(int breedingId)
+        {
+            var eggs = await _eggService.GetEggsByBreedingIdAsync(breedingId);
+            if (!eggs.Any())
+            {
+                return NotFound("There are no eggs!");
+            }
+            return Ok(eggs);
+        }
+
         // GET: api/Eggs/5
         [HttpGet("{id}")]
         public async Task<ActionResult<EggResponse>> GetEgg(int id)
         {
             var egg = await _eggService.GetEggByIdAsync(id);
             if(egg == null)
+            {
+                return NotFound("Egg not found");
+            }
+            return Ok(egg);
+        }
+
+        [HttpGet("Bird/{birdId}")]
+        public async Task<ActionResult<EggResponse>> GetEggByBirdId(int birdId)
+        {
+            var egg = await _eggService.GetEggByBirdIdAsync(birdId);
+            if (egg == null)
             {
                 return NotFound("Egg not found");
             }

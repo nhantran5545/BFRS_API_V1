@@ -51,7 +51,7 @@ namespace BFRS_API_V1.Controllers
 
         // PUT: api/Farms/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        /*[HttpPut("{id}")]
         public async Task<IActionResult> PutFarm(Guid id, Farm farm)
         {
 
@@ -73,6 +73,6 @@ namespace BFRS_API_V1.Controllers
         {
 
             return NoContent();
-        }
+        }*/
     }
 }

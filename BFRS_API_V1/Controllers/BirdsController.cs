@@ -10,6 +10,7 @@ using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.RequestModels;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -18,10 +19,14 @@ namespace BFRS_API_V1.Controllers
     public class BirdsController : ControllerBase
     {
         private readonly IBirdService _birdService;
+        private readonly IBirdSpeciesService _birdSpeciesService;
+        private readonly ICageService _cageService;
 
-        public BirdsController(IBirdService birdService)
+        public BirdsController(IBirdService birdService, IBirdSpeciesService birdSpeciesService, ICageService cageService)
         {
             _birdService = birdService;
+            _birdSpeciesService = birdSpeciesService;
+            _cageService = cageService;
         }
 
         // GET: api/Birds
@@ -65,7 +70,7 @@ namespace BFRS_API_V1.Controllers
         // GET: api/Birds/5
         [HttpGet("{id}")]
         [EnableQuery]
-        public async Task<ActionResult<Bird>> GetBird(int id)
+        public async Task<ActionResult<BirdResponse>> GetBird(int id)
         {
             var bird = await _birdService.GetBirdByIdAsync(id);
             if (bird == null)
@@ -117,10 +122,46 @@ namespace BFRS_API_V1.Controllers
         // POST: api/Birds
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Bird>> PostBird(Bird bird)
+        public async Task<ActionResult<BirdResponse>> PostBird(BirdAddRequest birdAddRequest)
         {
+            var species = await _birdSpeciesService.GetBirdSpeciesByIdAsync(birdAddRequest.BirdSpeciesId);
+            if(species == null)
+            {
+                return NotFound("Invalid Species");
+            }
 
-            return CreatedAtAction("GetBird", new { id = bird.BirdId }, bird);
+            var cage = await _cageService.GetCageByIdAsync(birdAddRequest.CageId);
+            if(cage == null)
+            {
+                return NotFound("Invalid cage");
+            }
+
+            if(birdAddRequest.FatherBirdId != null)
+            {
+                var fatherBirdId = await _birdService.GetBirdByIdAsync(birdAddRequest.FatherBirdId);
+                if(fatherBirdId == null || fatherBirdId.Gender != "Male")
+                { 
+                    return NotFound("Father Bird not found");
+                }
+            }
+
+            if (birdAddRequest.MotherBirdId != null)
+            {
+                var motherBirdId = await _birdService.GetBirdByIdAsync(birdAddRequest.MotherBirdId);
+                if (motherBirdId == null || motherBirdId.Gender != "Female")
+                {
+                    return NotFound("Mother Bird not found");
+                }
+            }
+
+            var result = await _birdService.CreateBirdAsync(birdAddRequest);
+            if(result < 1)
+            {
+                return BadRequest("Something wrong with the server, please try again!");
+            }
+
+            var bird = await _birdService.GetBirdByIdAsync(result);
+            return Ok(bird);
         }
 
         // DELETE: api/Birds/5

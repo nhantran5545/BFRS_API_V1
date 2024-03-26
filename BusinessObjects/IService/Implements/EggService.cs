@@ -89,6 +89,22 @@ namespace BusinessObjects.IService.Implements
             return eggs.Select(e => _mapper.Map<EggResponse>(e));
         }
 
+        public async Task<IEnumerable<EggResponse>> GetEggsByBreedingIdAsync(object breedingId)
+        {
+            List<Egg> totalEggs = new List<Egg>();
+            var clutches = await _clutchRepository.GetClutchsByBreedingId(breedingId);
+            if (clutches.Any())
+            {                
+                foreach (var item in clutches)
+                {
+                    var eggs = await _eggRepository.GetEggsByClutchIdAsync(item.ClutchId);
+                    totalEggs.AddRange(eggs);
+                }
+            }
+
+            return totalEggs.Select(e => _mapper.Map<EggResponse>(e));
+        }
+
         public async Task<EggResponse?> GetEggByBirdIdAsync(object birdId)
         {
             var egg = await _eggRepository.GetByIdAsync(birdId);

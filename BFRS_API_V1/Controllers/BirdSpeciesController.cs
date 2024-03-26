@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 using Microsoft.AspNetCore.OData.Query;
@@ -39,7 +38,7 @@ namespace BFRS_API_V1.Controllers
         // GET: api/BirdSpecies/5
         [HttpGet("{id}")]
         [EnableQuery]
-        public async Task<ActionResult<BirdSpeciesResponse>> GetBirdSpecy(int id)
+        public async Task<ActionResult<BirdSpeciesDetailResponse>> GetBirdSpecy(int id)
         {
             var birdspecy = await _birdSpeciesService.GetBirdSpeciesByIdAsync(id);
             if(birdspecy == null)
@@ -51,7 +50,7 @@ namespace BFRS_API_V1.Controllers
 
         // PUT: api/BirdSpecies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        /*[HttpPut("{id}")]
         public async Task<IActionResult> PutBirdSpecy(int id, BirdSpecy birdSpecy)
         {
 
@@ -73,6 +72,6 @@ namespace BFRS_API_V1.Controllers
         {
 
             return NoContent();
-        }
+        }*/
     }
 }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 
@@ -89,7 +88,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Cages/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cage>> GetCage(int id)
+        public async Task<ActionResult<CageDetailResponse>> GetCage(int id)
         {
             var cage = await _cageService.GetCageByIdAsync(id);
             if(cage == null)
@@ -101,7 +100,7 @@ namespace BFRS_API_V1.Controllers
 
         // PUT: api/Cages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        /*[HttpPut("{id}")]
         public async Task<IActionResult> PutCage(int id, Cage cage)
         {
 
@@ -123,6 +122,6 @@ namespace BFRS_API_V1.Controllers
         {
 
             return NoContent();
-        }
+        }*/
     }
 }

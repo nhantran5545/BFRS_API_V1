@@ -12,13 +12,11 @@ namespace BusinessObjects.IService
     public interface IBirdService
     {
         Task<int> CreateBirdAsync(BirdAddRequest birdAddRequest);
-        void UpdateBird(Bird bird);
-        void DeleteBird(Bird bird); 
-        void DeleteBirdById(object birdId);
         Task<IEnumerable<BirdResponse>> GetAllBirdsAsync();
         Task<IEnumerable<BirdResponse>> GetBirdsByFarmId(object farmId);
         Task<IEnumerable<BirdResponse>> GetInRestBirdsBySpeciesIdAndFarmId(object speciesId, object farmId);
         Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId);
+        Task<BirdDetailResponse?> GetBirdByEggIdAsync(object eggId);
         Task<Dictionary<string, BirdPedi>> GetPedigreeOfABird(int birdId);
     }
 }

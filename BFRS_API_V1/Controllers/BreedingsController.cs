@@ -9,7 +9,6 @@ using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
 using Microsoft.AspNetCore.OData.Query;
 using BusinessObjects.ResponseModels;
-using AutoMapper;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -20,14 +19,12 @@ namespace BFRS_API_V1.Controllers
         private readonly IBreedingService _breedingService;
         private readonly IBirdService _birdService;
         private readonly ICageService _cageService;
-        private readonly IMapper _mapper;
 
-        public BreedingsController(IBreedingService breedingService, IBirdService birdService, ICageService cageService, IMapper mapper)
+        public BreedingsController(IBreedingService breedingService, IBirdService birdService, ICageService cageService)
         {
             _breedingService = breedingService;
             _birdService = birdService;
             _cageService = cageService;
-            _mapper = mapper;
         }
 
         [HttpGet("InbreedingCoefficient")]
@@ -61,9 +58,21 @@ namespace BFRS_API_V1.Controllers
             return Ok(breedings); 
         }
 
+        [HttpGet("Management/{managerId}")]
+        [EnableQuery]
+        public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedingsByManagerId(int managerId)
+        {
+            var breedings = await _breedingService.GetAllBreedingsByManagerId(managerId);
+            if (breedings == null)
+            {
+                return NotFound("There are no breeding!");
+            }
+            return Ok(breedings);
+        }
+
         [HttpGet("{id}")]
         [EnableQuery]
-        public async Task<ActionResult<BreedingResponse>> GetBreeding(int id)
+        public async Task<ActionResult<BreedingDetailResponse>> GetBreeding(int id)
         {
             var breeding = await _breedingService.GetBreedingById(id);
             if(breeding == null)

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 using BusinessObjects.RequestModels;
@@ -37,18 +36,6 @@ namespace BFRS_API_V1.Controllers
             return Ok(clutches);
         }
 
-        // GET: api/Clutches/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ClutchResponse>> GetClutch(int id)
-        {
-            var clutch = await _clutchService.GetClutchByIdAsync(id);
-            if(clutch == null)
-            {
-                return NotFound("Clutch not found");
-            }
-            return Ok(clutch);
-        }
-
         [HttpGet("ByBreeding/{breedingId}")]
         public async Task<ActionResult<IEnumerable<ClutchResponse>>> GetClutchesByBreedingId(int breedingId)
         {
@@ -69,6 +56,18 @@ namespace BFRS_API_V1.Controllers
                 return NotFound("Clutches not found!");
             }
             return Ok(clutches);
+        }
+
+        // GET: api/Clutches/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ClutchDetailResponse>> GetClutch(int id)
+        {
+            var clutch = await _clutchService.GetClutchByIdAsync(id);
+            if (clutch == null)
+            {
+                return NotFound("Clutch not found");
+            }
+            return Ok(clutch);
         }
 
         [HttpPut("Close/{id}")]
