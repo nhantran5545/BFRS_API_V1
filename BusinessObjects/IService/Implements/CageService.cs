@@ -75,6 +75,12 @@ namespace BusinessObjects.IService.Implements
             return cages.Select(c => _mapper.Map<CageResponse>(c));
         }
 
+        public async Task<IEnumerable<CageResponse>> GetCagesForBreeding(int farmId)
+        {
+            var cages = await _cageRepository.GetEmptyCagesByFarmId(farmId);
+            return cages.Select(c => _mapper.Map<CageResponse>(c));
+        }
+
         public void UpdateCage(Cage cage)
         {
             throw new NotImplementedException();
