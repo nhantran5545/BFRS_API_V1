@@ -12,6 +12,7 @@ namespace BusinessObjects.IService
     public interface IBirdService
     {
         Task<int> CreateBirdAsync(BirdAddRequest birdAddRequest);
+        Task<bool> UpdateBirdAsync(BirdUpdateRequest birdUpdateRequest);
         Task<IEnumerable<BirdResponse>> GetAllBirdsAsync();
         Task<IEnumerable<BirdResponse>> GetBirdsByFarmId(object farmId);
         Task<IEnumerable<BirdResponse>> GetInRestBirdsBySpeciesIdAndFarmId(object speciesId, object farmId);

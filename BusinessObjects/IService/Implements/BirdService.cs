@@ -78,5 +78,35 @@ namespace BusinessObjects.IService.Implements
             }
             return pairs;
         }
+
+        public async Task<bool> UpdateBirdAsync(BirdUpdateRequest birdUpdateRequest)
+        {
+            var bird = await _birdRepository.GetByIdAsync(birdUpdateRequest.BirdId);
+            if(bird == null)
+            {
+                return false;
+            }
+
+            bird.Gender = birdUpdateRequest.Gender;
+            bird.HatchedDate = birdUpdateRequest.HatchedDate;
+            bird.PurchaseFrom = birdUpdateRequest.PurchaseFrom;
+            bird.AcquisitionDate = birdUpdateRequest.AcquisitionDate;
+            bird.BirdSpeciesId = birdUpdateRequest.BirdSpeciesId;
+            bird.CageId = birdUpdateRequest.CageId;
+            bird.FarmId = birdUpdateRequest.FarmId;
+            bird.FatherBirdId = birdUpdateRequest.FatherBirdId;
+            bird.MotherBirdId = birdUpdateRequest.MotherBirdId;
+            bird.BandNumber = birdUpdateRequest.BandNumber;
+            bird.Image = birdUpdateRequest.Image;
+            bird.LifeStage = birdUpdateRequest.LifeStage;
+            bird.Status = birdUpdateRequest.Status;
+
+            var result = _birdRepository.SaveChanges();
+            if(result < 1)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
