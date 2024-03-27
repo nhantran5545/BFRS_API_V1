@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using DataAccess.Models;
 using AutoMapper;
 using BusinessObjects.RequestModels;
 using BusinessObjects.IService;
@@ -19,14 +18,11 @@ namespace BFRS_API_V1.Controllers
     public class AccountsController : ControllerBase
     {
         IAccountService _accountService;
-        private readonly IMapper _mapper;
 
 
-        public AccountsController(IAccountService accountService, IMapper mapper)
+        public AccountsController(IAccountService accountService)
         {
             _accountService = accountService;
-            _mapper = mapper;
-
         }
 
         [HttpPost("login")]

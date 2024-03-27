@@ -103,21 +103,37 @@ namespace BusinessObjects.IService.Implements
             return clutchResponse;
         }
 
-        public void UpdateClutch(Clutch clutch)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> CloseClutch(ClutchUpdateRequest clutchUpdateRequest)
+        public async Task<bool> UpdateClutch(ClutchUpdateRequest clutchUpdateRequest)
         {
             var clutch = await _clutchRepository.GetByIdAsync(clutchUpdateRequest.ClutchId);
+            if (clutch == null)
+            {
+                return false;
+            }
+
+            clutch.BroodStartDate = clutchUpdateRequest.BroodStartDate;
+            clutch.BroodEndDate = clutchUpdateRequest.BroodEndDate;
+            //clutch.CageId = clutch.CageId;
+            clutch.UpdatedBy = clutchUpdateRequest.UpdatedBy;
+            clutch.UpdatedDate = DateTime.Now;
+            var result = _clutchRepository.SaveChanges();
+            if(result < 1)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> CloseClutch(ClutchCloseRequest clutchCloseRequest)
+        {
+            var clutch = await _clutchRepository.GetByIdAsync(clutchCloseRequest.ClutchId);
             if(clutch == null)
             {
                 return false;
             }
 
-            clutch.Status = "Closed";
-            clutch.UpdatedBy = clutchUpdateRequest.UpdatedBy;
+            clutch.Status = clutchCloseRequest.Status;
+            clutch.UpdatedBy = clutchCloseRequest.UpdatedBy;
             clutch.UpdatedDate = DateTime.Now;
             var result = _clutchRepository.SaveChanges();
             if (result < 1)

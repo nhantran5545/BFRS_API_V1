@@ -70,27 +70,6 @@ namespace BFRS_API_V1.Controllers
             return Ok(clutch);
         }
 
-        [HttpPut("Close/{id}")]
-        public async Task<IActionResult> CloseClutch(int id, [FromBody]ClutchUpdateRequest clutchUpdateRequest)
-        {
-            if(id != clutchUpdateRequest.ClutchId)
-            {
-                return BadRequest("clutch id conflict");
-            }
-
-            var clutch = await _clutchService.GetClutchByIdAsync(id);
-            if(clutch == null)
-            {
-                return NotFound("Clutch not found");
-            }
-
-            if(await _clutchService.CloseClutch(clutchUpdateRequest))
-            {
-                return Ok("Close successfully!");
-            }
-            return BadRequest("Something wrong with the server, please try again");
-        }
-
         // POST: api/Clutches
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -101,6 +80,12 @@ namespace BFRS_API_V1.Controllers
             {
                 return BadRequest("Breeding not found");
             }
+
+            if(breeding.Status != "Mating" && breeding.Status != "InProgress")
+            {
+                return BadRequest("Breeding already closed");
+            }
+
             var result = await _clutchService.CreateClutchAsync(clutchAddRequest);
             if (result < 1)
             {
@@ -108,6 +93,54 @@ namespace BFRS_API_V1.Controllers
             }
             var clutch = await _clutchService.GetClutchByIdAsync(result);
             return Ok(clutch);
+        }
+
+        [HttpPut("Close/{id}")]
+        public async Task<IActionResult> CloseClutch(int id, [FromBody] ClutchCloseRequest clutchUpdateRequest)
+        {
+            if (id != clutchUpdateRequest.ClutchId)
+            {
+                return BadRequest("clutch id conflict");
+            }
+
+            var clutch = await _clutchService.GetClutchByIdAsync(id);
+            if (clutch == null)
+            {
+                return NotFound("Clutch not found");
+            }
+
+            if (await _clutchService.CloseClutch(clutchUpdateRequest))
+            {
+                return Ok("Close successfully!");
+            }
+            return BadRequest("Something wrong with the server, please try again");
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateClutchInfo(int id, [FromBody]ClutchUpdateRequest clutchUpdateRequest)
+        {
+            if(id != clutchUpdateRequest.ClutchId)
+            {
+                return BadRequest("Id must be the same");
+            }
+
+            if(clutchUpdateRequest.BroodStartDate != null && clutchUpdateRequest.BroodEndDate != null
+                && clutchUpdateRequest.BroodEndDate < clutchUpdateRequest.BroodStartDate)
+            {
+                return BadRequest("Brood Start Date must before Brood End Date");
+            }
+
+            var clutch = await _clutchService.GetClutchByIdAsync(id);
+            if (clutch == null)
+            {
+                return NotFound("clutch not found");
+            }
+
+            if(await _clutchService.UpdateClutch(clutchUpdateRequest))
+            {
+                return Ok("Update Successfully");
+            }
+            return BadRequest();
         }
 
         // DELETE: api/Clutches/5

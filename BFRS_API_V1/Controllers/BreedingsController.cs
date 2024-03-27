@@ -108,11 +108,15 @@ namespace BFRS_API_V1.Controllers
             }
 
             var cage = await _cageService.GetCageByIdAsync(breedingAddRequest.CageId);
-            if(cage == null || cage.Status != "Breeding")
+            if(cage == null)
             {
-                return BadRequest("Cage is either unavailable or not for breeding");
+                return BadRequest("Cage not found");
             }
 
+            if(cage.Status != "Standby")
+            {
+                return BadRequest("Cage is either not for breeding or in breeding progress");
+            }
             var result = await _breedingService.CreateBreeding(breedingAddRequest);
             if(result < 1)
             {
@@ -122,7 +126,7 @@ namespace BFRS_API_V1.Controllers
             return Ok(breeding);
         }
 
-        [HttpPut("PutBirdsTogether")]
+        /*[HttpPut("PutBirdsTogether")]
         public async Task<IActionResult> PutBirdsTogether(BreedingUpdateRequest breedingUpdateRequest)
         {
             var breeding = await _breedingService.GetBreedingById(breedingUpdateRequest.BreedingId);
@@ -142,7 +146,7 @@ namespace BFRS_API_V1.Controllers
                 return Ok("Update Successfully");
             }
             return BadRequest("Something is wrong with the server please try again!");
-        }
+        }*/
 
         /*[HttpPut("BreedingInProgress")]
         public async Task<IActionResult> BreedingInProgress(BreedingUpdateRequest breedingUpdateRequest)

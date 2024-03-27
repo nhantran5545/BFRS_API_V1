@@ -12,8 +12,8 @@ namespace BusinessObjects.IService
     public interface IClutchService
     {
         Task<int> CreateClutchAsync(ClutchAddRequest clutchAddRequest);
-        Task<bool> CloseClutch(ClutchUpdateRequest clutchUpdateRequest);
-        void UpdateClutch(Clutch clutch);
+        Task<bool> CloseClutch(ClutchCloseRequest clutchUpdateRequest);
+        Task<bool> UpdateClutch(ClutchUpdateRequest clutchUpdateRequest);
         void DeleteClutch(Clutch clutch);
         void DeleteClutchtById(object clutchId);
         Task<IEnumerable<ClutchResponse>> GetAllClutchsAsync();

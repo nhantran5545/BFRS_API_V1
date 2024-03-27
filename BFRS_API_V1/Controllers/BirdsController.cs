@@ -90,8 +90,26 @@ namespace BFRS_API_V1.Controllers
         // PUT: api/Birds/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBird(int id, BirdUpdateRequest birdUpdateRequest)
+        public async Task<IActionResult> PutBird(int id, [FromBody]BirdUpdateRequest birdUpdateRequest)
         {
+            var bird = await _birdService.GetBirdByIdAsync(birdUpdateRequest.BirdId);
+            if(bird == null)
+            {
+                return NotFound("Bird not found");
+            }
+
+            var birdSpecies = await _birdSpeciesService.GetBirdSpeciesByIdAsync(birdUpdateRequest.BirdSpeciesId);
+            if (birdSpecies == null)
+            {
+                return NotFound("Invalid bird species");
+            }
+
+            var cage = await _cageService.GetCageByIdAsync(birdUpdateRequest.CageId);
+            if(cage == null)
+            {
+                return NotFound("Invalid cage");
+            }
+
             if(await _birdService.UpdateBirdAsync(birdUpdateRequest))
             {
                 return Ok(birdUpdateRequest);

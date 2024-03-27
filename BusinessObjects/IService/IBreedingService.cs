@@ -13,9 +13,8 @@ namespace BusinessObjects.IService
     {
         Task<double> CalculateInbreedingPercentage(int fatherBirdId, int motherBirdId);
         Task<int> CreateBreeding(BreedingAddRequest breedingAddRequest);
-        void UpdateBreeding(BreedingAddRequest breedingAddRequest);
-        Task<bool> PutBirdsToBreeding(BreedingUpdateRequest breedingUpdateRequest);
-        Task<bool> BreedingInProgress(BreedingUpdateRequest breedingUpdateRequest);
+        /*Task<bool> PutBirdsToBreeding(BreedingUpdateRequest breedingUpdateRequest);
+        Task<bool> BreedingInProgress(BreedingUpdateRequest breedingUpdateRequest);*/
         Task<bool> CloseBreeding(BreedingCloseRequest breedingCloseRequest);
         void DeleteBreeding(BreedingAddRequest breeding);
         void DeleteBreedingById(object breedingId);

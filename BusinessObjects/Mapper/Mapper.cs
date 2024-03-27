@@ -114,6 +114,8 @@ namespace BusinessObjects.Mapper
                 .ReverseMap();
             CreateMap<ClutchAddRequest, Clutch>()
                 .ReverseMap();
+            CreateMap<ClutchCloseRequest, Clutch>()
+                .ReverseMap();
             CreateMap<EggAddRequest, Egg>()
                 .ReverseMap();
             #endregion
