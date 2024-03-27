@@ -38,7 +38,7 @@ namespace BusinessObjects.InheritanceClass
                     new Claim("AccountId", accountId.ToString()),
                     new Claim(ClaimTypes.Role, role),
                 }),
-                Expires = DateTime.UtcNow.AddHours(2), // Thời gian hiệu lực của token (vd: 30 phút)
+                Expires = DateTime.UtcNow.AddHours(24), // Thời gian hiệu lực của token (vd: 30 phút)
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 

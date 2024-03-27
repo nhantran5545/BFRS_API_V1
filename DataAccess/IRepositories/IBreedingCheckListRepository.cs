@@ -10,6 +10,7 @@ namespace DataAccess.IRepositories
     public interface IBreedingCheckListRepository : IGenericRepository<BreedingCheckList>
     {
         BreedingCheckList GetBreedingCheckList(int breedingId, int phase);
+        Task<IEnumerable<BreedingCheckList>> GetBreedingCheckListsByBreedingId(int breedingId);
     }
 }
 
