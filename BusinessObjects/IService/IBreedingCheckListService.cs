@@ -9,7 +9,10 @@ namespace BusinessObjects.IService
 {
     public interface IBreedingCheckListService
     {
-        BreedingCheckListResponse GetBreedingCheckList(int breedingId, int phase);
+        //BreedingCheckListResponse GetBreedingCheckList(int breedingId, int phase);
+        Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsAsync();
+        Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsByBreedingId(int breedingId);
+        Task<BreedingCheckListResponse?> GetBreedingCheckListDetail(int breedingCheckListId);
     }
 
 }

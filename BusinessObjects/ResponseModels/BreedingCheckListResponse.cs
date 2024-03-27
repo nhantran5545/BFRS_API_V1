@@ -11,6 +11,6 @@ namespace BusinessObjects.ResponseModels
         public int BreedingCheckListId { get; set; }
         public int? BreedingId { get; set; }
         public int Phase { get; set; }
-        public List<CheckListDetailResponse> CheckListDetails { get; set; }
+        public List<BreedingCheckListDetailResponse>? BreedingCheckListDetails { get; set; }
     }
 }
