@@ -13,16 +13,14 @@ namespace DataAccess.IRepositories.Implements
         public BreedingCheckListRepository(BFRS_dbContext context) : base(context)
         {
         }
-        public async Task<List<BreedingCheckList>> GetBreedingCheckListDetailsByBreedingId(int breedingId)
-        {
-            return await _context.BreedingCheckLists
-                .Include(bcl => bcl.CheckList)
-                .Include(bcl => bcl.Breeding)
-                .Include(bcl => bcl.BreedingCheckListDetails)
-                    .ThenInclude(bclDetail => bclDetail.CheckListDetail)
-                .Where(bcl => bcl.BreedingId == breedingId)
-                .ToListAsync();
-        }
 
+        public BreedingCheckList GetBreedingCheckList(int breedingId, int phase)
+        {
+            return _context.BreedingCheckLists
+                .Include(b => b.Breeding)
+                .Include(b => b.CheckList)
+                .ThenInclude(cl => cl.CheckListDetails)
+                .FirstOrDefault(b => b.BreedingId == breedingId && b.Phase == phase);
+        }
     }
 }

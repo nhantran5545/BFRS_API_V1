@@ -8,11 +8,9 @@ namespace BusinessObjects.ResponseModels
 {
     public class BreedingCheckListResponse
     {
-        public string CheckListName { get; set; }
+        public int BreedingCheckListId { get; set; }
+        public int? BreedingId { get; set; }
         public int Phase { get; set; }
-        public string QuestionName { get; set; }
-        public bool Compulsory { get; set; }
-        public bool Positive { get; set; }
-        public int Priority { get; set; }
+        public List<CheckListDetailResponse> CheckListDetails { get; set; }
     }
 }

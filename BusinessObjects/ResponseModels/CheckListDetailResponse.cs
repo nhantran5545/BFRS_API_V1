@@ -8,13 +8,12 @@ namespace BusinessObjects.ResponseModels
 {
     public class CheckListDetailResponse
     {
-        public string CheckListName { get; set; }
-        public int Phase { get; set; }
+        public int CheckListDetailId { get; set; }
         public string QuestionName { get; set; }
-        public bool Compulsory { get; set; }
-        public bool Positive { get; set; }
-        public int Priority { get; set; }
-        public string Status { get; set; }
+        public bool? Compulsory { get; set; }
+        public bool? Positive { get; set; }
+        public int? Priority { get; set; }
+        public int? CheckValue { get; set; } 
     }
 }
 

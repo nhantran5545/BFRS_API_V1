@@ -13,5 +13,6 @@ namespace DataAccess.IRepositories.Implements
         public BreedingCheckListDetailRepository(BFRS_dbContext context) : base(context)
         {
         }
+
     }
 }

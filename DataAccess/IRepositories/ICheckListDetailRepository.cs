@@ -9,6 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface ICheckListDetailRepository : IGenericRepository<CheckListDetail>
     {
-        Task<List<CheckListDetail>> GetCheckListDetailsByCheckListId(int checkListId);
+        Task<List<CheckListDetail>> GetCheckListDetailById(int CheckListId);
     }
 }
