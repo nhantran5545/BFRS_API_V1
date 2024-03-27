@@ -1,4 +1,4 @@
-﻿using BusinessObjects.IService;
+﻿                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   using BusinessObjects.IService;
 using BusinessObjects.IService.Implements;
 using BusinessObjects.ResponseModels;
 using Microsoft.AspNetCore.Authorization;
@@ -64,13 +64,6 @@ namespace BFRS_API_V1.Controllers
             catch (UnauthorizedAccessException)
             {
                 return StatusCode(403, "You are not authorized to access this resource.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-
-                // Return a 500 Internal Server Error responsexx
-                return StatusCode(500, "An error occurred while processing your request.");
             }
         }
 
