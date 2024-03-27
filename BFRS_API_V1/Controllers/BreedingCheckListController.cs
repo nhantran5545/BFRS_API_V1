@@ -1,5 +1,7 @@
 ﻿using BusinessObjects.IService;
+using BusinessObjects.IService.Implements;
 using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,22 +18,16 @@ namespace BFRS_API_V1.Controllers
             _breedingCheckListService = breedingCheckListService ?? throw new ArgumentNullException(nameof(breedingCheckListService));
         }
 
-        [HttpGet("{breedingId}")]
-        public async Task<ActionResult<List<BreedingCheckListResponse>>> GetBreedingCheckListDetailsByBreedingId(int breedingId)
+        [HttpGet("{breedingId}/{phase}")]
+        public IActionResult GetBreedingCheckList(int breedingId, int phase)
         {
-            try
+            var breedingCheckList = _breedingCheckListService.GetBreedingCheckList(breedingId, phase);
+            if (breedingCheckList == null)
             {
-                var breedingCheckListDetails = await _breedingCheckListService.GetBreedingCheckListDetailsByBreedingId(breedingId);
-                if (breedingCheckListDetails == null || breedingCheckListDetails.Count == 0)
-                {
-                    return NotFound("No BreedingCheckList details found for the provided BreedingId.");
-                }
-                return Ok(breedingCheckListDetails);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return Ok(breedingCheckList);
         }
     }
 }
+    

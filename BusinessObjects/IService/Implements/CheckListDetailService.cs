@@ -58,18 +58,9 @@ namespace BusinessObjects.IService.Implements
             };
         }
 
-
-        public async Task<List<CheckListDetailResponse>> GetCheckListDetailsByCheckListId(int checkListId)
+        public async Task<List<CheckListDetail>> GetCheckListDetailsByCheckListId(int checkListId)
         {
-            var checkListDetails = await _checkListDetailRepository.GetCheckListDetailsByCheckListId(checkListId);
-            return checkListDetails.Select(c => new CheckListDetailResponse
-            {
-                QuestionName = c.QuestionName,
-                Compulsory = c.Compulsory ?? false,
-                Positive = c.Positive ?? false,
-                Priority = c.Priority ?? 0,
-                Status = c.Status
-            }).ToList();
+            return await _checkListDetailRepository.GetCheckListDetailById(checkListId);
         }
     }
 }
