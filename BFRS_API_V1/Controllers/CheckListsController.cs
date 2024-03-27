@@ -49,7 +49,7 @@ namespace BFRS_API_V1.Controllers
 
         // PUT: api/CheckLists/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        /*[HttpPut("{id}")]
         public async Task<IActionResult> PutCheckList(Guid id, CheckList checkList)
         {
 
@@ -71,7 +71,7 @@ namespace BFRS_API_V1.Controllers
         {
 
             return NoContent();
-        }
+        }*/
 
 
 

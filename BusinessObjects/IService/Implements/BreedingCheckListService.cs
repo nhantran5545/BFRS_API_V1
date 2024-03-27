@@ -14,7 +14,7 @@ namespace BusinessObjects.IService.Implements
     public class BreedingCheckListService : IBreedingCheckListService
     {
         private readonly IBreedingCheckListRepository _repository;
-        private readonly IMapper _mapper;
+        private readonly IMapper _mapper;   
 
         public BreedingCheckListService(IBreedingCheckListRepository repository, IMapper mapper)
         {
@@ -22,7 +22,7 @@ namespace BusinessObjects.IService.Implements
             _mapper = mapper;
         }
 
-        public BreedingCheckListResponse GetBreedingCheckList(int breedingId, int phase)
+        /*public BreedingCheckListResponse GetBreedingCheckList(int breedingId, int phase)
         {
             var breedingCheckList = _repository.GetBreedingCheckList(breedingId, phase);
             var breedingCheckListDTO = new BreedingCheckListResponse
@@ -41,11 +41,41 @@ namespace BusinessObjects.IService.Implements
                 }).ToList()
             };
             return breedingCheckListDTO;
+        }*/
+
+        public async Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsAsync()
+        {
+            var breedingCheckLists = await _repository.GetAllAsync();
+            if(breedingCheckLists == null)
+            {
+                return Enumerable.Empty<BreedingCheckListResponse>();
+            }
+            return breedingCheckLists.Select(bc => ConvertToResponse(bc));
         }
 
         public async Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsByBreedingId(int breedingId)
         {
             var breedingCheckLists = await _repository.GetBreedingCheckListsByBreedingId(breedingId);
+            if (breedingCheckLists == null)
+            {
+                return Enumerable.Empty<BreedingCheckListResponse>();
+            }
+            return breedingCheckLists.Select(bc => ConvertToResponse(bc));
+        }
+
+        public async Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsByBreedingIdAndPhase(int breedingId, int phase)
+        {
+            var breedingCheckLists = await _repository.GetBreedingCheckListsByBreedingIdAndPhase(breedingId, phase);
+            if (breedingCheckLists == null)
+            {
+                return Enumerable.Empty<BreedingCheckListResponse>();
+            }
+            return breedingCheckLists.Select(bc => ConvertToResponse(bc));
+        }
+
+        public async Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsByClutchIdAndPhase(int clutchId, int phase)
+        {
+            var breedingCheckLists = await _repository.GetBreedingCheckListsByClutchIdAndPhase(clutchId, phase);
             if (breedingCheckLists == null)
             {
                 return Enumerable.Empty<BreedingCheckListResponse>();

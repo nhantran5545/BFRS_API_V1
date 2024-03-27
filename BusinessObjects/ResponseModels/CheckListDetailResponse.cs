@@ -13,7 +13,6 @@ namespace BusinessObjects.ResponseModels
         public bool? Compulsory { get; set; }
         public bool? Positive { get; set; }
         public int? Priority { get; set; }
-        public int? CheckValue { get; set; } 
     }
 }
 

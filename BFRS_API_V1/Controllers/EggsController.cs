@@ -153,13 +153,5 @@ namespace BFRS_API_V1.Controllers
             var egg = await _eggService.GetEggByIdAsync(result);
             return Ok(egg);
         }
-
-        // DELETE: api/Eggs/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEgg(int id)
-        {
-
-            return NoContent();
-        }
     }
 }

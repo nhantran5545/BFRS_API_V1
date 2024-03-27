@@ -18,13 +18,57 @@ namespace BFRS_API_V1.Controllers
             _breedingCheckListService = breedingCheckListService ?? throw new ArgumentNullException(nameof(breedingCheckListService));
         }
 
-        [HttpGet("{breedingId}/{phase}")]
-        public IActionResult GetBreedingCheckList(int breedingId, int phase)
+        [HttpGet]
+        public async Task<IActionResult> GetBreedingCheckLists()
         {
-            var breedingCheckList = _breedingCheckListService.GetBreedingCheckList(breedingId, phase);
+            var breedingCheckLists = await _breedingCheckListService.GetBreedingCheckListsAsync();
+            if(!breedingCheckLists.Any())
+            {
+                return NotFound("CheckList answers not found!");
+            }
+            return Ok(breedingCheckLists);
+        }
+
+        [HttpGet("ByBreeding/{breedingId}")]
+        public async Task<IActionResult> GetBreedingCheckListsByBreedingId(int breedingId)
+        {
+            var breedingCheckLists = await _breedingCheckListService.GetBreedingCheckListsByBreedingId(breedingId);
+            if (!breedingCheckLists.Any())
+            {
+                return NotFound("CheckList answers not found!");
+            }
+            return Ok(breedingCheckLists);
+        }
+
+        [HttpGet("ByBreedingAndPhase")]
+        public async Task<IActionResult> GetBreedingCheckListsByBreedingId(int breedingId, int phase)
+        {
+            var breedingCheckLists = await _breedingCheckListService.GetBreedingCheckListsByBreedingIdAndPhase(breedingId, phase);
+            if (!breedingCheckLists.Any())
+            {
+                return NotFound("CheckList answers not found!");
+            }
+            return Ok(breedingCheckLists);
+        }
+
+        [HttpGet("ByClutchAndPhase")]
+        public async Task<IActionResult> GetBreedingCheckListsByClutchId(int clutchId, int phase)
+        {
+            var breedingCheckLists = await _breedingCheckListService.GetBreedingCheckListsByClutchIdAndPhase(clutchId, phase);
+            if (!breedingCheckLists.Any())
+            {
+                return NotFound("CheckList answers not found!");
+            }
+            return Ok(breedingCheckLists);
+        }
+
+        [HttpGet("{breedingCheckListId}")]
+        public async Task<IActionResult> GetBreedingCheckList(int breedingCheckListId)
+        {
+            var breedingCheckList = await _breedingCheckListService.GetBreedingCheckListDetail(breedingCheckListId);
             if (breedingCheckList == null)
             {
-                return NotFound();
+                return NotFound("CheckList answer not found");
             }
             return Ok(breedingCheckList);
         }
