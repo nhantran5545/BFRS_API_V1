@@ -14,11 +14,11 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
-        public async Task<IEnumerable<Cage>> GetEmptyCagesByFarmId(int farmId)
+        public async Task<IEnumerable<Cage>> GetStandbyCagesByFarmId(int farmId)
         {
             return await _context.Cages
                 .Include(c => c.Area)
-                .Where(c => (c.Status == null || c.Status.Equals("Empty")) 
+                .Where(c => (c.Status == null || c.Status.Equals("Standby")) 
                             && c.Area != null && c.Area.FarmId.Equals(farmId))
                 .ToListAsync();
         }

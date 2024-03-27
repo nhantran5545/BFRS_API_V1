@@ -67,7 +67,7 @@ namespace BusinessObjects.IService.Implements
                 if (motherCage != null)
                     cages.Add(motherCage);
             }
-            var emptyCages = await _cageRepository.GetEmptyCagesByFarmId(farmId);
+            var emptyCages = await _cageRepository.GetStandbyCagesByFarmId(farmId);
             if(emptyCages.Any())
             {
                 cages.AddRange(emptyCages);
@@ -77,7 +77,7 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<IEnumerable<CageResponse>> GetCagesForBreeding(int farmId)
         {
-            var cages = await _cageRepository.GetEmptyCagesByFarmId(farmId);
+            var cages = await _cageRepository.GetStandbyCagesByFarmId(farmId);
             return cages.Select(c => _mapper.Map<CageResponse>(c));
         }
 
