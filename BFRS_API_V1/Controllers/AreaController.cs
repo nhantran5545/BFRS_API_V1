@@ -32,7 +32,7 @@ namespace BFRS_API_V1.Controllers
             return Ok(bird);
         }
 
-        [HttpGet("GetAreasByFarmId/{accountId}")]
+        [HttpGet("GetAreasByFarmId/{managerId}")]
         [Authorize(Roles = "Admin")]
         public IActionResult GetAreasByFarmId(int managerId)
         {
