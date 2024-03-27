@@ -63,6 +63,26 @@ namespace BusinessObjects.IService.Implements
             return breedingCheckLists.Select(bc => ConvertToResponse(bc));
         }
 
+        public async Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsByBreedingIdAndPhase(int breedingId, int phase)
+        {
+            var breedingCheckLists = await _repository.GetBreedingCheckListsByBreedingIdAndPhase(breedingId, phase);
+            if (breedingCheckLists == null)
+            {
+                return Enumerable.Empty<BreedingCheckListResponse>();
+            }
+            return breedingCheckLists.Select(bc => ConvertToResponse(bc));
+        }
+
+        public async Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsByClutchIdAndPhase(int clutchId, int phase)
+        {
+            var breedingCheckLists = await _repository.GetBreedingCheckListsByClutchIdAndPhase(clutchId, phase);
+            if (breedingCheckLists == null)
+            {
+                return Enumerable.Empty<BreedingCheckListResponse>();
+            }
+            return breedingCheckLists.Select(bc => ConvertToResponse(bc));
+        }
+
         public async Task<BreedingCheckListResponse?> GetBreedingCheckListDetail(int breedingCheckListId)
         {
             var breedingCheckList = await _repository.GetByIdAsync(breedingCheckListId);
@@ -89,5 +109,4 @@ namespace BusinessObjects.IService.Implements
             return breedingCheckListResponse;
         }
     }
-
 }

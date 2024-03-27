@@ -142,13 +142,5 @@ namespace BFRS_API_V1.Controllers
             }
             return BadRequest();
         }
-
-        // DELETE: api/Clutches/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteClutch(int id)
-        {
-
-            return NoContent();
-        }
     }
 }

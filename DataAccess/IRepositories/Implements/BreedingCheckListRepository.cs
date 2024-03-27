@@ -51,5 +51,25 @@ namespace DataAccess.IRepositories.Implements
                 .Where(bc => bc.BreedingId == breedingId)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<BreedingCheckList>> GetBreedingCheckListsByBreedingIdAndPhase(int breedingId, int phase)
+        {
+            return await _context.BreedingCheckLists
+                .Include(bc => bc.CheckList)
+                .Include(bc => bc.BreedingCheckListDetails)
+                .ThenInclude(bcd => bcd.CheckListDetail)
+                .Where(bc => bc.BreedingId == breedingId && bc.Phase == phase)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<BreedingCheckList>> GetBreedingCheckListsByClutchIdAndPhase(int clutchId, int phase)
+        {
+            return await _context.BreedingCheckLists
+                .Include(bc => bc.CheckList)
+                .Include(bc => bc.BreedingCheckListDetails)
+                .ThenInclude(bcd => bcd.CheckListDetail)
+                .Where(bc => bc.ClutchId == clutchId && bc.Phase == phase)
+                .ToListAsync();
+        }
     }
 }
