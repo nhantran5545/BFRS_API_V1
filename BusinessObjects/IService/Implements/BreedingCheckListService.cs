@@ -35,7 +35,7 @@ namespace BusinessObjects.IService.Implements
                     Compulsory = cd.Compulsory,
                     Positive = cd.Positive,
                     Priority = cd.Priority,
-                    CheckValue = breedingCheckList.BreedingCheckListDetails.FirstOrDefault(bcd => bcd.CheckListDetailId == cd.CheckListDetailId).CheckValue
+                    CheckValue = breedingCheckList.BreedingCheckListDetails.FirstOrDefault(bcd => bcd.CheckListDetailId == cd.CheckListDetailId)?.CheckValue
                 }).ToList()
             };
             return breedingCheckListDTO;

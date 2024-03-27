@@ -30,7 +30,6 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Birds
         [HttpGet]
-        [EnableQuery]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetAllBirds()
         {
@@ -43,7 +42,6 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("InFarm")]
-        [EnableQuery]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsByFarmId(int FarmId)
         {
             var birds = await _birdService.GetBirdsByFarmId(FarmId);
@@ -55,7 +53,6 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("BySpeciesAndFarm")]
-        [EnableQuery]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsBySpeciesIdAndFarmId(int SpeciesId, int FarmId)
         {
             var birds = await _birdService.GetInRestBirdsBySpeciesIdAndFarmId(SpeciesId, FarmId);
@@ -68,7 +65,6 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Birds/5
         [HttpGet("{id}")]
-        [EnableQuery]
         public async Task<ActionResult<BirdResponse>> GetBird(int id)
         {
             var bird = await _birdService.GetBirdByIdAsync(id);
@@ -80,7 +76,6 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("Pedigree/{id}")]
-        [EnableQuery]
         public async Task<IActionResult> GetBirdPedigree(int id)
         {
             var pedigree = await _birdService.GetPedigreeOfABird(id);

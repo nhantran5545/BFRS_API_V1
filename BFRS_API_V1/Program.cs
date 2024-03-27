@@ -82,6 +82,7 @@ builder.Services.AddScoped<IMutationRepository, MutationRepository>();
 builder.Services.AddScoped<ISpeciesMutationRepository, SpeciesMutationRepository>();
 
 //Services
+builder.Services.AddScoped<IAreaService, AreaService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBirdService, BirdService>();
 builder.Services.AddScoped<IBirdSpeciesService, BirdSpeciesService>();

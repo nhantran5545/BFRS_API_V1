@@ -12,5 +12,9 @@ namespace DataAccess.IRepositories.Implements
         public AccountRepository(BFRS_dbContext context) : base(context)
         {
         }
+        public Account GetAccountById(int accountId)
+        {
+            return _context.Accounts.FirstOrDefault(a => a.AccountId == accountId);
+        }
     }
 }

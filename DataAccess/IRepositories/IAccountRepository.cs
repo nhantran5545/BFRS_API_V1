@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface IAccountRepository : IGenericRepository<Account>
     {
+        Account GetAccountById(int accountId);
     }
 }

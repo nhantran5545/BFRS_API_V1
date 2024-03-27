@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface IAreaRepository : IGenericRepository<Area>
     {
+        IEnumerable<Area> GetAreasByFarmId(int farmId);
     }
 }
