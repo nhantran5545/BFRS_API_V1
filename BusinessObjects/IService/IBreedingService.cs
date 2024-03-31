@@ -20,6 +20,7 @@ namespace BusinessObjects.IService
         void DeleteBreedingById(object breedingId);
         Task<IEnumerable<BreedingResponse>> GetAllBreedings();
         Task<IEnumerable<BreedingResponse>> GetAllBreedingsByManagerId(object managerId);
+        Task<IEnumerable<BreedingResponse>> GetBreedingsByStaffIdAsync(int staffId);
         Task<BreedingDetailResponse?> GetBreedingById(object breedingId);
     }
 }

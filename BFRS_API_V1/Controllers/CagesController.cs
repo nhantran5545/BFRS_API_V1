@@ -27,31 +27,46 @@ namespace BFRS_API_V1.Controllers
             _farmService = farmService;
         }
 
-
-        [HttpPost]
-        public async Task<IActionResult> CreateCage([FromBody] CageAddRequest request)
-        {
-            try
-            {
-                await _cageService.CreateCageAsync(request);
-                return Ok("Cage created successfully.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
         // GET: api/Cages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CageResponse>>> GetCages()
         {
             var cages = await _cageService.GetAllCagesAsync();
-            if(cages == null)
+            if (cages == null)
             {
                 return NotFound("Cages not found");
             }
             return Ok(cages);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCage([FromBody] CageAddRequest request)
+        {
+                await _cageService.CreateCageAsync(request);
+                return Ok("Cage created successfully.");
+        }
+
+        [HttpPut("{cageId}")]
+        public async Task<IActionResult> UpdateCage(int cageId, CageUpdateRequest request)
+        {
+            try
+            {
+                var success = await _cageService.UpdateCageAsync(cageId, request);
+                if (success)
+                {
+                    return Ok("Cage updated successfully");
+                }
+                else
+                {
+                    return StatusCode(500, "Failed to update cage");
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpGet("ForBreeding")]
         public async Task<ActionResult<IEnumerable<CageResponse>>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId)

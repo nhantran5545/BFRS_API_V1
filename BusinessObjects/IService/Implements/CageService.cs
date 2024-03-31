@@ -45,7 +45,6 @@ namespace BusinessObjects.IService.Implements
             {
                 cage.Status = "Standby";
             }
-            // You can add more conditions for other statuses if needed
 
              await _cageRepository.AddAsync(cage);
             _cageRepository.SaveChanges();
@@ -103,9 +102,59 @@ namespace BusinessObjects.IService.Implements
             return cages.Select(c => _mapper.Map<CageResponse>(c));
         }
 
-        public void UpdateCage(Cage cage)
+
+
+        public async Task<bool> UpdateCageAsync(int cageId, CageUpdateRequest request)
         {
-            throw new NotImplementedException();
+            var cage = await _cageRepository.GetByIdAsync(cageId);
+            if (cage == null)
+            {
+                throw new Exception("Cage not found");
+            }
+
+            var currentArea = await _areaRepository.GetByIdAsync(cage.AreaId);
+            if (currentArea == null)
+            {
+                throw new Exception("Current area not found");
+            }
+
+            var targetArea = await _areaRepository.GetByIdAsync(request.AreaId);
+            if (targetArea == null)
+            {
+                throw new Exception("Target area not found");
+            }
+
+            // Check if the cage has birds
+            var birdsInCage = await _birdRepository.GetBirdsByCageIdAsync(cageId);
+
+            if (currentArea.Status == "For Nourishing" && targetArea.Status == "For Breeding" && birdsInCage.Any())
+            {
+                throw new Exception("Please move birds to another cage before transferring the cage to a breeding area");
+            }
+
+            if (currentArea.Status == "For Nourishing" && targetArea.Status == "For Breeding" && !birdsInCage.Any())
+            {
+                cage.Status = "Standby";
+            }
+
+            if (currentArea.Status == "For Breeding" && targetArea.Status == "For Nourishing" && cage.Status != "Standby")
+            {
+                throw new Exception("You can only transfer a cage with standby status from breeding area to nourishing area");
+            } 
+            cage.ManufacturedDate = request.ManufacturedDate;
+            cage.ManufacturedAt = request.ManufacturedAt;
+            cage.PurchasedDate = request.PurchasedDate;
+            cage.AreaId = request.AreaId;
+            cage.AccountId = request.AccountId;
+
+            _cageRepository.Update(cage);
+            var result = _cageRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
         }
+
     }
 }

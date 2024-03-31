@@ -58,7 +58,7 @@ namespace BFRS_API_V1.Controllers
             return Ok(breedings); 
         }
 
-        [HttpGet("Management/{managerId}")]
+        [HttpGet("manager/{managerId}")]
         [EnableQuery]
         public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedingsByManagerId(int managerId)
         {
@@ -70,6 +70,17 @@ namespace BFRS_API_V1.Controllers
             return Ok(breedings);
         }
 
+        [HttpGet("staff/{staffId}")]
+        [EnableQuery]
+        public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedingsByStaffId(int staffId)
+        {
+            var breedings = await _breedingService.GetBreedingsByStaffIdAsync(staffId);
+            if (breedings == null)
+            {
+                return NotFound("There are no breeding!");
+            }
+            return Ok(breedings);
+        }
 
         [HttpGet("{id}")]
         [EnableQuery]

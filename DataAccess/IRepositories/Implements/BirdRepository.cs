@@ -43,6 +43,13 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
+        public async Task<List<Bird>> GetBirdsByCageIdAsync(int cageId)
+        {
+            return await _context.Birds
+                .Where(b => b.CageId == cageId)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Bird>> GetInRestBirdsBySpeciesIdAndFarmId(object SpeciesId, object FarmId)
         {
             return await _context.Birds

@@ -73,15 +73,10 @@ namespace BusinessObjects.IService.Implements
                 FarmId = a.FarmId, 
                 Status = a.Status 
             });
-
             return areaDTOs;
         }
 
-        private bool IsManager(int accountId)
-        {
-            var account = _accountRepository.GetAccountById(accountId);
-            return account != null && account.Role == "Manager";
-        }
+
 
         private int GetFarmIdByAccountId(int accountId)
         {
@@ -97,6 +92,12 @@ namespace BusinessObjects.IService.Implements
         {
             var area = await _repository.GetByIdAsync(areaId);
             return _mapper.Map<AreaResponse>(area);
+        }
+
+        private bool IsManager(int accountId)
+        {
+            var account = _accountRepository.GetAccountById(accountId);
+            return account != null && account.Role == "Manager";
         }
     }
 }

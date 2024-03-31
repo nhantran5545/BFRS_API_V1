@@ -15,18 +15,20 @@ namespace BusinessObjects.IService.Implements
     {
         private readonly IBreedingRepository _breedingRepository;
         private readonly IBirdRepository _birdRepository;
+        private readonly IAccountRepository _accountRepository;
         private readonly ICageRepository _cageRepository;
         private readonly IBirdSpeciesRepository _birdSpeciesRepository;
         private readonly IMapper _mapper;
 
         public BreedingService(IBreedingRepository breedingRepository, IBirdRepository birdRepository,
-            ICageRepository cageRepository, IBirdSpeciesRepository birdSpeciesRepository, IMapper mapper)
+            ICageRepository cageRepository, IBirdSpeciesRepository birdSpeciesRepository, IMapper mapper, IAccountRepository accountRepository)
         {
             _breedingRepository = breedingRepository;
             _birdRepository = birdRepository;
             _cageRepository = cageRepository;
             _birdSpeciesRepository = birdSpeciesRepository;
             _mapper = mapper;
+            _accountRepository = accountRepository;
         }
 
         public async Task<double> CalculateInbreedingPercentage(int fatherBirdId, int motherBirdId)
@@ -132,6 +134,23 @@ namespace BusinessObjects.IService.Implements
             return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 
+
+        public async Task<IEnumerable<BreedingResponse>> GetBreedingsByStaffIdAsync(int staffId)
+        {
+            var account = await _accountRepository.GetByIdAsync(staffId);
+            if (account == null)
+            {
+                throw new Exception("Invalid staff ID");
+            }
+
+            if (account.Role != "Staff")
+            {
+                throw new Exception("The provided account is not a staff member");
+            }
+
+            var breedings = await _breedingRepository.GetAllBreedingsByStaffId(staffId);
+            return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
+        }
 
         public async Task<BreedingDetailResponse?> GetBreedingById(object breedingId)
         {

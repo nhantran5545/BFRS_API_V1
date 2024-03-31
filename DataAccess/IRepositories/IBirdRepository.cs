@@ -12,5 +12,6 @@ namespace DataAccess.IRepositories
         Task<IEnumerable<Bird>> GetBirdsByFarmId(object farmId);
         Task<IEnumerable<Bird>> GetBirdsBySpeciesId(object SpeciesId);
         Task<IEnumerable<Bird>> GetInRestBirdsBySpeciesIdAndFarmId(object SpeciesId, object FarmId);
+        Task<List<Bird>> GetBirdsByCageIdAsync(int cageId);
     }
 }
