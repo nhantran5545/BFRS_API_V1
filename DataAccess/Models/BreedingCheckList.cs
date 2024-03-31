@@ -15,7 +15,7 @@ namespace DataAccess.Models
         public int? ClutchId { get; set; }
         public int? EggId { get; set; }
         public int? CheckListId { get; set; }
-        public int Phase { get; set; }
+        public int? Phase { get; set; }
         public DateTime? CreateDate { get; set; }
         public string? Status { get; set; }
 
