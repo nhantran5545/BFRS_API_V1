@@ -43,6 +43,8 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
+
+
         public async Task<List<Breeding>> GetBreedingByAccountIdAsync(int accountId)
         {
             if (accountId <= 0)
@@ -55,6 +57,16 @@ namespace DataAccess.IRepositories.Implements
                 .Include(br => br.MotherBird)
                 .Include(br => br.Clutches)
                 .Where(b => b.Cage.AccountId == accountId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Breeding>> GetAllBreedingsByStaffId(object staffId)
+        {
+            return await _context.Breedings
+                .Include(br => br.FatherBird)
+                .Include(br => br.MotherBird)
+                .Include(br => br.Clutches)
+                .Where(br => br.CreatedBy.Equals(staffId))
                 .ToListAsync();
         }
     }

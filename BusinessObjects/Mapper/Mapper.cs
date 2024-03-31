@@ -122,11 +122,15 @@ namespace BusinessObjects.Mapper
             #endregion
 
             #region Mapper_Request
+            CreateMap<AreaAddRequest, Area>()
+                .ReverseMap();
             CreateMap<BirdAddRequest, Bird>()
                 .ReverseMap();
             CreateMap<BreedingAddRequest, Breeding>()
                 .ReverseMap();
             CreateMap<ClutchAddRequest, Clutch>()
+                .ReverseMap();
+            CreateMap<CageAddRequest, Cage>()
                 .ReverseMap();
             CreateMap<ClutchCloseRequest, Clutch>()
                 .ReverseMap();

@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
+using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,20 +17,39 @@ namespace BusinessObjects.IService.Implements
     {
         private readonly ICageRepository _cageRepository;
         private readonly IBirdRepository _birdRepository;
+        private readonly IAreaRepository _areaRepository;
         private readonly IMapper _mapper;
-        public CageService(ICageRepository cageRepository, IBirdRepository birdRepository, IMapper mapper)
+        public CageService(ICageRepository cageRepository, IBirdRepository birdRepository, IMapper mapper, IAreaRepository areaRepository)
         {
             _cageRepository = cageRepository;
             _birdRepository = birdRepository;
+            _areaRepository = areaRepository;
             _mapper = mapper;
         }
-
-        public async Task CreateCageAsync(Cage cage)
+        public async Task CreateCageAsync(CageAddRequest request)
         {
-            await _cageRepository.AddAsync(cage);
+            var area = await _areaRepository.GetByIdAsync(request.AreaId);
+
+            if (area == null)
+            {
+                throw new Exception("Invalid area");
+            }
+
+            var cage = _mapper.Map<Cage>(request);
+
+            if (area.Status == "For Nourishing")
+            {
+                cage.Status = "Nourishing";
+            }
+            else if (area.Status == "For Breeding")
+            {
+                cage.Status = "Standby";
+            }
+            // You can add more conditions for other statuses if needed
+
+             await _cageRepository.AddAsync(cage);
             _cageRepository.SaveChanges();
         }
-
         public void DeleteCage(Cage cage)
         {
             throw new NotImplementedException();

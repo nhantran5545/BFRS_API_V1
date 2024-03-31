@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
+using BusinessObjects.IService.Implements;
+using BusinessObjects.RequestModels;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -25,6 +27,20 @@ namespace BFRS_API_V1.Controllers
             _farmService = farmService;
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCage([FromBody] CageAddRequest request)
+        {
+            try
+            {
+                await _cageService.CreateCageAsync(request);
+                return Ok("Cage created successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
         // GET: api/Cages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CageResponse>>> GetCages()

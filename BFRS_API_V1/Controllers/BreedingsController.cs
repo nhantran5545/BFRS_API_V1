@@ -70,6 +70,7 @@ namespace BFRS_API_V1.Controllers
             return Ok(breedings);
         }
 
+
         [HttpGet("{id}")]
         [EnableQuery]
         public async Task<ActionResult<BreedingDetailResponse>> GetBreeding(int id)

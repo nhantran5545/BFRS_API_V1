@@ -10,6 +10,7 @@ namespace DataAccess.IRepositories
     public interface IBreedingRepository : IGenericRepository<Breeding>
     {
         Task<IEnumerable<Breeding>> GetAllBreedingsByManagerId(object managerId);
+        Task<IEnumerable<Breeding>> GetAllBreedingsByStaffId(object staffId);
         Task<List<Breeding>> GetBreedingByAccountIdAsync(int accountId);
     }
 }

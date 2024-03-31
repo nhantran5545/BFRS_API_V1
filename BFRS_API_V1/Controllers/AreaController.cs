@@ -1,5 +1,6 @@
 ﻿                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   using BusinessObjects.IService;
 using BusinessObjects.IService.Implements;
+using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,20 @@ namespace BFRS_API_V1.Controllers
         public AreaController(IAreaService areaService)
         {
             _areaService = areaService;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<int>> CreateArea(AreaAddRequest areaAddRequest)
+        {
+            try
+            {
+                var areaId = await _areaService.CreateAreaAsync(areaAddRequest);
+                return Ok("add successful");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
@@ -53,7 +68,6 @@ namespace BFRS_API_V1.Controllers
             try
             {
                 var areas = await _areaService.GetAllAreaAsync();
-
                 if (areas == null || !areas.Any())
                 {
                     return NotFound("There are no area");

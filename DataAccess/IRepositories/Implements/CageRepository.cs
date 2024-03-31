@@ -18,9 +18,11 @@ namespace DataAccess.IRepositories.Implements
         {
             return await _context.Cages
                 .Include(c => c.Area)
-                .Where(c => (c.Status == null || c.Status.Equals("Standby")) 
+                .Where(c => (c.Status == null || c.Status.Equals("Standby"))
                             && c.Area != null && c.Area.FarmId.Equals(farmId))
                 .ToListAsync();
         }
+
+
     }
 }

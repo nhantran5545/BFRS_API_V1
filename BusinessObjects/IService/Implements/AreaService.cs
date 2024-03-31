@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
 using DataAccess.IRepositories.Implements;
@@ -23,6 +24,28 @@ namespace BusinessObjects.IService.Implements
             _repository = repository;
             _accountRepository = accountRepository;
             _mapper = mapper;
+        }
+
+        public async Task<int> CreateAreaAsync(AreaAddRequest areaAddRequest)
+        {
+            if (areaAddRequest == null)
+            {
+                throw new ArgumentNullException(nameof(areaAddRequest), "Data cannot be null");
+            }
+            if (areaAddRequest.Status != "For Nourishing" && areaAddRequest.Status != "For Breeding")
+            {
+                throw new ArgumentException("Status must be 'For Nourishing' or 'For Breeding'", nameof(areaAddRequest.Status));
+            }
+
+            var area = _mapper.Map<Area>(areaAddRequest);
+            await _repository.AddAsync(area);
+            var result = _repository.SaveChanges();
+            if (result < 1)
+            {
+                return result;
+            }
+
+            return area.AreaId;
         }
 
         public async Task<IEnumerable<AreaResponse>> GetAllAreaAsync()
