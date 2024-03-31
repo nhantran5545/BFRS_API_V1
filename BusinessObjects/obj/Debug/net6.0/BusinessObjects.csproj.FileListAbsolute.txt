@@ -1,0 +1,15 @@
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\obj\Debug\net6.0\BusinessObjects.csproj.AssemblyReference.cache
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\obj\Debug\net6.0\BusinessObjects.GeneratedMSBuildEditorConfig.editorconfig
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\obj\Debug\net6.0\BusinessObjects.AssemblyInfoInputs.cache
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\obj\Debug\net6.0\BusinessObjects.AssemblyInfo.cs
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\obj\Debug\net6.0\BusinessObjects.csproj.CoreCompileInputs.cache
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\bin\Debug\net6.0\BusinessObjects.deps.json
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\bin\Debug\net6.0\BusinessObjects.dll
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\bin\Debug\net6.0\BusinessObjects.pdb
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\bin\Debug\net6.0\DataAccess.dll
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\bin\Debug\net6.0\DataAccess.pdb
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\obj\Debug\net6.0\BusinessObjects.csproj.CopyComplete
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\obj\Debug\net6.0\BusinessObjects.dll
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\obj\Debug\net6.0\refint\BusinessObjects.dll
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\obj\Debug\net6.0\BusinessObjects.pdb
+e:\Project Code\Captone Project\BFRS_API_V1\BusinessObjects\obj\Debug\net6.0\ref\BusinessObjects.dll

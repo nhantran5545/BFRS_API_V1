@@ -4,109 +4,105 @@ using System.Linq;
 
 class Program
 {
-    static Dictionary<string, object> pedigree = new Dictionary<string, object>();
+    public static Dictionary<string, object> pedigree = new Dictionary<string, object>();
     static Dictionary<string, Dictionary<string, object>> ancestors = new Dictionary<string, Dictionary<string, object>>();
-    static Dictionary<string, object> names = new Dictionary<string, object>();
     static Dictionary<int, Dictionary<string, object>> generations = new Dictionary<int, Dictionary<string, object>>();
     static Dictionary<string, double> ancestorCache = new Dictionary<string, double>();
 
-    static void Main()
+    public static void Main()
     {
         const int MAX_GENS = 12;
 
-        // Khởi tạo dữ liệu cho các thế hệx
+        // Khởi tạo dữ liệu cho mỗi thế hệ.
         for (int i = 0; i <= MAX_GENS; i++)
         {
             generations[i] = new Dictionary<string, object>();
         }
 
+        // Khởi tạo thế hệ đầu tiên với khóa chuỗi trống và từ điển danh phả.
         generations[0][""] = pedigree;
+
+        // Fill the pedigree data with example values.
         FillPedigree();
+
+        // Calculate inbreeding coefficients.
         Calculate();
     }
 
-    static void FillPedigree()
+    // Function to fill the pedigree with example data.
+    public static void FillPedigree()
     {
-        AddInd("", "X");
-        AddInd("s", "B");
-        AddInd("ss", "C");
-        AddInd("sss", "A");
-        AddInd("ssd", "E");
-        AddInd("ssds", "A");
-
-
-        AddInd("d", "D");
-        AddInd("ds", "F");
-        AddInd("dss", "E");
-        AddInd("dsss", "A");
-
-
-        AddInd("dd", "C");
-        AddInd("dds", "A");
-        AddInd("ddd", "E");
-        AddInd("ddds", "A");
+        // Add individuals to the pedigree with their codes and birdIds.
+        AddInd("s", 1);
+        AddInd("ss", 2);
+        AddInd("sss", 3);
+        AddInd("ssd", 4);
+        AddInd("ssds", 3);
+        AddInd("d", 5);
+        AddInd("ds", 6);
+        AddInd("dss", 4);
+        AddInd("dsss", 3);
+        AddInd("dd", 2);
+        AddInd("dds", 3);
+        AddInd("ddd", 4);
+        AddInd("ddds", 3);
     }
 
-    static void AddInd(string code, string name)
+    // Function to add an individual to the pedigree.
+    public static void AddInd(string code, int birdId)
     {
+        // Initialize variables.
         Dictionary<string, object> node = pedigree;
-        bool isNewName = false;
 
-        if (code.Length > 12)
-        {
-            return;
-        }
 
+        // Duyệt qua các ký tự của mã để thêm nút vào danh phả.
         for (int i = 0; i < code.Length; i++)
         {
             if (!node.ContainsKey(code[i].ToString()))
             {
+                // Nếu node does not exist, create a new dictionary for it.
                 node[code[i].ToString()] = new Dictionary<string, object>();
-                generations[i + 1][code.Substring(0, i + 1)] = node[code[i].ToString()];
+                // Thêm nút mới vào thế hệ tương ứng.
             }
             node = (Dictionary<string, object>)node[code[i].ToString()];
         }
-        node["name"] = name;
 
-        if (!ancestors.ContainsKey(name))
-        {
-            ancestors[name] = new Dictionary<string, object>();
-            isNewName = true;
-        }
-        ancestors[name][code] = null;
+        // Đặt thuộc tính "birdId" của nút cuối cùng trong mã.
+        node["birdId"] = birdId;
 
-        if (isNewName)
+        // Check if the birdId is already in the ancestors dictionary.
+        if (!ancestors.ContainsKey(birdId.ToString()))
         {
-            node = names;
-            for (int i = 0; i < name.Length; i++)
-            {
-                if (!node.ContainsKey(name[i].ToString()))
-                {
-                    node[name[i].ToString()] = new Dictionary<string, object>();
-                }
-                node = (Dictionary<string, object>)node[name[i].ToString()];
-            }
-            node["end"] = null;
+            // If not, create a new entry for the birdId in the ancestors dictionary.
+            ancestors[birdId.ToString()] = new Dictionary<string, object>();
         }
+
+        // Add the code to the ancestors dictionary for the given birdId.
+        ancestors[birdId.ToString()][code] = null;
     }
 
-    static void Calculate()
+    //calculate inbreeding coefficients.
+    public static void Calculate()
     {
-        ancestorCache.Clear(); 
+        // Clear the ancestor cache before calculations.
+        ancestorCache.Clear();
+        // Perform the calculation.
         DoCalculation();
     }
 
-    static void DoCalculation()
+    // Function to perform the inbreeding calculation.
+    public static void DoCalculation()
     {
+        // Calculate inbreeding coefficients for each code.
         List<object> common = CalculateForCode("", true);
         common = common.Cast<object>().ToList();
 
-        // Group by name
+        // Group the common ancestors by birdId.
         var groupedCommon = common
-            .GroupBy(a => ((Dictionary<string, object>)a)["name"].ToString())
+            .GroupBy(a => Convert.ToInt32(((Dictionary<string, object>)a)["birdId"]))
             .Select(group => new
             {
-                Name = group.Key,
+                BirdId = group.Key,
                 Inbreeding = group.Sum(a => Convert.ToDouble(((Dictionary<string, object>)a)["inbreeding"])),
                 Paths = group.Select(a => new
                 {
@@ -116,46 +112,37 @@ class Program
             })
             .ToList();
 
-        // Sort by name
-        groupedCommon.Sort((a, b) => a.Name.CompareTo(b.Name));
+        // Sort the grouped common ancestors by birdId.
+        groupedCommon.Sort((a, b) => a.BirdId.CompareTo(b.BirdId));
 
-        // Display result and breakdown
+        // Display the total inbreeding and breakdown for each ancestor.
         double totalInbreeding = groupedCommon.Sum(a => a.Inbreeding);
         Console.WriteLine($"Inbreeding: F = {(totalInbreeding * 100.0).ToString("F2")}%");
 
-        foreach (var anc in groupedCommon)
-        {
-            string ancestorInfo = $"{(anc.Inbreeding * 100.0).ToString("F2")}% through {anc.Name} ({anc.Paths.Count} path{(anc.Paths.Count > 1 ? "s" : "")})";
-            Console.WriteLine(ancestorInfo);
-
-            if (anc.Paths.Count > 1)
-            {
-                var breakdownInfo = anc.Paths.Select(path =>
-                    $"{(path.Inbreeding * 100.0).ToString("F2")}% × {path.NumPaths}"
-                ).ToList();
-
-                Console.WriteLine($"Breakdown for {anc.Name}: {string.Join(" + ", breakdownInfo)}");
-            }
-        }
     }
 
-
-    static double calculateForName(string name)
+    // Function to calculate inbreeding for a specific birdId.
+    static double calculateForBirdId(int birdId)
     {
+        // Initialize variables.
         string code;
         Dictionary<string, object> node;
         List<double> results = new List<double>();
 
-        foreach (var codeEntry in ancestors[name].Keys)
+        // Iterate through codes of the given birdId in the ancestors dictionary.
+        foreach (var codeEntry in ancestors[birdId.ToString()].Keys)
         {
             code = codeEntry;
             node = getNodeFromCode(code);
+
             if (node.ContainsKey("s") && node.ContainsKey("d"))
             {
+                // Calculate inbreeding for all cases with both parents.
                 results.AddRange(CalculateForCode(code, true).Select(item => Convert.ToDouble(((Dictionary<string, object>)item)["inbreeding"])));
             }
         }
 
+        // Return the maximum inbreeding coefficient among the results.
         if (results.Count > 0)
         {
             return results.Max();
@@ -163,14 +150,13 @@ class Program
         return 0.0;
     }
 
-
-
-
+    //  calculate inbreeding coefficients for a given base code.
     static List<object> CalculateForCode(string baseCode, bool list)
     {
+        // Initialize variables.
         List<object> common = new List<object>();
         Dictionary<string, Dictionary<string, object>> ancs = new Dictionary<string, Dictionary<string, object>>();
-        string name;
+        int birdId;
         string code1;
         string code2;
         int i;
@@ -179,34 +165,39 @@ class Program
         double inbreeding;
         double anc_inbreeding;
 
+        // Copy the ancestors dictionary.
         foreach (var entry in ancestors)
         {
             ancs[entry.Key] = new Dictionary<string, object>(entry.Value);
         }
 
+        // Adjust the ancestor codes based on the baseCode.
         if (baseCode.Length > 0)
         {
             foreach (var entry in ancs.ToList())
             {
-                name = entry.Key;
+                birdId = Convert.ToInt32(entry.Key);
                 foreach (var codeEntry in entry.Value.Keys.ToList())
                 {
                     if (codeEntry.IndexOf(baseCode) == 0)
                     {
-                        ancs[name][codeEntry.Substring(baseCode.Length)] = null;
+                        // Remove the baseCode from other codes.
+                        ancs[birdId.ToString()][codeEntry.Substring(baseCode.Length)] = null;
                     }
-                    ancs[name].Remove(codeEntry);
+                    ancs[birdId.ToString()].Remove(codeEntry);
                 }
-                if (ancs[name].Count == 0)
+                if (ancs[birdId.ToString()].Count == 0)
                 {
-                    ancs.Remove(name);
+                    // Remove all codes for this birdId.
+                    ancs.Remove(birdId.ToString());
                 }
             }
         }
 
+        // Iterate through each pair of codes in the ancestors dictionary.
         foreach (var entry in ancs)
         {
-            name = entry.Key;
+            birdId = Convert.ToInt32(entry.Key);
             foreach (var code1Entry in entry.Value.Keys)
             {
                 foreach (var code2Entry in entry.Value.Keys)
@@ -214,47 +205,51 @@ class Program
                     code1 = code1Entry;
                     code2 = code2Entry;
 
+                    // Check if the codes are different.
                     if (code2 != code1)
                     {
                         path = true;
                         interm.Clear();
 
+                        // Check for an intermediate ancestor that exists in both codes.
                         for (i = 1; i < code1.Length; i++)
                         {
-                            interm[getNodeFromCode(baseCode + code1.Substring(0, i))["name"].ToString()] = null;
+                            interm[getNodeFromCode(baseCode + code1.Substring(0, i))["birdId"].ToString()] = null;
                         }
 
                         for (i = 1; i < code2.Length; i++)
                         {
-                            if (interm.ContainsKey(getNodeFromCode(baseCode + code2.Substring(0, i))["name"].ToString()))
+                            if (interm.ContainsKey(getNodeFromCode(baseCode + code2.Substring(0, i))["birdId"].ToString()))
                             {
-                                // Found an intermediate ancestor that is in both codes.
+                                // Found an intermediate ancestor that exists in both codes.
                                 // This is not an inbreeding path.
                                 path = false;
                                 break;
                             }
                         }
 
+                        // If the path is unique, calculate inbreeding.
                         if (path)
                         {
-                            if (ancestorCache.ContainsKey(name))
+                            if (ancestorCache.ContainsKey(birdId.ToString()))
                             {
-                                anc_inbreeding = Convert.ToDouble(ancestorCache[name]);
+                                anc_inbreeding = Convert.ToDouble(ancestorCache[birdId.ToString()]);
                             }
                             else
                             {
-                                anc_inbreeding = calculateForName(name);
-                                ancestorCache[name] = anc_inbreeding;
+                                anc_inbreeding = calculateForBirdId(birdId);
+                                ancestorCache[birdId.ToString()] = anc_inbreeding;
                             }
 
-                            // 2^(-(length1 + length2 - 1))*(1 - FA) using shift operator
+                            // Calculate inbreeding coefficient using the formula.
                             inbreeding = 1.0 / (1 << (code1.Length + code2.Length - 1)) * (1.0 + anc_inbreeding);
 
+                            // Add the result to the common list.
                             if (list)
                             {
                                 common.Add(new Dictionary<string, object>
                                 {
-                                    { "name", name },
+                                    { "birdId", birdId },
                                     { "inbreeding", inbreeding }
                                 });
                             }
@@ -264,33 +259,38 @@ class Program
                             }
                         }
                     }
-                    ancs[name].Remove(code1);
-
+                    // Remove the processed code1 from the ancestor list.
+                    ancs[birdId.ToString()].Remove(code1);
                 }
-
             }
-
         }
 
+        // Return the list of inbreeding coefficients.
         return common;
     }
 
-
-
+    // Function to get a node from the pedigree using a given code.
     static Dictionary<string, object> getNodeFromCode(string code)
     {
+        // Initialize the node from the pedigree.
         Dictionary<string, object> node = pedigree;
+
+        // Iterate through the characters of the code.
         for (int i = 0; i < code.Length; i++)
         {
             if (node.ContainsKey(code[i].ToString()))
             {
+                // Move to the next node in the pedigree.
                 node = (Dictionary<string, object>)node[code[i].ToString()];
             }
             else
             {
+                // Throw an exception if the node matching the code does not exist.
                 throw new Exception($"Node matching code {code} does not exist");
             }
         }
+
+        // Return the final node.
         return node;
     }
 }

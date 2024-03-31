@@ -476,11 +476,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Project Code\\Captone Project\\inbreedingSample\\inbreedingSample\\inbreedingSample.csproj",
+      "projectUniqueName": "E:\\Project Code\\Captone Project\\BFRS_API_V1\\inbreedingSample\\inbreedingSample.csproj",
       "projectName": "inbreedingSample",
-      "projectPath": "E:\\Project Code\\Captone Project\\inbreedingSample\\inbreedingSample\\inbreedingSample.csproj",
+      "projectPath": "E:\\Project Code\\Captone Project\\BFRS_API_V1\\inbreedingSample\\inbreedingSample.csproj",
       "packagesPath": "C:\\Users\\nhant\\.nuget\\packages\\",
-      "outputPath": "E:\\Project Code\\Captone Project\\inbreedingSample\\inbreedingSample\\obj\\",
+      "outputPath": "E:\\Project Code\\Captone Project\\BFRS_API_V1\\inbreedingSample\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
