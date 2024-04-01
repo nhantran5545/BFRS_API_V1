@@ -10,6 +10,7 @@ using BusinessObjects.RequestModels;
 using BusinessObjects.IService;
 using BusinessObjects.InheritanceClass;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -23,6 +24,34 @@ namespace BFRS_API_V1.Controllers
         public AccountsController(IAccountService accountService)
         {
             _accountService = accountService;
+        }
+
+        [HttpGet("managers")]
+        public async Task<IActionResult> GetManagerAccounts()
+        {
+            try
+            {
+                var managerAccounts = await _accountService.GetManagerAccountsAsync();
+                return Ok(managerAccounts);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("staff")]
+        public async Task<IActionResult> GetStaffAccounts()
+        {
+            try
+            {
+                var managerAccounts = await _accountService.GetStaffAccountsAsync();
+                return Ok(managerAccounts);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("login")]
@@ -42,6 +71,21 @@ namespace BFRS_API_V1.Controllers
             else
             {
                 return Unauthorized("Invalid username or password.");
+            }
+        }
+
+        [HttpPost("signup")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SignUp(AccountSignUpRequest accountSignUp)
+        {
+            try
+            {
+                await _accountService.RegisterAccountAsync(accountSignUp);
+                return Ok("Account registered successfully");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 

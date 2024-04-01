@@ -1,10 +1,13 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BusinessObjects.InheritanceClass
 {
@@ -13,12 +16,15 @@ namespace BusinessObjects.InheritanceClass
         private readonly IConfiguration _configuration;
         private readonly IMemoryCache _memoryCache;
         private static ProvideToken _instance;
+
         public static ProvideToken Instance => _instance;
+
         private ProvideToken(IConfiguration configuration, IMemoryCache memoryCache)
         {
             _configuration = configuration;
             _memoryCache = memoryCache;
         }
+
         public static void Initialize(IConfiguration configuration, IMemoryCache memoryCache)
         {
             if (_instance == null)
@@ -30,7 +36,7 @@ namespace BusinessObjects.InheritanceClass
             var tokenHandler = new JwtSecurityTokenHandler();
             var secretKey = _configuration["AppSettings:SecretKey"];
             var key = Encoding.ASCII.GetBytes(secretKey);
-            // Tiếp tục với việc tạo token bằng key
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -38,17 +44,16 @@ namespace BusinessObjects.InheritanceClass
                     new Claim("AccountId", accountId.ToString()),
                     new Claim(ClaimTypes.Role, role),
                 }),
-                Expires = DateTime.UtcNow.AddHours(24), // Thời gian hiệu lực của token (vd: 30 phút)
+                Expires = DateTime.UtcNow.AddHours(24),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            // Lưu trữ token trong bộ nhớ
             _memoryCache.Set(accountId.ToString(), tokenString, TimeSpan.FromMinutes(10));
 
             return (tokenString, role);
         }
     }
-}   
+}
