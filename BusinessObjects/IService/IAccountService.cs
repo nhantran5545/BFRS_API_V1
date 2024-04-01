@@ -21,5 +21,7 @@ namespace BusinessObjects.IService
         Task<IEnumerable<Account>> GetAllAccountsAsync();
         Task<bool> CheckUsernameExist(string username);
         Task RegisterAccountAsync(AccountSignUpRequest accountSignUp);
+        Task<IEnumerable<AccountResponse>> GetManagerAccountsAsync();
+        Task<IEnumerable<AccountResponse>> GetStaffAccountsAsync();
     }
 }

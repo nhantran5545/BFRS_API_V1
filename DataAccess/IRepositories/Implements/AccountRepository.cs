@@ -13,6 +13,11 @@ namespace DataAccess.IRepositories.Implements
         public AccountRepository(BFRS_dbContext context) : base(context)
         {
         }
+
+        public async Task<IEnumerable<Account>> GetAccountsByRoleAsync(string role)
+        {
+            return await _context.Accounts.Where(a => a.Role == role).ToListAsync();
+        }
         public Account GetAccountById(int accountId)
         {
             return _context.Accounts.FirstOrDefault(a => a.AccountId == accountId);

@@ -26,6 +26,34 @@ namespace BFRS_API_V1.Controllers
             _accountService = accountService;
         }
 
+        [HttpGet("managers")]
+        public async Task<IActionResult> GetManagerAccounts()
+        {
+            try
+            {
+                var managerAccounts = await _accountService.GetManagerAccountsAsync();
+                return Ok(managerAccounts);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("staff")]
+        public async Task<IActionResult> GetStaffAccounts()
+        {
+            try
+            {
+                var managerAccounts = await _accountService.GetStaffAccountsAsync();
+                return Ok(managerAccounts);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(AccountLoginRequest login)
         {

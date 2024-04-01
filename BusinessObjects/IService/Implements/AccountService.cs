@@ -101,6 +101,18 @@ namespace BusinessObjects.IService.Implements
             _accountRepository.SaveChanges();
         }
 
+        public async Task<IEnumerable<AccountResponse>> GetManagerAccountsAsync()
+        {
+            var managerAccounts = await _accountRepository.GetAccountsByRoleAsync("Manager");
+            return _mapper.Map<IEnumerable<AccountResponse>>(managerAccounts);
+        }
+
+        public async Task<IEnumerable<AccountResponse>> GetStaffAccountsAsync()
+        {
+            var managerAccounts = await _accountRepository.GetAccountsByRoleAsync("Staff");
+            return _mapper.Map<IEnumerable<AccountResponse>>(managerAccounts);
+        }
+
         public async Task<bool> CheckUsernameExist(string username)
         {
             var existingAccount = await _accountRepository.GetByUsernameAsync(username);
