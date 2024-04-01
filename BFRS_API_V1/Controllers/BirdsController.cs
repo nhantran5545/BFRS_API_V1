@@ -20,12 +20,14 @@ namespace BFRS_API_V1.Controllers
         private readonly IBirdService _birdService;
         private readonly IBirdSpeciesService _birdSpeciesService;
         private readonly ICageService _cageService;
+        private readonly IEggService _eggService;
 
-        public BirdsController(IBirdService birdService, IBirdSpeciesService birdSpeciesService, ICageService cageService)
+        public BirdsController(IBirdService birdService, IBirdSpeciesService birdSpeciesService, ICageService cageService, IEggService eggService)
         {
             _birdService = birdService;
             _birdSpeciesService = birdSpeciesService;
             _cageService = cageService;
+            _eggService = eggService;
         }
 
         // GET: api/Birds
@@ -150,6 +152,15 @@ namespace BFRS_API_V1.Controllers
                 if (motherBirdId == null || motherBirdId.Gender != "Female")
                 {
                     return NotFound("Mother Bird not found");
+                }
+            }
+
+            if(birdAddRequest.EggId != null)
+            {
+                var egg = await _eggService.GetEggByIdAsync(birdAddRequest.EggId);
+                if (egg == null)
+                {
+                    return NotFound("Invalid Egg");
                 }
             }
 

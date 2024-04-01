@@ -2,7 +2,6 @@
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
-using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -15,28 +14,51 @@ namespace BusinessObjects.IService.Implements
     public class BirdService : IBirdService
     {
         private readonly IBirdRepository _birdRepository;
+        private readonly IEggBirdRepository _eggBirdRepository;
         private readonly IMapper _mapper;
 
-        public BirdService(IBirdRepository birdRepository, IMapper mapper)
+        public BirdService(IBirdRepository birdRepository, IEggBirdRepository eggBirdRepository, IMapper mapper)
         {
             _birdRepository = birdRepository;
+            _eggBirdRepository = eggBirdRepository;
             _mapper = mapper;
         }
 
         public async Task<int> CreateBirdAsync(BirdAddRequest birdAddRequest)
         {
-            var bird = _mapper.Map<Bird>(birdAddRequest);
-            if (bird == null)
+            using (var transaction = _birdRepository.BeginTransaction())
             {
-                return -1;
+                try
+                {
+                    var bird = _mapper.Map<Bird>(birdAddRequest);
+                    if (bird == null)
+                    {
+                        return -1;
+                    }
+                    await _birdRepository.AddAsync(bird);
+                    _birdRepository.SaveChanges();
+
+                    if (birdAddRequest.EggId != null)
+                    {
+                        EggBird eggBird = new EggBird()
+                        {
+                            EggId = birdAddRequest.EggId.Value,
+                            BirdId = bird.BirdId
+                        };
+                        await _eggBirdRepository.AddAsync(eggBird);
+                        _eggBirdRepository.SaveChanges();
+                    }
+
+                    transaction.Commit();
+                    return bird.BirdId;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    transaction.Rollback();
+                    return -1;
+                }
             }
-            await _birdRepository.AddAsync(bird);
-            var result = _birdRepository.SaveChanges();
-            if(result < 1)
-            {
-                return result;
-            }
-            return bird.BirdId;
         }
 
         public async Task<IEnumerable<BirdResponse>> GetAllBirdsAsync()

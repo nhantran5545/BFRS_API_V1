@@ -18,15 +18,18 @@ namespace BusinessObjects.IService.Implements
         private readonly IAccountRepository _accountRepository;
         private readonly ICageRepository _cageRepository;
         private readonly IBirdSpeciesRepository _birdSpeciesRepository;
+        private readonly IClutchRepository _clutchRepository;
         private readonly IMapper _mapper;
 
         public BreedingService(IBreedingRepository breedingRepository, IBirdRepository birdRepository,
-            ICageRepository cageRepository, IBirdSpeciesRepository birdSpeciesRepository, IMapper mapper, IAccountRepository accountRepository)
+            ICageRepository cageRepository, IBirdSpeciesRepository birdSpeciesRepository, IClutchRepository clutchRepository,
+            IMapper mapper, IAccountRepository accountRepository)
         {
             _breedingRepository = breedingRepository;
             _birdRepository = birdRepository;
             _cageRepository = cageRepository;
             _birdSpeciesRepository = birdSpeciesRepository;
+            _clutchRepository = clutchRepository;
             _mapper = mapper;
             _accountRepository = accountRepository;
         }
@@ -334,6 +337,18 @@ namespace BusinessObjects.IService.Implements
                     Console.WriteLine(ex.Message);
                     transaction.Rollback();
                     return false;
+                }
+            }
+        }
+
+        private async Task CloseClutchesByBreedingId(int breedingId)
+        {
+            var clutches = await _clutchRepository.GetClutchsByBreedingId(breedingId);
+            if(clutches.Any())
+            {
+                foreach (var item in clutches)
+                {
+                    item.Status = "Closed";
                 }
             }
         }

@@ -73,6 +73,7 @@ builder.Services.AddScoped<ICheckListDetailRepository, CheckListDetailRepository
 builder.Services.AddScoped<ICheckListRepository, CheckListRepository>();
 builder.Services.AddScoped<IClutchReasonRepository, ClutchReasonRepository>();
 builder.Services.AddScoped<IClutchRepository, ClutchRepository>();
+builder.Services.AddScoped<IEggBirdRepository, EggBirdRepository>();
 builder.Services.AddScoped<IEggReasonRepository, EggReasonRepository>();
 builder.Services.AddScoped<IEggRepository, EggRepository>();
 builder.Services.AddScoped<IFarmRepository, FarmRepository>();

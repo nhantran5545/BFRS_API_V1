@@ -2,7 +2,6 @@
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
-using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -179,6 +178,7 @@ namespace BusinessObjects.IService.Implements
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.Message);
                     transaction.Rollback();
                     return -1;
                 }

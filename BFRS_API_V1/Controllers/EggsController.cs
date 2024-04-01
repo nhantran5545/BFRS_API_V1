@@ -144,6 +144,11 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Clutch not found!");
             }
 
+            if(clutch.Status == "Closed" || clutch.Status == "Eliminated")
+            {
+                return BadRequest("Clutch is closed or elminated");
+            }
+
             var result = await _eggService.CreateEggAsync(eggAddRequest);
             if(result < 1)
             {

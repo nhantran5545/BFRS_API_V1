@@ -95,7 +95,7 @@ namespace BusinessObjects.IService.Implements
         public async Task<IEnumerable<EggResponse>> GetEggsByClutchIdAsync(object clutchId)
         {
             var eggs = await _eggRepository.GetEggsByClutchIdAsync(clutchId);
-            return eggs.Select(e => _mapper.Map<EggResponse>(e));
+            return eggs.Select(e => convertToResponse(e));
         }
 
         public async Task<IEnumerable<EggResponse>> GetEggsByBreedingIdAsync(object breedingId)
@@ -230,6 +230,24 @@ namespace BusinessObjects.IService.Implements
                     }
                 }
             }
+        }
+
+        private EggResponse convertToResponse(Egg egg)
+        {
+            var eggResponse = _mapper.Map<EggResponse>(egg);
+
+            var eggBird = egg.EggBirds.FirstOrDefault();
+            if(eggBird != null)
+            {
+                var bird = eggBird.Bird;
+                if(bird != null)
+                {
+                    eggResponse.BirdId = bird.BirdId;
+                    eggResponse.BandNumber = bird.BandNumber;
+                }
+            }
+            
+            return eggResponse;
         }
     }
 }
