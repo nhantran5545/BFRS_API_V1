@@ -1,4 +1,5 @@
-﻿using BusinessObjects.ResponseModels;
+﻿using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,8 @@ namespace BusinessObjects.IService
         Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsByBreedingIdAndPhase(int breedingId, int phase);
         Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsByClutchIdAndPhase(int clutchId, int phase);
         Task<BreedingCheckListResponse?> GetBreedingCheckListDetail(int breedingCheckListId);
+        Task<BreedingCheckListResponse?> GetTodayBreedingCheckListDetail(BreedingDetailResponse breedingResponse);
+        Task<int> CreateBreedingCheckList(BreedingCheckListAddRequest breedingCheckListAddRequest);
     }
 
 }

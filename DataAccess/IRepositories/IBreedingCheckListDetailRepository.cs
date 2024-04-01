@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface IBreedingCheckListDetailRepository : IGenericRepository<BreedingCheckListDetail>
     {
+        Task<BreedingCheckListDetail?> GetBreedingCheckListDetailByBreedingCheckListIdAndCheckListDetailId(object breedingCheckListId, object checkListDetailId);
     }
 }

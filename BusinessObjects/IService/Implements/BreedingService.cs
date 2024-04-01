@@ -134,6 +134,11 @@ namespace BusinessObjects.IService.Implements
             return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 
+        public async Task<IEnumerable<BreedingResponse>> GetAllBreedingsByStaffId(object staffId)
+        {
+            var breedings = await _breedingRepository.GetAllBreedingsByStaffId(staffId);
+            return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
+        }
 
         public async Task<IEnumerable<BreedingResponse>> GetBreedingsByStaffIdAsync(int staffId)
         {

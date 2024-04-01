@@ -14,5 +14,11 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
+        public async Task<BreedingCheckListDetail?> GetBreedingCheckListDetailByBreedingCheckListIdAndCheckListDetailId(object breedingCheckListId, object checkListDetailId)
+        {
+            return await _context.BreedingCheckListDetails
+                .Where(bcd => bcd.BreedingCheckListId.Equals(breedingCheckListId) && bcd.CheckListDetailId.Equals(checkListDetailId))
+                .FirstOrDefaultAsync();
+        }
     }
 }

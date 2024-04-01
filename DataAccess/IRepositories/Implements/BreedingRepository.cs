@@ -49,7 +49,9 @@ namespace DataAccess.IRepositories.Implements
                 .Include(br => br.FatherBird)
                 .Include(br => br.MotherBird)
                 .Include(br => br.Clutches)
-                .Where(br => br.CreatedBy.Equals(staffId))
+                .Include(br => br.Cage)
+                .ThenInclude(c => c.AccountId)
+                .Where(c => c.Cage.AccountId.Equals(staffId))
                 .ToListAsync();
         }
 

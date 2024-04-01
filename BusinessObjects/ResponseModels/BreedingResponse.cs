@@ -19,6 +19,7 @@ namespace BusinessObjects.ResponseModels
         public string? SpeciesName { get; set; }
         public bool? CoupleSeperated { get; set; }
         public int CageId { get; set; }
+        public int Phase { get; set; }
         public DateTime? NextCheck { get; set; }
         public string? Status { get; set; }
         public int NumOfClutches { get; set; }

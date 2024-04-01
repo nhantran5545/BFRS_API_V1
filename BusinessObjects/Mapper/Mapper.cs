@@ -128,6 +128,10 @@ namespace BusinessObjects.Mapper
                 .ReverseMap();
             CreateMap<BreedingAddRequest, Breeding>()
                 .ReverseMap();
+            CreateMap<BreedingCheckListAddRequest, BreedingCheckList>()
+                .ReverseMap();
+            CreateMap<BreedingCheckListAddRequestDetail, BreedingCheckListDetail>()
+                .ReverseMap();
             CreateMap<ClutchAddRequest, Clutch>()
                 .ReverseMap();
             CreateMap<CageAddRequest, Cage>()

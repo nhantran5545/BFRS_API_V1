@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface ICheckListRepository : IGenericRepository<CheckList>
     {
+        Task<CheckList?> GetCheckListByPhase(int phaseId);
     }
 }
