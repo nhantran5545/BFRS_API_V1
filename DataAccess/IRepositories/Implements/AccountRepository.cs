@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,11 @@ namespace DataAccess.IRepositories.Implements
         public Account GetAccountById(int accountId)
         {
             return _context.Accounts.FirstOrDefault(a => a.AccountId == accountId);
+        }
+
+        public async Task<Account> GetByUsernameAsync(string username)
+        {
+            return await _context.Accounts.FirstOrDefaultAsync(a => a.Username == username);
         }
     }
 }

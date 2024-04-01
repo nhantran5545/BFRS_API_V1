@@ -122,6 +122,8 @@ namespace BusinessObjects.Mapper
             #endregion
 
             #region Mapper_Request
+            CreateMap<AccountSignUpRequest, Account>()
+                .ReverseMap();
             CreateMap<AreaAddRequest, Area>()
                 .ReverseMap();
             CreateMap<BirdAddRequest, Bird>()

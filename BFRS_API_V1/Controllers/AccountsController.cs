@@ -10,6 +10,7 @@ using BusinessObjects.RequestModels;
 using BusinessObjects.IService;
 using BusinessObjects.InheritanceClass;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -42,6 +43,21 @@ namespace BFRS_API_V1.Controllers
             else
             {
                 return Unauthorized("Invalid username or password.");
+            }
+        }
+
+        [HttpPost("signup")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SignUp(AccountSignUpRequest accountSignUp)
+        {
+            try
+            {
+                await _accountService.RegisterAccountAsync(accountSignUp);
+                return Ok("Account registered successfully");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 
