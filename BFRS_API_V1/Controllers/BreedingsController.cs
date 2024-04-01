@@ -47,7 +47,6 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet]
-        [EnableQuery]
         public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedings()
         {
             var breedings = await _breedingService.GetAllBreedings();
@@ -59,7 +58,6 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("manager/{managerId}")]
-        [EnableQuery]
         public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedingsByManagerId(int managerId)
         {
             var breedings = await _breedingService.GetAllBreedingsByManagerId(managerId);
@@ -83,7 +81,6 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("{id}")]
-        [EnableQuery]
         public async Task<ActionResult<BreedingDetailResponse>> GetBreeding(int id)
         {
             var breeding = await _breedingService.GetBreedingById(id);
@@ -216,24 +213,49 @@ namespace BFRS_API_V1.Controllers
             return BadRequest("Something is wrong with the server please try again!");
         }
 
-        // DELETE: api/Breedings/5
+        [HttpPut("cancelBreeding")]
+        public async Task<IActionResult> CancelBreeding(BreedingUpdateRequest breedingUpdateRequest)
+        {
+            if(breedingUpdateRequest.Status != "Failed" && breedingUpdateRequest.Status != "Cancelled")
+            {
+                return BadRequest("Invalid Status");
+            }
+
+            var breeding = await _breedingService.GetBreedingById(breedingUpdateRequest.BreedingId);
+            if (breeding == null)
+            {
+                return NotFound("Breeding not found");
+            }
+
+            if (breeding.CreatedBy != breedingUpdateRequest.ManagerId)
+            {
+                return BadRequest("This is not your breeding");
+            }
+
+            var fatherCage = await _cageService.GetCageByIdAsync(breedingUpdateRequest.FatherCageId);
+            if (fatherCage == null || fatherCage.Status != "Nourishing")
+            {
+                return BadRequest("Father can not move to this cage");
+            }
+
+            var motherCage = await _cageService.GetCageByIdAsync(breedingUpdateRequest.MotherCageId);
+            if (motherCage == null || motherCage.Status != "Nourishing")
+            {
+                return BadRequest("Mother can not move to this cage");
+            }
+
+            if (await _breedingService.CancelBreeding(breedingUpdateRequest))
+            {
+                return Ok("Update Successfully");
+            }
+            return BadRequest("Something is wrong with the server please try again!");
+        }
+        /*// DELETE: api/Breedings/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBreeding(Guid id)
         {
-            /*if (_context.Breedings == null)
-            {
-                return NotFound();
-            }
-            var breeding = await _context.Breedings.FindAsync(id);
-            if (breeding == null)
-            {
-                return NotFound();
-            }
-
-            _context.Breedings.Remove(breeding);
-            await _context.SaveChangesAsync();*/
 
             return NoContent();
-        }
+        }*/
     }
 }

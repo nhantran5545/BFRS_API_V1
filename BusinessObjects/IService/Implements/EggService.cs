@@ -15,13 +15,15 @@ namespace BusinessObjects.IService.Implements
     {
         private readonly IEggRepository _eggRepository;
         private readonly IClutchRepository _clutchRepository;
+        private readonly IBreedingRepository _breedingRepository;
         private readonly IMapper _mapper;
 
-        public EggService(IEggRepository eggRepository,  IMapper mapper, IClutchRepository clutchRepository)
+        public EggService(IEggRepository eggRepository,  IMapper mapper, IClutchRepository clutchRepository, IBreedingRepository breedingRepository)
         {
             _eggRepository = eggRepository;
             _mapper = mapper;
             _clutchRepository = clutchRepository;
+            _breedingRepository = breedingRepository;
         }
 
         public async Task<int> CreateEggAsync(EggAddRequest eggAddRequest)
@@ -31,7 +33,7 @@ namespace BusinessObjects.IService.Implements
                 try
                 {
                     var egg = _mapper.Map<Egg>(eggAddRequest);
-                    if (egg == null || egg.ClutchId == null)
+                    if (egg == null)
                     {
                         return -1;
                     }
@@ -45,6 +47,13 @@ namespace BusinessObjects.IService.Implements
                     {
                         clutch.Status = "Hatched";
                         _clutchRepository.SaveChanges();
+
+                        var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
+                        if(breeding != null)
+                        {
+                            breeding.Phase = 3;
+                            _breedingRepository.SaveChanges();
+                        }
                     }
 
                     egg.CreatedDate = DateTime.Now;
@@ -124,7 +133,7 @@ namespace BusinessObjects.IService.Implements
                 try
                 {
                     var egg = await _eggRepository.GetByIdAsync(eggUpdateRequest.EggId);
-                    if (egg == null || egg.ClutchId == null)
+                    if (egg == null)
                     {
                         return false;
                     }
@@ -134,7 +143,7 @@ namespace BusinessObjects.IService.Implements
                     egg.UpdatedDate = DateTime.Now;
 
                     _eggRepository.SaveChanges();
-                    await UpdateClutchStatus(egg.ClutchId.Value);
+                    await UpdateClutchStatus(egg.ClutchId);
                     transaction.Commit();
                     return true;
                 }
@@ -154,7 +163,7 @@ namespace BusinessObjects.IService.Implements
                 try
                 {
                     var egg = await _eggRepository.GetByIdAsync(eggHatchRequest.EggId);
-                    if (egg == null || egg.ClutchId == null)
+                    if (egg == null)
                     {
                         return false;
                     }
@@ -176,7 +185,7 @@ namespace BusinessObjects.IService.Implements
                     egg.UpdatedDate = DateTime.Now;
 
                     _eggRepository.SaveChanges();
-                    await UpdateClutchStatus(egg.ClutchId.Value);
+                    await UpdateClutchStatus(egg.ClutchId);
                     transaction.Commit();
                     return true;
                 }
@@ -211,6 +220,13 @@ namespace BusinessObjects.IService.Implements
                     {
                         clutch.Status = "Weaned";
                         _clutchRepository.SaveChanges();
+
+                        var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
+                        if (breeding != null)
+                        {
+                            breeding.Phase = 4;
+                            _breedingRepository.SaveChanges();
+                        }
                     }
                 }
             }

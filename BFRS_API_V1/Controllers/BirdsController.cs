@@ -93,18 +93,24 @@ namespace BFRS_API_V1.Controllers
                 return NotFound("Bird not found");
             }
 
-            var birdSpecies = await _birdSpeciesService.GetBirdSpeciesByIdAsync(birdUpdateRequest.BirdSpeciesId);
-            if (birdSpecies == null)
+            if (birdUpdateRequest.BirdSpeciesId != null)
             {
-                return NotFound("Invalid bird species");
+                var birdSpecies = await _birdSpeciesService.GetBirdSpeciesByIdAsync(birdUpdateRequest.BirdSpeciesId);
+                if (birdSpecies == null)
+                {
+                    return NotFound("Invalid bird species");
+                }
             }
-
-            var cage = await _cageService.GetCageByIdAsync(birdUpdateRequest.CageId);
-            if(cage == null)
+            
+            if(birdUpdateRequest.CageId != null)
             {
-                return NotFound("Invalid cage");
+                var cage = await _cageService.GetCageByIdAsync(birdUpdateRequest.CageId);
+                if (cage == null)
+                {
+                    return NotFound("Invalid cage");
+                }
             }
-
+            
             if(await _birdService.UpdateBirdAsync(birdUpdateRequest))
             {
                 return Ok(birdUpdateRequest);

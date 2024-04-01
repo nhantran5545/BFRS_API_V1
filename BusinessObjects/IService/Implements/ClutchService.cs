@@ -44,6 +44,7 @@ namespace BusinessObjects.IService.Implements
                     if (breeding.Status != "InProgress")
                     {
                         breeding.Status = "InProgress";
+                        breeding.Phase = 2;
                         _breedingRepository.SaveChanges();
                     }
 
@@ -56,6 +57,7 @@ namespace BusinessObjects.IService.Implements
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex.ToString());
                     transaction.Rollback();
                     return -1;
                 }

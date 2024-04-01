@@ -52,6 +52,7 @@ namespace BusinessObjects.IService.Implements
 
                     breeding.CoupleSeperated = false;
                     breeding.Status = "Mating";
+                    breeding.Phase = 1;
                     breeding.CreatedBy = breedingAddRequest.ManagerId;
                     breeding.CreatedDate = DateTime.Now;
                     await _breedingRepository.AddAsync(breeding);
@@ -284,5 +285,57 @@ namespace BusinessObjects.IService.Implements
             }
         }
 
+        public async Task<bool> CancelBreeding(BreedingUpdateRequest breedingUpdateRequest)
+        {
+            using (var transaction = _breedingRepository.BeginTransaction())
+            {
+                try
+                {
+                    var breeding = await _breedingRepository.GetByIdAsync(breedingUpdateRequest.BreedingId);
+                    if (breeding == null)
+                    {
+                        return false;
+                    }
+
+                    breeding.CoupleSeperated = true;
+                    breeding.Status = breedingUpdateRequest.Status;
+                    breeding.UpdatedBy = breedingUpdateRequest.ManagerId;
+                    breeding.UpdatedDate = DateTime.Now;
+                    _breedingRepository.SaveChanges();
+
+                    var fatherBird = await _birdRepository.GetByIdAsync(breeding.FatherBirdId);
+                    if (fatherBird != null)//fatherBird never null
+                    {
+                        fatherBird.CageId = breedingUpdateRequest.FatherCageId;
+                        fatherBird.Status = "InRestPeriod";
+                    }
+                    var motherBird = await _birdRepository.GetByIdAsync(breeding.MotherBirdId);
+                    if (motherBird != null)//motherBird never null
+                    {
+                        motherBird.CageId = breedingUpdateRequest.MotherCageId;
+                        motherBird.Status = "InRestPeriod";
+                    }
+
+                    _birdRepository.SaveChanges();
+
+                    var cage = await _cageRepository.GetByIdAsync(breeding.CageId);
+                    if (cage != null)//cage never null
+                    {
+                        cage.Status = "Standby";
+                    }
+
+                    _cageRepository.SaveChanges();
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    transaction.Rollback();
+                    return false;
+                }
+            }
+        }
     }
 }

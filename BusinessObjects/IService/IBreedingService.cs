@@ -16,6 +16,7 @@ namespace BusinessObjects.IService
         /*Task<bool> PutBirdsToBreeding(BreedingUpdateRequest breedingUpdateRequest);
         Task<bool> BreedingInProgress(BreedingUpdateRequest breedingUpdateRequest);*/
         Task<bool> CloseBreeding(BreedingCloseRequest breedingCloseRequest);
+        Task<bool> CancelBreeding(BreedingUpdateRequest breedingUpdateRequest);
         void DeleteBreeding(BreedingAddRequest breeding);
         void DeleteBreedingById(object breedingId);
         Task<IEnumerable<BreedingResponse>> GetAllBreedings();
