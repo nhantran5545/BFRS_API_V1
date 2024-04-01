@@ -19,6 +19,7 @@ namespace BusinessObjects.IService
         void DeleteAccount(Account account);
         void DeleteAccountById(object accountId);
         Task<IEnumerable<Account>> GetAllAccountsAsync();
-        Task<Account?> GetAccountByEmailAsync(string email);
+        Task<bool> CheckUsernameExist(string username);
+        Task RegisterAccountAsync(AccountSignUpRequest accountSignUp);
     }
 }
