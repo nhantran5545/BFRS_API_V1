@@ -32,7 +32,6 @@ namespace DataAccess.IRepositories.Implements
         public async Task<Account> GetByUsernameAsync(string username)
         {
             return await _context.Accounts
-                .Include(a => a.Farm)
                 .FirstOrDefaultAsync(a => a.Username == username);
         }
     }
