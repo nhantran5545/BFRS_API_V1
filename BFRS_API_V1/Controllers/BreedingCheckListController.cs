@@ -104,18 +104,18 @@ namespace BFRS_API_V1.Controllers
             if(breeding == null)
             {
                 return NotFound("Breeding not found");
-            }/*
+            }
 
             var checkList = await _checkListService.GetCheckListByIdAsync(breedingCheckListAddRequest.CheckListId);
-            if(checkList == null)
+            if (checkList == null)
             {
                 return NotFound("CheckList not found");
             }
 
-            if(breeding.Phase != checkList.Phase)
+            if (breeding.Phase != checkList.Phase)
             {
                 return BadRequest("Breeding can only be added checklist in phase " + breeding.Phase);
-            }*/
+            }
 
             var result = await _breedingCheckListService.CreateBreedingCheckList(breedingCheckListAddRequest);
             if(result < 1)
