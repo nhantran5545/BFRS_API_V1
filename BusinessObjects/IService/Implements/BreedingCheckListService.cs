@@ -103,7 +103,7 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<BreedingCheckListResponse?> GetTodayBreedingCheckListDetail(BreedingDetailResponse breedingResponse)
         {
-            var breedingCheckList = await _breedingCheckListRepository.GetTodayCheckListByBreedingId(breedingResponse.BreedingId);
+            var breedingCheckList = await _breedingCheckListRepository.GetTodayCheckListByBreedingIdAndPhase(breedingResponse.BreedingId, breedingResponse.Phase);
             if (breedingCheckList == null)
             {
                 var breedingCheckListResponse = new BreedingCheckListResponse();
@@ -131,13 +131,14 @@ namespace BusinessObjects.IService.Implements
             return ConvertToResponse(breedingCheckList);
         }
 
-        public async Task<int> CreateBreedingCheckList(BreedingCheckListAddRequest breedingCheckListAddRequest)
+        public async Task<int> CreateBreedingCheckList(BreedingCheckListAddRequest breedingCheckListAddRequest, int phase)
         {
             using(var transaction = _breedingCheckListRepository.BeginTransaction())
             {
                 try
                 {
-                    var breedingCheckList = await _breedingCheckListRepository.GetTodayCheckListByBreedingId(breedingCheckListAddRequest.BreedingId);
+                    var breedingCheckList = await _breedingCheckListRepository
+                        .GetTodayCheckListByBreedingIdAndPhase(breedingCheckListAddRequest.BreedingId, phase);
                     if(breedingCheckList == null)
                     {
                         breedingCheckList = _mapper.Map<BreedingCheckList>(breedingCheckListAddRequest);

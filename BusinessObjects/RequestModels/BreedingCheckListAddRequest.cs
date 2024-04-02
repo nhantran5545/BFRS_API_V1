@@ -12,7 +12,6 @@ namespace BusinessObjects.RequestModels
         //public int? ClutchId { get; set; }
         //public int? EggId { get; set; }
         public int CheckListId { get; set; }
-        public int Phase { get; set; }
         public List<BreedingCheckListAddRequestDetail> BreedingCheckListAddRequestDetails { get; set; } = new List<BreedingCheckListAddRequestDetail>();  
     }
 }

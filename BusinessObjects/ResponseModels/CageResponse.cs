@@ -16,5 +16,6 @@ namespace BusinessObjects.ResponseModels
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Status { get; set; }
+        public int? NumOfBird { get; set; }
     }
 }

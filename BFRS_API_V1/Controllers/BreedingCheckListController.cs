@@ -117,7 +117,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Breeding can only be added checklist in phase " + breeding.Phase);
             }
 
-            var result = await _breedingCheckListService.CreateBreedingCheckList(breedingCheckListAddRequest);
+            var result = await _breedingCheckListService.CreateBreedingCheckList(breedingCheckListAddRequest, breeding.Phase);
             if(result < 1)
             {
                 return BadRequest("Something is wrong with the server. Please try again");

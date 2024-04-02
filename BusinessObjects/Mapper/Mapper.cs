@@ -79,6 +79,8 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.Account != null ? src.Account.FirstName : string.Empty))
                 .ForMember(dest => dest.LastName,
                             opt => opt.MapFrom(src => src.Account != null ? src.Account.LastName : string.Empty))
+                .ForMember(dest => dest.NumOfBird,
+                            opt => opt.MapFrom(src => src.Birds.Count()))
                 .ReverseMap();
             CreateMap<Cage, CageDetailResponse>()
                 .ForMember(dest => dest.AreaName,

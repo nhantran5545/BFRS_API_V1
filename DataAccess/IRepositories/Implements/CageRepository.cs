@@ -19,6 +19,7 @@ namespace DataAccess.IRepositories.Implements
             return await _context.Cages
                 .Include(c => c.Area)
                 .Include(c => c.Account)
+                .Include(c => c.Birds)
                 .ToListAsync();
         }
 
@@ -27,6 +28,7 @@ namespace DataAccess.IRepositories.Implements
             return await _context.Cages
                 .Include(br => br.Area)
                 .Include(c => c.Account)
+                .Include(c => c.Birds)
                 .Where(br => br.CageId.Equals(cageId))
                 .FirstOrDefaultAsync();
         }
