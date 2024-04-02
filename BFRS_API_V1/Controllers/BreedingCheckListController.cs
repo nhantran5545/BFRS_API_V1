@@ -14,11 +14,14 @@ namespace BFRS_API_V1.Controllers
     {
         private readonly IBreedingCheckListService _breedingCheckListService;
         private readonly IBreedingService _breedingService;
+        private readonly ICheckListService _checkListService;
 
-        public BreedingCheckListController(IBreedingCheckListService breedingCheckListService, IBreedingService breedingService)
+        public BreedingCheckListController(IBreedingCheckListService breedingCheckListService, IBreedingService breedingService,
+            ICheckListService checkListService)
         {
             _breedingCheckListService = breedingCheckListService ?? throw new ArgumentNullException(nameof(breedingCheckListService));
             _breedingService = breedingService;
+            _checkListService = checkListService;
         }
 
         [HttpGet]
@@ -97,6 +100,23 @@ namespace BFRS_API_V1.Controllers
         [HttpPost("Today/{breedingId}")]
         public async Task<IActionResult> CreateTodayBreedingCheckListByBreedingId(BreedingCheckListAddRequest breedingCheckListAddRequest)
         {
+            var breeding = await _breedingService.GetBreedingById(breedingCheckListAddRequest.BreedingId);
+            if(breeding == null)
+            {
+                return NotFound("Breeding not found");
+            }/*
+
+            var checkList = await _checkListService.GetCheckListByIdAsync(breedingCheckListAddRequest.CheckListId);
+            if(checkList == null)
+            {
+                return NotFound("CheckList not found");
+            }
+
+            if(breeding.Phase != checkList.Phase)
+            {
+                return BadRequest("Breeding can only be added checklist in phase " + breeding.Phase);
+            }*/
+
             var result = await _breedingCheckListService.CreateBreedingCheckList(breedingCheckListAddRequest);
             if(result < 1)
             {

@@ -107,13 +107,13 @@ namespace BusinessObjects.IService.Implements
             if (breedingCheckList == null)
             {
                 var breedingCheckListResponse = new BreedingCheckListResponse();
-                breedingCheckListResponse.BreedingCheckListId = 0;
-                breedingCheckListResponse.Phase = breedingResponse.Phase;
                 var checkList = await _checkListRepository.GetCheckListByPhase(breedingResponse.Phase);
                 if (checkList == null)
                 {
                     return null;
                 }
+                breedingCheckListResponse.CheckListId = checkList.CheckListId;
+                breedingCheckListResponse.Phase = breedingResponse.Phase;
 
                 List<BreedingCheckListDetailResponse> breedingCheckListDetails = new List<BreedingCheckListDetailResponse>();
                 foreach (var item in checkList.CheckListDetails)
@@ -150,10 +150,26 @@ namespace BusinessObjects.IService.Implements
                         await _breedingCheckListRepository.AddAsync(breedingCheckList);
                         _breedingCheckListRepository.SaveChanges();
 
-                        foreach (var item in breedingCheckListAddRequest.BreedingCheckListAddRequestDetails)
+                        var checkListDetails = await _checkListDetailRepository.GetCheckListDetailByCheckListId(breedingCheckListAddRequest.CheckListId);
+                        if(!checkListDetails.Any())
                         {
-                            var breedingCheckListDetail = _mapper.Map<BreedingCheckListDetail>(item);
-                            breedingCheckListDetail.BreedingCheckListId = breedingCheckList.BreedingCheckListId;
+                            return -1;
+                        }
+
+                        foreach (var item in checkListDetails)
+                        {
+                            var breedingCheckListDetail = new BreedingCheckListDetail()
+                            {
+                                BreedingCheckListId = breedingCheckList.BreedingCheckListId,
+                                CheckListDetailId = item.CheckListDetailId,
+                                CheckValue = 0
+                            };
+                            var breedingCheckListAddRequestDetail = breedingCheckListAddRequest.BreedingCheckListAddRequestDetails
+                                .Where(bca => bca.CheckListDetailId == item.CheckListDetailId).FirstOrDefault();
+                            if(breedingCheckListAddRequestDetail != null)
+                            {
+                                breedingCheckListDetail.CheckValue = breedingCheckListAddRequestDetail.CheckValue;
+                            }
                             await _breedingCheckListDetailRepository.AddAsync(breedingCheckListDetail);
                         }
                     }
@@ -170,7 +186,6 @@ namespace BusinessObjects.IService.Implements
                             }
                         }
                     }
-                    
 
                     _breedingCheckListDetailRepository.SaveChanges();
                     transaction.Commit();

@@ -60,7 +60,7 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<List<CheckListDetail>> GetCheckListDetailsByCheckListId(int checkListId)
         {
-            return await _checkListDetailRepository.GetCheckListDetailById(checkListId);
+            return await _checkListDetailRepository.GetCheckListDetailByCheckListId(checkListId);
         }
     }
 }

@@ -14,11 +14,13 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
-        public async Task<List<CheckListDetail>> GetCheckListDetailById(int CheckListId)
+        public async Task<List<CheckListDetail>> GetCheckListDetailByCheckListId(int CheckListId)
         {
             return await _context.CheckListDetails
                 .Where(c => c.CheckListId == CheckListId)
                 .ToListAsync();
         }
+
+
     }
 }

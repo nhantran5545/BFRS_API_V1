@@ -19,12 +19,15 @@ namespace BFRS_API_V1.Controllers
         private readonly IBreedingService _breedingService;
         private readonly IBirdService _birdService;
         private readonly ICageService _cageService;
+        private readonly IAccountService _accountService;
 
-        public BreedingsController(IBreedingService breedingService, IBirdService birdService, ICageService cageService)
+        public BreedingsController(IBreedingService breedingService, IBirdService birdService, 
+            ICageService cageService, IAccountService accountService)
         {
             _breedingService = breedingService;
             _birdService = birdService;
             _cageService = cageService;
+            _accountService = accountService;
         }
 
         [HttpGet("InbreedingCoefficient")]

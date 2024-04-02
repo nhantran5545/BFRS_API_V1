@@ -9,7 +9,7 @@ namespace BusinessObjects.RequestModels
     public class BreedingCheckListAddRequest
     {
         public int BreedingId { get; set; }
-        public int? ClutchId { get; set; }
+        //public int? ClutchId { get; set; }
         //public int? EggId { get; set; }
         public int CheckListId { get; set; }
         public int Phase { get; set; }
