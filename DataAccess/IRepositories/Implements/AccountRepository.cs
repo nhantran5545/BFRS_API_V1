@@ -16,8 +16,6 @@ namespace DataAccess.IRepositories.Implements
 
         public async Task<Account> AuthenticateAsync(string username, string password)
         {
-            // Implement authentication logic here
-            // Example:
             var user = await _context.Accounts.FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
             return user;
         }
@@ -33,7 +31,9 @@ namespace DataAccess.IRepositories.Implements
 
         public async Task<Account> GetByUsernameAsync(string username)
         {
-            return await _context.Accounts.FirstOrDefaultAsync(a => a.Username == username);
+            return await _context.Accounts
+                .Include(a => a.Farm)
+                .FirstOrDefaultAsync(a => a.Username == username);
         }
     }
 }
