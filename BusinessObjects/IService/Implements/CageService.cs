@@ -60,7 +60,7 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<IEnumerable<CageResponse>> GetAllCagesAsync()
         {
-            var cages = await _cageRepository.GetAllAsync();
+            var cages = await _cageRepository.GetAllCagesAsync();
             return cages.Select(c => _mapper.Map<CageResponse>(c));
         }
 
