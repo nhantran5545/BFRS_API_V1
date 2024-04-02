@@ -15,7 +15,8 @@ namespace BusinessObjects.Mapper
         public Mapper() 
         {
             #region Mapper_Response
-
+            CreateMap<Account, AccountDetailResponse>()
+                  .ReverseMap();
             CreateMap<Account, AccountResponse>()
                  .ReverseMap();
             CreateMap<Area, AreaResponse>()
