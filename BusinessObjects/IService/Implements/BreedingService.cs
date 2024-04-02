@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http.Results;
 
 namespace BusinessObjects.IService.Implements
 {
@@ -135,11 +136,6 @@ namespace BusinessObjects.IService.Implements
             return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 
-        public async Task<IEnumerable<BreedingResponse>> GetAllBreedingsByStaffId(object staffId)
-        {
-            var breedings = await _breedingRepository.GetAllBreedingsByStaffId(staffId);
-            return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
-        }
 
         public async Task<IEnumerable<BreedingResponse>> GetBreedingsByStaffIdAsync(int staffId)
         {
@@ -154,7 +150,7 @@ namespace BusinessObjects.IService.Implements
                 throw new Exception("The provided account is not a staff member");
             }
 
-            var breedings = await _breedingRepository.GetAllBreedingsByStaffId(staffId);
+            var breedings = await _breedingRepository.GetAllBreedingsByStaffId(account.AccountId);
             return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 
