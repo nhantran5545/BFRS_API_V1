@@ -33,14 +33,23 @@ namespace BFRS_API_V1.Controllers
         // GET: api/Birds
         [HttpGet]
         [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Manager")]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetAllBirds()
         {
-            var birds = await _birdService.GetAllBirdsAsync();
-            if (birds == null || !birds.Any())
+            try
             {
-                return NotFound("There are no birds");
+                var birds = await _birdService.GetAllBirdsAsync();
+                if (birds == null || !birds.Any())
+                {
+                    return NotFound("There are no birds");
+                }
+                return Ok(birds);
             }
-            return Ok(birds);
+            catch (UnauthorizedAccessException)
+            {
+                return StatusCode(403, "You are not authorized to access this resource.");
+            }
+ 
         }
 
         [HttpGet("InFarm")]
