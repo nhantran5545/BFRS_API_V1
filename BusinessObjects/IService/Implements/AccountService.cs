@@ -62,11 +62,6 @@ namespace BusinessObjects.IService.Implements
             IEnumerable<Account> users = await GetAllAccountsAsync();
             var checkLogin = (from u in users where u.Username == account.Username && u.Password == account.Password select u)
                             .FirstOrDefault();
-
-            if (checkLogin.Status == "Ban")
-            {
-                throw new HttpStatusCodeException(HttpStatusCode.BadRequest, "Your Account have been banned");
-            }
             if (checkLogin != null)
             {
                 return checkLogin; 
