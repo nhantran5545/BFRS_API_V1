@@ -11,6 +11,7 @@ using BusinessObjects.IService;
 using BusinessObjects.InheritanceClass;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.ResponseModels;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -55,23 +56,13 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(AccountLoginRequest login)
+        public async Task<IActionResult> Login(AccountLoginRequest loginRequest)
         {
-            if (string.IsNullOrEmpty(login.Username) || string.IsNullOrEmpty(login.Password))
-            {
-                return BadRequest("Username and password are required.");
-            }
+            var (token, account) = await _accountService.AuthenticateAsync(loginRequest);
+            if (token == null || account == null)
+                return Unauthorized();
 
-            var user = await _accountService.LoginAsync(login);
-            if (user != null)
-            {
-                var (token, role) = _accountService.CreateToken(user.AccountId, user.Role);
-                return Ok(new { token, role });
-            }
-            else
-            {
-                return Unauthorized("Invalid username or password.");
-            }
+            return Ok(new { token, account });
         }
 
         [HttpPost("signup")]

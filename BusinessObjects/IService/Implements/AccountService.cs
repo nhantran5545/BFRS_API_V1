@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BusinessObjects.InheritanceClass;
-using BusinessObjects.InheritanceClass.HandleError;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
@@ -8,7 +7,6 @@ using DataAccess.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
-using System.Net;
 
 namespace BusinessObjects.IService.Implements
 {
@@ -52,21 +50,18 @@ namespace BusinessObjects.IService.Implements
             return await _accountRepository.GetAllAsync();
         }
 
-        public (string token, string role) CreateToken(int accountId, string role)
+        public async Task<(string token, AccountResponse accountResponse)> AuthenticateAsync(AccountLoginRequest loginRequest)
         {
-            // Generate token using ProvideToken.Instance
-            return ProvideToken.Instance.GenerateToken(accountId, role);
-        }
-        public async Task<Account?> LoginAsync(AccountLoginRequest account)
-        {
-            IEnumerable<Account> users = await GetAllAccountsAsync();
-            var checkLogin = (from u in users where u.Username == account.Username && u.Password == account.Password select u)
-                            .FirstOrDefault();
-            if (checkLogin != null)
-            {
-                return checkLogin; 
-            }
-            return null; 
+            var user = await _accountRepository.AuthenticateAsync(loginRequest.Username, loginRequest.Password);
+
+            if (user == null)
+                return (null, null);
+
+            var token = ProvideToken.Instance.GenerateToken(user.AccountId, user.Role);
+
+            var account = _mapper.Map<AccountResponse>(user);
+
+            return (token.token, account);
         }
 
         public async Task RegisterAccountAsync(AccountSignUpRequest accountSignUp)

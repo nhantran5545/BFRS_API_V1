@@ -143,6 +143,8 @@ namespace BusinessObjects.Mapper
                 .ReverseMap();
             CreateMap<EggAddRequest, Egg>()
                 .ReverseMap();
+            CreateMap<AccountLoginRequest, Account>()
+                .ReverseMap();
             #endregion
         }
     }
