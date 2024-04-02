@@ -55,6 +55,18 @@ namespace BusinessObjects.IService.Implements
                             _breedingRepository.SaveChanges();
                         }
                     }
+                    else if (clutch.Status == "Weaned" && egg.Status == "In Development")
+                    {
+                        clutch.Status = "Banding";
+                        _clutchRepository.SaveChanges();
+
+                        var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
+                        if (breeding != null)
+                        {
+                            breeding.Phase = 3;
+                            _breedingRepository.SaveChanges();
+                        }
+                    }
 
                     egg.CreatedDate = DateTime.Now;
                     await _eggRepository.AddAsync(egg);
