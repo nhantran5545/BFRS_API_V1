@@ -90,7 +90,7 @@ namespace BFRS_API_V1.Controllers
             {
                 foreach (var item in breeding.ClutchResponses)
                 {
-                    if (item.Status != "Closed")
+                    if (item.Status != "Closed" && item.Status != "Eliminated")
                     {
                         return BadRequest("Another clutch is in progress");
                     }
@@ -114,7 +114,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("clutch id conflict");
             }
 
-            if(clutchUpdateRequest.Status != "Closed")
+            if(clutchUpdateRequest.Status != "Closed" && clutchUpdateRequest.Status != "Eliminated")
             {
                 return BadRequest("Invalid status");
             }
