@@ -32,8 +32,8 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Birds
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Admin, Manager")]
+        //[Authorize(Roles = "Manager")]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetAllBirds()
         {
             try

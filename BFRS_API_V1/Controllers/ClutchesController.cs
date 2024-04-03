@@ -86,6 +86,17 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Breeding already closed");
             }
 
+            if(breeding.ClutchResponses != null && breeding.ClutchResponses.Any())
+            {
+                foreach (var item in breeding.ClutchResponses)
+                {
+                    if (item.Status != "Closed")
+                    {
+                        return BadRequest("Another clutch is in progress");
+                    }
+                }
+            }
+            
             var result = await _clutchService.CreateClutchAsync(clutchAddRequest);
             if (result < 1)
             {

@@ -296,6 +296,8 @@ namespace BusinessObjects.IService.Implements
                         return false;
                     }
 
+                    await CloseClutchesByBreedingId(breeding.BreedingId);
+
                     breeding.CoupleSeperated = true;
                     breeding.Status = breedingUpdateRequest.Status;
                     breeding.UpdatedBy = breedingUpdateRequest.ManagerId;
@@ -346,6 +348,7 @@ namespace BusinessObjects.IService.Implements
                 {
                     item.Status = "Closed";
                 }
+                _clutchRepository.SaveChanges();
             }
         }
     }

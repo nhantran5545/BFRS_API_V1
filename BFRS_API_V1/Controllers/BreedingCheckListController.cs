@@ -88,6 +88,11 @@ namespace BFRS_API_V1.Controllers
                 return NotFound("Breeding not found");
             }
 
+            /*if(breeding.Status != "Mating")
+            {
+                return BadRequest("Breeding to different phase");
+            }*/
+
             var breedingCheckListResponse = await _breedingCheckListService.GetTodayBreedingCheckListDetail(breeding);
             if (breedingCheckListResponse == null)
             {
