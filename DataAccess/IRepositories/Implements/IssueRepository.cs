@@ -9,7 +9,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class IssueRepository : GenericRepository<Issue>, IIssueRepository
     {
-        public IssueRepository(BFRS_dbContext context) : base(context)
+        public IssueRepository(BFRS_DBContext context) : base(context)
         {
         }
     }

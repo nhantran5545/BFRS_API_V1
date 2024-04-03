@@ -10,7 +10,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class AccountRepository : GenericRepository<Account>, IAccountRepository
     {
-        public AccountRepository(BFRS_dbContext context) : base(context)
+        public AccountRepository(BFRS_DBContext context) : base(context)
         {
         }
 

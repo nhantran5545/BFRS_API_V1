@@ -9,7 +9,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class MutationRepository : GenericRepository<Mutation>, IMutationRepository
     {
-        public MutationRepository(BFRS_dbContext context) : base(context)
+        public MutationRepository(BFRS_DBContext context) : base(context)
         {
         }
     }

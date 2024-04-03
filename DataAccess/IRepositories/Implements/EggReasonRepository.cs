@@ -9,7 +9,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class EggReasonRepository : GenericRepository<EggReason>, IEggReasonRepository
     {
-        public EggReasonRepository(BFRS_dbContext context) : base(context)
+        public EggReasonRepository(BFRS_DBContext context) : base(context)
         {
         }
     }

@@ -13,7 +13,7 @@ namespace DataAccess.Models
         }
 
         public int ClutchId { get; set; }
-        public int? BreedingId { get; set; }
+        public int BreedingId { get; set; }
         public DateTime? BroodStartDate { get; set; }
         public DateTime? BroodEndDate { get; set; }
         public int? CageId { get; set; }

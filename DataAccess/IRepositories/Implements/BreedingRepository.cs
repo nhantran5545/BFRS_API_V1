@@ -10,7 +10,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class BreedingRepository : GenericRepository<Breeding>, IBreedingRepository
     {
-        public BreedingRepository(BFRS_dbContext context) : base(context)
+        public BreedingRepository(BFRS_DBContext context) : base(context)
         {
         }
 

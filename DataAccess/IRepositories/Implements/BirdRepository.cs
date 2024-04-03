@@ -10,7 +10,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class BirdRepository : GenericRepository<Bird>, IBirdRepository
     {
-        public BirdRepository(BFRS_dbContext context) : base(context)
+        public BirdRepository(BFRS_DBContext context) : base(context)
         {
         }
 

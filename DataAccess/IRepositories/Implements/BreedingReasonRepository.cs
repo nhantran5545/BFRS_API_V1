@@ -9,7 +9,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class BreedingReasonRepository : GenericRepository<BreedingReason>, IBreedingReasonRepository
     {
-        public BreedingReasonRepository(BFRS_dbContext context) : base(context)
+        public BreedingReasonRepository(BFRS_DBContext context) : base(context)
         {
         }
     }

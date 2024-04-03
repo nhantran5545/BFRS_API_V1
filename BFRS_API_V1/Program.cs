@@ -50,7 +50,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddHttpContextAccessor();
 
 //DbContext
-builder.Services.AddDbContext<BFRS_dbContext>(options =>
+builder.Services.AddDbContext<BFRS_DBContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("BFRSDB")));
 
 // C?u h�nh Memory Cache

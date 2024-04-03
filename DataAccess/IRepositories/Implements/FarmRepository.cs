@@ -9,7 +9,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class FarmRepository : GenericRepository<Farm>, IFarmRepository
     {
-        public FarmRepository(BFRS_dbContext context) : base(context)
+        public FarmRepository(BFRS_DBContext context) : base(context)
         {
         }
     }

@@ -10,7 +10,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class CageRepository : GenericRepository<Cage>, ICageRepository
     {
-        public CageRepository(BFRS_dbContext context) : base(context)
+        public CageRepository(BFRS_DBContext context) : base(context)
         {
         }
 

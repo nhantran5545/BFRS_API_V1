@@ -10,7 +10,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class ClutchRepository : GenericRepository<Clutch>, IClutchRepository
     {
-        public ClutchRepository(BFRS_dbContext context) : base(context)
+        public ClutchRepository(BFRS_DBContext context) : base(context)
         {
         }
 

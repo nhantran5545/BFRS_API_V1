@@ -10,7 +10,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class CheckListRepository : GenericRepository<CheckList>, ICheckListRepository
     {
-        public CheckListRepository(BFRS_dbContext context) : base(context)
+        public CheckListRepository(BFRS_DBContext context) : base(context)
         {
         }
 

@@ -12,9 +12,9 @@ namespace DataAccess.IRepositories.Implements
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly BFRS_dbContext _context;
+        protected readonly BFRS_DBContext _context;
 
-        public GenericRepository(BFRS_dbContext context)
+        public GenericRepository(BFRS_DBContext context)
         {
             _context = context;
         }

@@ -10,7 +10,7 @@ namespace DataAccess.IRepositories.Implements
 {
     public class AreaRepository : GenericRepository<Area>, IAreaRepository
     {
-        public AreaRepository(BFRS_dbContext context) : base(context)
+        public AreaRepository(BFRS_DBContext context) : base(context)
         {
         }
 
