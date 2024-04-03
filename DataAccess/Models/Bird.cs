@@ -16,6 +16,7 @@ namespace DataAccess.Models
         }
 
         public int BirdId { get; set; }
+        public string? BirdName { get; set; }
         public string? Gender { get; set; }
         public DateTime? HatchedDate { get; set; }
         public string? PurchaseFrom { get; set; }

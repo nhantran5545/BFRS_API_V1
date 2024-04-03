@@ -43,7 +43,6 @@ namespace DataAccess.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -94,6 +93,8 @@ namespace DataAccess.Models
                 entity.ToTable("Bird");
 
                 entity.Property(e => e.AcquisitionDate).HasColumnType("date");
+
+                entity.Property(e => e.BirdName).HasMaxLength(255);
 
                 entity.Property(e => e.Gender).HasMaxLength(10);
 
