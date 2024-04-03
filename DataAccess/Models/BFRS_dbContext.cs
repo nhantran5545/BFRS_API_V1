@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DataAccess.Models
 {
-    public partial class BFRS_dbContext : DbContext
+    public partial class BFRS_DBContext : DbContext
     {
-        public BFRS_dbContext()
+        public BFRS_DBContext()
         {
         }
 
-        public BFRS_dbContext(DbContextOptions<BFRS_dbContext> options)
+        public BFRS_DBContext(DbContextOptions<BFRS_DBContext> options)
             : base(options)
         {
         }
@@ -43,6 +43,7 @@ namespace DataAccess.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -160,7 +161,7 @@ namespace DataAccess.Models
             modelBuilder.Entity<BirdSpecy>(entity =>
             {
                 entity.HasKey(e => e.BirdSpeciesId)
-                    .HasName("PK__BirdSpec__D9DA595F439456F6");
+                    .HasName("PK__BirdSpec__D9DA595F23C96CEF");
 
                 entity.Property(e => e.BirdSpeciesName).HasMaxLength(255);
 

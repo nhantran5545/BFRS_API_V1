@@ -13,7 +13,7 @@ namespace DataAccess.Models
         }
 
         public int EggId { get; set; }
-        public int ClutchId { get; set; }
+        public int? ClutchId { get; set; }
         public DateTime? LayDate { get; set; }
         public DateTime? HatchedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
