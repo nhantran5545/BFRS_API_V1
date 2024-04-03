@@ -46,26 +46,28 @@ namespace BusinessObjects.IService.Implements
                     if (clutch.Status == "Created")
                     {
                         clutch.Status = "Hatched";
+                        clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
 
-                        var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
+                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
                         if(breeding != null)
                         {
                             breeding.Phase = 3;
                             _breedingRepository.SaveChanges();
-                        }
+                        }*/
                     }
                     else if (clutch.Status == "Weaned" && egg.Status == "In Development")
                     {
                         clutch.Status = "Banding";
+                        clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
 
-                        var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
+                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
                         if (breeding != null)
                         {
                             breeding.Phase = 3;
                             _breedingRepository.SaveChanges();
-                        }
+                        }*/
                     }
 
                     egg.CreatedDate = DateTime.Now;
@@ -231,14 +233,15 @@ namespace BusinessObjects.IService.Implements
                     if (clutch != null)
                     {
                         clutch.Status = "Weaned";
+                        clutch.Phase = 4;
                         _clutchRepository.SaveChanges();
 
-                        var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
+                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
                         if (breeding != null)
                         {
                             breeding.Phase = 4;
                             _breedingRepository.SaveChanges();
-                        }
+                        }*/
                     }
                 }
             }

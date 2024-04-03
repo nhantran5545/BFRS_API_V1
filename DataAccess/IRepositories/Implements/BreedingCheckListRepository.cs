@@ -93,5 +93,16 @@ namespace DataAccess.IRepositories.Implements
                                 && bc.CreateDate == DateTime.Today && bc.Phase == phase)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<BreedingCheckList?> GetTodayCheckListByClutchIdAndPhase(object clutchId, int phase)
+        {
+            return await _context.BreedingCheckLists
+                .Include(bc => bc.CheckList)
+                .Include(bc => bc.BreedingCheckListDetails)
+                .ThenInclude(bcd => bcd.CheckListDetail)
+                .Where(bc => bc.ClutchId.Equals(clutchId) && bc.CreateDate != null
+                                && bc.CreateDate == DateTime.Today && bc.Phase == phase)
+                .FirstOrDefaultAsync();
+        }
     }
 }

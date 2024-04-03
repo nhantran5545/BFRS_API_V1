@@ -140,6 +140,8 @@ namespace BusinessObjects.Mapper
                 .ReverseMap();
             CreateMap<ClutchAddRequest, Clutch>()
                 .ReverseMap();
+            CreateMap<ClutchCheckListAddRequest, BreedingCheckList>()
+                .ReverseMap();
             CreateMap<CageAddRequest, Cage>()
                 .ReverseMap();
             CreateMap<ClutchCloseRequest, Clutch>()

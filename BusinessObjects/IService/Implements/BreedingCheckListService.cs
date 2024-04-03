@@ -101,19 +101,20 @@ namespace BusinessObjects.IService.Implements
             return ConvertToResponse(breedingCheckList);
         }
 
-        public async Task<BreedingCheckListResponse?> GetTodayBreedingCheckListDetail(BreedingDetailResponse breedingResponse)
+        public async Task<BreedingCheckListResponse?> GetTodayBreedingCheckListDetail(int breedingId, int phase)
         {
-            var breedingCheckList = await _breedingCheckListRepository.GetTodayCheckListByBreedingIdAndPhase(breedingResponse.BreedingId, breedingResponse.Phase);
+            var breedingCheckList = await _breedingCheckListRepository.GetTodayCheckListByBreedingIdAndPhase(breedingId, phase);
             if (breedingCheckList == null)
             {
                 var breedingCheckListResponse = new BreedingCheckListResponse();
-                var checkList = await _checkListRepository.GetCheckListByPhase(breedingResponse.Phase);
+                var checkList = await _checkListRepository.GetCheckListByPhase(phase);
                 if (checkList == null)
                 {
                     return null;
                 }
                 breedingCheckListResponse.CheckListId = checkList.CheckListId;
-                breedingCheckListResponse.Phase = breedingResponse.Phase;
+                breedingCheckListResponse.BreedingId = breedingId;
+                breedingCheckListResponse.Phase = phase;
 
                 List<BreedingCheckListDetailResponse> breedingCheckListDetails = new List<BreedingCheckListDetailResponse>();
                 foreach (var item in checkList.CheckListDetails)
@@ -183,6 +184,108 @@ namespace BusinessObjects.IService.Implements
                                 .GetBreedingCheckListDetailByBreedingCheckListIdAndCheckListDetailId
                                 (breedingCheckList.BreedingCheckListId, item.CheckListDetailId);
                             if(breedingCheckListDetail != null)
+                            {
+                                breedingCheckListDetail.CheckValue = item.CheckValue;
+                            }
+                        }
+                    }
+
+                    _breedingCheckListDetailRepository.SaveChanges();
+                    transaction.Commit();
+                    return breedingCheckList.BreedingCheckListId;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    transaction.Rollback();
+                    return -1;
+                }
+            }
+        }
+
+        public async Task<BreedingCheckListResponse?> GetTodayClutchCheckListDetail(int clutchId, int phase)
+        {
+            var breedingCheckList = await _breedingCheckListRepository.GetTodayCheckListByClutchIdAndPhase(clutchId, phase);
+            if (breedingCheckList == null)
+            {
+                var breedingCheckListResponse = new BreedingCheckListResponse();
+                var checkList = await _checkListRepository.GetCheckListByPhase(phase);
+                if (checkList == null)
+                {
+                    return null;
+                }
+                breedingCheckListResponse.CheckListId = checkList.CheckListId;
+                breedingCheckListResponse.ClutchId = clutchId;
+                breedingCheckListResponse.Phase = phase;
+
+                List<BreedingCheckListDetailResponse> breedingCheckListDetails = new List<BreedingCheckListDetailResponse>();
+                foreach (var item in checkList.CheckListDetails)
+                {
+                    BreedingCheckListDetailResponse breedingCheckListDetailResponse = new BreedingCheckListDetailResponse();
+                    //breedingCheckListDetailResponse.BreedingCheckListId = 0;
+                    breedingCheckListDetailResponse.CheckListDetailResponse = _mapper.Map<CheckListDetailResponse>(item);
+                    breedingCheckListDetails.Add(breedingCheckListDetailResponse);
+                }
+
+                breedingCheckListResponse.BreedingCheckListDetails = breedingCheckListDetails;
+                return breedingCheckListResponse;
+            }
+
+            return ConvertToResponse(breedingCheckList);
+        }
+
+        public async Task<int> CreateClutchCheckList(ClutchCheckListAddRequest clutchCheckListAddRequest, int phase)
+        {
+            using (var transaction = _breedingCheckListRepository.BeginTransaction())
+            {
+                try
+                {
+                    var breedingCheckList = await _breedingCheckListRepository
+                        .GetTodayCheckListByClutchIdAndPhase(clutchCheckListAddRequest.ClutchId, phase);
+                    if (breedingCheckList == null)
+                    {
+                        breedingCheckList = _mapper.Map<BreedingCheckList>(clutchCheckListAddRequest);
+                        if (breedingCheckList == null)
+                        {
+                            return -1;
+                        }
+
+                        breedingCheckList.CreateDate = DateTime.Today;
+                        breedingCheckList.Phase = phase;
+                        await _breedingCheckListRepository.AddAsync(breedingCheckList);
+                        _breedingCheckListRepository.SaveChanges();
+
+                        var checkListDetails = await _checkListDetailRepository.GetCheckListDetailByCheckListId(clutchCheckListAddRequest.CheckListId);
+                        if (!checkListDetails.Any())
+                        {
+                            return -1;
+                        }
+
+                        foreach (var item in checkListDetails)
+                        {
+                            var breedingCheckListDetail = new BreedingCheckListDetail()
+                            {
+                                BreedingCheckListId = breedingCheckList.BreedingCheckListId,
+                                CheckListDetailId = item.CheckListDetailId,
+                                CheckValue = 0
+                            };
+                            var breedingCheckListAddRequestDetail = clutchCheckListAddRequest.BreedingCheckListAddRequestDetails
+                                .Where(bca => bca.CheckListDetailId == item.CheckListDetailId).FirstOrDefault();
+                            if (breedingCheckListAddRequestDetail != null)
+                            {
+                                breedingCheckListDetail.CheckValue = breedingCheckListAddRequestDetail.CheckValue;
+                            }
+                            await _breedingCheckListDetailRepository.AddAsync(breedingCheckListDetail);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in clutchCheckListAddRequest.BreedingCheckListAddRequestDetails)
+                        {
+                            var breedingCheckListDetail = await _breedingCheckListDetailRepository
+                                .GetBreedingCheckListDetailByBreedingCheckListIdAndCheckListDetailId
+                                (breedingCheckList.BreedingCheckListId, item.CheckListDetailId);
+                            if (breedingCheckListDetail != null)
                             {
                                 breedingCheckListDetail.CheckValue = item.CheckValue;
                             }

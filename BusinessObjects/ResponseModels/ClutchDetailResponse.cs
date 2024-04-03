@@ -22,6 +22,7 @@ namespace BusinessObjects.ResponseModels
         public string? UpdatedByFirstName { get; set; }
         public string? UpdatedByLastName { get; set; }
         public string? Status { get; set; }
+        public int Phase { get; set; }
         public List<EggResponse>? EggResponses { get; set; }
     }
 }

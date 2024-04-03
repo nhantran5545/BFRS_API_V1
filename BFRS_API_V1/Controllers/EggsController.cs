@@ -124,7 +124,18 @@ namespace BFRS_API_V1.Controllers
 
             if(egg.Status != "In Development")
             {
-                return BadRequest("The egg is either hatched or unavailabel");
+                return BadRequest("The egg is either hatched or unavailable");
+            }
+
+            var clutch = await _clutchService.GetClutchByIdAsync(egg.ClutchId);
+            if (clutch == null)
+            {
+                return BadRequest("Clutch not found!");
+            }
+
+            if (clutch.Status == "Closed" || clutch.Status == "Eliminated")
+            {
+                return BadRequest("Clutch is closed or elminated");
             }
 
             if (await _eggService.EggHatched(eggHatchRequest))

@@ -114,6 +114,11 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("clutch id conflict");
             }
 
+            if(clutchUpdateRequest.Status != "Closed")
+            {
+                return BadRequest("Invalid status");
+            }
+
             var clutch = await _clutchService.GetClutchByIdAsync(id);
             if (clutch == null)
             {
