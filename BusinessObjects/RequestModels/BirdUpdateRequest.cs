@@ -9,6 +9,7 @@ namespace BusinessObjects.RequestModels
     public class BirdUpdateRequest
     {
         public int BirdId { get; set; }
+        public string? BirdName { get; set; }
         public string? Gender { get; set; }
         public DateTime? HatchedDate { get; set; }
         public string? PurchaseFrom { get; set; }

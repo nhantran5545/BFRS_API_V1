@@ -14,14 +14,16 @@ namespace BusinessObjects.IService.Implements
     public class BirdService : IBirdService
     {
         private readonly IBirdRepository _birdRepository;
+        private readonly IEggRepository _eggRepository;
         private readonly IEggBirdRepository _eggBirdRepository;
         private readonly IMapper _mapper;
 
-        public BirdService(IBirdRepository birdRepository, IEggBirdRepository eggBirdRepository, IMapper mapper)
+        public BirdService(IBirdRepository birdRepository, IEggBirdRepository eggBirdRepository, IMapper mapper, IEggRepository eggRepository)
         {
             _birdRepository = birdRepository;
             _eggBirdRepository = eggBirdRepository;
             _mapper = mapper;
+            _eggRepository = eggRepository;
         }
 
         public async Task<int> CreateBirdAsync(BirdAddRequest birdAddRequest)
@@ -38,7 +40,7 @@ namespace BusinessObjects.IService.Implements
                     await _birdRepository.AddAsync(bird);
                     _birdRepository.SaveChanges();
 
-                    if (birdAddRequest.EggId != null)
+                    /*if (birdAddRequest.EggId != null)
                     {
                         EggBird eggBird = new EggBird()
                         {
@@ -47,7 +49,59 @@ namespace BusinessObjects.IService.Implements
                         };
                         await _eggBirdRepository.AddAsync(eggBird);
                         _eggBirdRepository.SaveChanges();
+                    }*/
+
+                    transaction.Commit();
+                    return bird.BirdId;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    transaction.Rollback();
+                    return -1;
+                }
+            }
+        }
+
+        public async Task<int> CreateBirdFromEggAsync(BirdAddFromEggRequest birdAddFromEggRequest)
+        {
+            using (var transaction = _birdRepository.BeginTransaction())
+            {
+                try
+                {
+                    var bird = _mapper.Map<Bird>(birdAddFromEggRequest);
+                    if (bird == null)
+                    {
+                        return -1;
                     }
+
+                    var egg = await _eggRepository.GetEggDetailsAsync(birdAddFromEggRequest.EggId);
+                    if (egg == null || egg.Clutch == null)
+                    {
+                        return -1;
+                    }
+
+                    var breeding = egg.Clutch.Breeding;
+                    if(breeding == null || breeding.FatherBird == null)
+                    {
+                        return -1;
+                    }
+
+                    bird.BirdSpeciesId = breeding.FatherBird.BirdSpeciesId;
+                    bird.FatherBirdId = breeding.FatherBirdId;
+                    bird.MotherBirdId = breeding.MotherBirdId;
+                    bird.FarmId = breeding.FatherBird.FarmId;
+                    bird.HatchedDate = egg.HatchedDate;
+                    await _birdRepository.AddAsync(bird);
+                    _birdRepository.SaveChanges();
+
+                    EggBird eggBird = new EggBird()
+                    {
+                        EggId = birdAddFromEggRequest.EggId,
+                        BirdId = bird.BirdId
+                    };
+                    await _eggBirdRepository.AddAsync(eggBird);
+                    _eggBirdRepository.SaveChanges();
 
                     transaction.Commit();
                     return bird.BirdId;

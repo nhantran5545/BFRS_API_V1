@@ -132,6 +132,8 @@ namespace BusinessObjects.Mapper
                 .ReverseMap();
             CreateMap<BirdAddRequest, Bird>()
                 .ReverseMap();
+            CreateMap<BirdAddFromEggRequest, Bird>()
+                .ReverseMap();
             CreateMap<BreedingAddRequest, Breeding>()
                 .ReverseMap();
             CreateMap<BreedingCheckListAddRequest, BreedingCheckList>()

@@ -125,6 +125,17 @@ namespace BFRS_API_V1.Controllers
                 return NotFound("Clutch not found");
             }
 
+            if (clutch.EggResponses != null && clutch.EggResponses.Any())
+            {
+                foreach (var item in clutch.EggResponses)
+                {
+                    if(item.Status == "In Development")
+                    {
+                        return BadRequest("An Egg is in development");
+                    }
+                }
+            }
+
             if (await _clutchService.CloseClutch(clutchUpdateRequest))
             {
                 return Ok("Close successfully!");

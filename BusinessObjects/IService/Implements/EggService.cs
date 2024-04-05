@@ -137,7 +137,11 @@ namespace BusinessObjects.IService.Implements
         public async Task<EggResponse?> GetEggByIdAsync(object eggId)
         {
             var egg = await _eggRepository.GetByIdAsync(eggId);
-            return _mapper.Map<EggResponse>(egg);
+            if(egg == null)
+            {
+                return null;
+            }
+            return convertToResponse(egg);
         }
 
         public async Task<bool> UpdateEgg(EggUpdateRequest eggUpdateRequest)
