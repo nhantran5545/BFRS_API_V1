@@ -91,6 +91,11 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Egg Id conflict");
             }
 
+            if(eggUpdateRequest.Status == "Hatched")
+            {
+                return BadRequest("Invalid Status");
+            }
+
             var egg = await _eggService.GetEggByIdAsync(eggUpdateRequest.EggId);
             if (egg == null)
             {
@@ -99,8 +104,20 @@ namespace BFRS_API_V1.Controllers
             
             if(egg.Status == "Hatched")
             {
-                return BadRequest("Invalid Status");
+                return BadRequest("Egg is hatched and can not change");
             }
+
+            var clutch = await _clutchService.GetClutchByIdAsync(egg.ClutchId);
+            if (clutch == null)
+            {
+                return BadRequest("Clutch not found!");
+            }
+
+            if (clutch.Status == "Closed" || clutch.Status == "Eliminated")
+            {
+                return BadRequest("Clutch is closed or elminated");
+            }
+
             if (await _eggService.UpdateEgg(eggUpdateRequest))
             {
                 return Ok("Update Sucessfully");
@@ -124,7 +141,18 @@ namespace BFRS_API_V1.Controllers
 
             if(egg.Status != "In Development")
             {
-                return BadRequest("The egg is either hatched or unavailabel");
+                return BadRequest("The egg is either hatched or unavailable");
+            }
+
+            var clutch = await _clutchService.GetClutchByIdAsync(egg.ClutchId);
+            if (clutch == null)
+            {
+                return BadRequest("Clutch not found!");
+            }
+
+            if (clutch.Status == "Closed" || clutch.Status == "Eliminated")
+            {
+                return BadRequest("Clutch is closed or elminated");
             }
 
             if (await _eggService.EggHatched(eggHatchRequest))

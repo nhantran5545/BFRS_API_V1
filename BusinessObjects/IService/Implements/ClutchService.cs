@@ -44,11 +44,12 @@ namespace BusinessObjects.IService.Implements
                     if (breeding.Status != "InProgress")
                     {
                         breeding.Status = "InProgress";
-                        breeding.Phase = 2;
+                        breeding.Phase = 0;
                         _breedingRepository.SaveChanges();
                     }
 
                     clutch.Status = "Created";
+                    clutch.Phase = 2;
                     clutch.CreatedDate = DateTime.Now;
                     await _clutchRepository.AddAsync(clutch);
                     _clutchRepository.SaveChanges();
@@ -135,6 +136,7 @@ namespace BusinessObjects.IService.Implements
             }
 
             clutch.Status = clutchCloseRequest.Status;
+            clutch.Phase = 0;
             clutch.UpdatedBy = clutchCloseRequest.UpdatedBy;
             clutch.UpdatedDate = DateTime.Now;
             var result = _clutchRepository.SaveChanges();

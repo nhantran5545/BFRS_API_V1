@@ -14,6 +14,14 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
+        public override async Task<Egg?> GetByIdAsync(object id)
+        {
+            return await _context.Eggs
+                .Include(e => e.EggBirds)
+                .ThenInclude(eb => eb.Bird)
+                .FirstOrDefaultAsync(e => e.EggId.Equals(id));
+        }
+
         public async Task<IEnumerable<Egg>> GetEggsByClutchIdAsync(object clutchId)
         {
             return await _context.Eggs
@@ -28,6 +36,15 @@ namespace DataAccess.IRepositories.Implements
             return await _context.Eggs
                 .Where(e => e.EggBirds.Contains(birdId))
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<Egg?> GetEggDetailsAsync(object eggId)
+        {
+            return await _context.Eggs
+                .Include(e => e.Clutch)
+                .ThenInclude(c => c.Breeding)
+                .ThenInclude(b => b.FatherBird)
+                .FirstOrDefaultAsync(e => e.EggId.Equals(eggId));
         }
     }
 }

@@ -46,26 +46,28 @@ namespace BusinessObjects.IService.Implements
                     if (clutch.Status == "Created")
                     {
                         clutch.Status = "Hatched";
+                        clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
 
-                        var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
+                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
                         if(breeding != null)
                         {
                             breeding.Phase = 3;
                             _breedingRepository.SaveChanges();
-                        }
+                        }*/
                     }
                     else if (clutch.Status == "Weaned" && egg.Status == "In Development")
                     {
                         clutch.Status = "Banding";
+                        clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
 
-                        var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
+                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
                         if (breeding != null)
                         {
                             breeding.Phase = 3;
                             _breedingRepository.SaveChanges();
-                        }
+                        }*/
                     }
 
                     egg.CreatedDate = DateTime.Now;
@@ -135,7 +137,11 @@ namespace BusinessObjects.IService.Implements
         public async Task<EggResponse?> GetEggByIdAsync(object eggId)
         {
             var egg = await _eggRepository.GetByIdAsync(eggId);
-            return _mapper.Map<EggResponse>(egg);
+            if(egg == null)
+            {
+                return null;
+            }
+            return convertToResponse(egg);
         }
 
         public async Task<bool> UpdateEgg(EggUpdateRequest eggUpdateRequest)
@@ -231,14 +237,15 @@ namespace BusinessObjects.IService.Implements
                     if (clutch != null)
                     {
                         clutch.Status = "Weaned";
+                        clutch.Phase = 4;
                         _clutchRepository.SaveChanges();
 
-                        var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
+                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
                         if (breeding != null)
                         {
                             breeding.Phase = 4;
                             _breedingRepository.SaveChanges();
-                        }
+                        }*/
                     }
                 }
             }
@@ -249,14 +256,9 @@ namespace BusinessObjects.IService.Implements
             var eggResponse = _mapper.Map<EggResponse>(egg);
 
             var eggBird = egg.EggBirds.FirstOrDefault();
-            if(eggBird != null)
+            if(eggBird != null && eggBird.Bird != null)
             {
-                var bird = eggBird.Bird;
-                if(bird != null)
-                {
-                    eggResponse.BirdId = bird.BirdId;
-                    eggResponse.BandNumber = bird.BandNumber;
-                }
+                eggResponse.BandNumber = eggBird.Bird.BandNumber;
             }
             
             return eggResponse;

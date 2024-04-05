@@ -197,6 +197,17 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("This is not your breeding");
             }
 
+            if (breeding.ClutchResponses != null && breeding.ClutchResponses.Any())
+            {
+                foreach (var item in breeding.ClutchResponses)
+                {
+                    if (item.Status != "Closed" && item.Status != "Eliminated")
+                    {
+                        return BadRequest("A clutch is in progress");
+                    }
+                }
+            }
+
             var fatherCage = await _cageService.GetCageByIdAsync(breedingCloseRequest.FatherCageId); 
             if (fatherCage == null || fatherCage.Status != "Nourishing")
             {

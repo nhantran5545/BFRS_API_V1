@@ -1,8 +1,5 @@
 ﻿using BusinessObjects.IService;
-using BusinessObjects.IService.Implements;
 using BusinessObjects.RequestModels;
-using BusinessObjects.ResponseModels;
-using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,13 +11,15 @@ namespace BFRS_API_V1.Controllers
     {
         private readonly IBreedingCheckListService _breedingCheckListService;
         private readonly IBreedingService _breedingService;
+        private readonly IClutchService _clutchService;
         private readonly ICheckListService _checkListService;
 
         public BreedingCheckListController(IBreedingCheckListService breedingCheckListService, IBreedingService breedingService,
-            ICheckListService checkListService)
+            IClutchService clutchService, ICheckListService checkListService)
         {
             _breedingCheckListService = breedingCheckListService ?? throw new ArgumentNullException(nameof(breedingCheckListService));
             _breedingService = breedingService;
+            _clutchService = clutchService;
             _checkListService = checkListService;
         }
 
@@ -79,7 +78,7 @@ namespace BFRS_API_V1.Controllers
             return Ok(breedingCheckList);
         }
 
-        [HttpGet("Today/{breedingId}")]
+        [HttpGet("BreedingToday/{breedingId}")]
         public async Task<IActionResult> GetTodayBreedingCheckListByBreedingId(int breedingId)
         {
             var breeding = await _breedingService.GetBreedingById(breedingId);
@@ -88,12 +87,12 @@ namespace BFRS_API_V1.Controllers
                 return NotFound("Breeding not found");
             }
 
-            /*if(breeding.Status != "Mating")
+            if (breeding.Phase != 1)
             {
                 return BadRequest("Breeding to different phase");
-            }*/
+            }
 
-            var breedingCheckListResponse = await _breedingCheckListService.GetTodayBreedingCheckListDetail(breeding);
+            var breedingCheckListResponse = await _breedingCheckListService.GetTodayBreedingCheckListDetail(breedingId, breeding.Phase);
             if (breedingCheckListResponse == null)
             {
                 return BadRequest("Breeding's phase is invalid");
@@ -102,9 +101,14 @@ namespace BFRS_API_V1.Controllers
             return Ok(breedingCheckListResponse);
         }
 
-        [HttpPost("Today/{breedingId}")]
-        public async Task<IActionResult> CreateTodayBreedingCheckListByBreedingId(BreedingCheckListAddRequest breedingCheckListAddRequest)
+        [HttpPost("BreedingToday/{breedingId}")]
+        public async Task<IActionResult> CreateTodayBreedingCheckListByBreedingId(int breedingId, BreedingCheckListAddRequest breedingCheckListAddRequest)
         {
+            if(breedingId != breedingCheckListAddRequest.BreedingId)
+            {
+                return BadRequest("Invalid breeding");
+            }
+
             var breeding = await _breedingService.GetBreedingById(breedingCheckListAddRequest.BreedingId);
             if(breeding == null)
             {
@@ -132,26 +136,62 @@ namespace BFRS_API_V1.Controllers
             return Ok(breedingCheckList);
         }
 
-        [HttpGet("ForMating{breedingId}")]
-        public async Task<IActionResult> GetCheckListForMatingBreeding(int breedingId)
+        [HttpGet("ClutchToday/{clutchId}")]
+        public async Task<IActionResult> GetTodayBreedingCheckListByClutchId(int clutchId)
         {
-            var breeding = await _breedingService.GetBreedingById(breedingId);
-            if(breeding == null)
+            var clutch = await _clutchService.GetClutchByIdAsync(clutchId);
+            if (clutch == null)
             {
-                return NotFound("Breeding not found");
+                return NotFound("Clutch not found");
             }
 
-            if(breeding.Status != "Mating")
+            if (clutch.Phase == 0)
             {
-                return BadRequest("You can not create checklist because the phase has passed!");
+                return BadRequest("Clutch to closed phase");
             }
 
-            var breedingCheckLists = await _breedingCheckListService.GetBreedingCheckListsByBreedingIdAndPhase(breedingId, 1);
-            if (breedingCheckLists.Any())
+            var breedingCheckListResponse = await _breedingCheckListService.GetTodayBreedingCheckListDetail(clutchId, clutch.Phase);
+            if (breedingCheckListResponse == null)
             {
-
+                return BadRequest("Clutch's phase is invalid");
             }
-            return Ok(breeding);
+
+            return Ok(breedingCheckListResponse);
+        }
+
+        [HttpPost("ClutchToday/{clutchId}")]
+        public async Task<IActionResult> CreateTodayBreedingCheckListByClutchId(int clutchId, ClutchCheckListAddRequest clutchCheckListAddRequest)
+        {
+            if (clutchId != clutchCheckListAddRequest.ClutchId)
+            {
+                return BadRequest("Invalid clutch");
+            }
+
+            var clutch = await _breedingService.GetBreedingById(clutchCheckListAddRequest.ClutchId);
+            if (clutch == null)
+            {
+                return NotFound("Clutch not found");
+            }
+
+            var checkList = await _checkListService.GetCheckListByIdAsync(clutchCheckListAddRequest.CheckListId);
+            if (checkList == null)
+            {
+                return NotFound("CheckList not found");
+            }
+
+            if (clutch.Phase != checkList.Phase)
+            {
+                return BadRequest("Clutch can only be added checklist in phase " + clutch.Phase);
+            }
+
+            var result = await _breedingCheckListService.CreateClutchCheckList(clutchCheckListAddRequest, clutch.Phase);
+            if (result < 1)
+            {
+                return BadRequest("Something is wrong with the server. Please try again");
+            }
+
+            var breedingCheckList = await _breedingCheckListService.GetBreedingCheckListDetail(result);
+            return Ok(breedingCheckList);
         }
     }
 }

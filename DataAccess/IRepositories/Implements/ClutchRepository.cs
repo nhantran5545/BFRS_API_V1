@@ -28,6 +28,7 @@ namespace DataAccess.IRepositories.Implements
             return await _context.Clutches
                //.Include(c => c.Breeding)
                .Include(c => c.Eggs)
+               .ThenInclude(e => e.EggBirds)
                .Include(c => c.CreatedByNavigation)
                .Include(c => c.UpdatedByNavigation)
                .Where(c => c.ClutchId.Equals(id))

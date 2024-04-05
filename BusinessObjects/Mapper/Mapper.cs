@@ -114,6 +114,8 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.UpdatedByNavigation != null ? src.UpdatedByNavigation.LastName : string.Empty))
                 .ReverseMap();
             CreateMap<Egg, EggResponse>()
+                .ForMember(dest => dest.BirdId,
+                            opt => opt.MapFrom(src => src.EggBirds.Any() ? src.EggBirds.First().BirdId : 0))
                 .ReverseMap();
             CreateMap<Mutation, IndividualMutation>()
                 .ReverseMap();
@@ -132,6 +134,8 @@ namespace BusinessObjects.Mapper
                 .ReverseMap();
             CreateMap<BirdAddRequest, Bird>()
                 .ReverseMap();
+            CreateMap<BirdAddFromEggRequest, Bird>()
+                .ReverseMap();
             CreateMap<BreedingAddRequest, Breeding>()
                 .ReverseMap();
             CreateMap<BreedingCheckListAddRequest, BreedingCheckList>()
@@ -139,6 +143,8 @@ namespace BusinessObjects.Mapper
             CreateMap<BreedingCheckListAddRequestDetail, BreedingCheckListDetail>()
                 .ReverseMap();
             CreateMap<ClutchAddRequest, Clutch>()
+                .ReverseMap();
+            CreateMap<ClutchCheckListAddRequest, BreedingCheckList>()
                 .ReverseMap();
             CreateMap<CageAddRequest, Cage>()
                 .ReverseMap();

@@ -16,8 +16,10 @@ namespace BusinessObjects.IService
         Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsByBreedingIdAndPhase(int breedingId, int phase);
         Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsByClutchIdAndPhase(int clutchId, int phase);
         Task<BreedingCheckListResponse?> GetBreedingCheckListDetail(int breedingCheckListId);
-        Task<BreedingCheckListResponse?> GetTodayBreedingCheckListDetail(BreedingDetailResponse breedingResponse);
+        Task<BreedingCheckListResponse?> GetTodayBreedingCheckListDetail(int breedingId, int phase);
+        Task<BreedingCheckListResponse?> GetTodayClutchCheckListDetail(int clutchId, int phase);
         Task<int> CreateBreedingCheckList(BreedingCheckListAddRequest breedingCheckListAddRequest, int phase);
+        Task<int> CreateClutchCheckList(ClutchCheckListAddRequest clutchCheckListAddRequest, int phase);
     }
 
 }

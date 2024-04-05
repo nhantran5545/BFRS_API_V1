@@ -90,7 +90,7 @@ namespace BFRS_API_V1.Controllers
             {
                 foreach (var item in breeding.ClutchResponses)
                 {
-                    if (item.Status != "Closed")
+                    if (item.Status != "Closed" && item.Status != "Eliminated")
                     {
                         return BadRequest("Another clutch is in progress");
                     }
@@ -114,10 +114,30 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("clutch id conflict");
             }
 
+            if(clutchUpdateRequest.Status != "Closed" && clutchUpdateRequest.Status != "Eliminated")
+            {
+                return BadRequest("Invalid status");
+            }
+
             var clutch = await _clutchService.GetClutchByIdAsync(id);
             if (clutch == null)
             {
                 return NotFound("Clutch not found");
+            }
+
+            if (clutch.EggResponses != null && clutch.EggResponses.Any())
+            {
+                foreach (var item in clutch.EggResponses)
+                {
+                    if(item.Status == "In Development")
+                    {
+                        return BadRequest("An Egg is in development");
+                    }
+                    if(item.Status == "Hatched" && item.BirdId == 0)
+                    {
+                        return BadRequest("An egg is hatched but no related bird profile!");
+                    }
+                }
             }
 
             if (await _clutchService.CloseClutch(clutchUpdateRequest))

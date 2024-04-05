@@ -131,26 +131,66 @@ namespace BFRS_API_V1.Controllers
 
         // POST: api/Birds
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<BirdResponse>> PostBird(BirdAddRequest birdAddRequest)
+        [HttpPost("ForEgg")]
+        public async Task<ActionResult<BirdResponse>> PostBirdForEgg(BirdAddFromEggRequest birdAddFromEggRequest)
         {
-            var species = await _birdSpeciesService.GetBirdSpeciesByIdAsync(birdAddRequest.BirdSpeciesId);
-            if(species == null)
+            var egg = await _eggService.GetEggByIdAsync(birdAddFromEggRequest.EggId);
+            if (egg == null)
             {
-                return NotFound("Invalid Species");
+                return NotFound("Egg not found");
             }
 
-            var cage = await _cageService.GetCageByIdAsync(birdAddRequest.CageId);
+            if(egg.Status != "Hatched")
+            {
+                return BadRequest("Egg is either in development or dead");
+            }
+
+            if(egg.BirdId != null)
+            {
+                return BadRequest("This egg have bird profile already");
+            }
+
+            var cage = await _cageService.GetCageByIdAsync(birdAddFromEggRequest.CageId);
             if(cage == null)
             {
                 return NotFound("Invalid cage");
             }
 
-            if(birdAddRequest.FatherBirdId != null)
+            if (cage.Status != "Nourishing")
+            {
+                return BadRequest("Cage is not for nourishing");
+            }
+
+            var result = await _birdService.CreateBirdFromEggAsync(birdAddFromEggRequest);
+            if (result < 1)
+            {
+                return BadRequest("Something wrong with the server, please try again!");
+            }
+
+            var bird = await _birdService.GetBirdByIdAsync(result);
+            return Ok(bird);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<BirdResponse>> PostBird(BirdAddRequest birdAddRequest)
+        {
+            var species = await _birdSpeciesService.GetBirdSpeciesByIdAsync(birdAddRequest.BirdSpeciesId);
+            if (species == null)
+            {
+                return NotFound("Invalid Species");
+            }
+
+            var cage = await _cageService.GetCageByIdAsync(birdAddRequest.CageId);
+            if (cage == null)
+            {
+                return NotFound("Invalid cage");
+            }
+
+            if (birdAddRequest.FatherBirdId != null)
             {
                 var fatherBirdId = await _birdService.GetBirdByIdAsync(birdAddRequest.FatherBirdId);
-                if(fatherBirdId == null || fatherBirdId.Gender != "Male")
-                { 
+                if (fatherBirdId == null || fatherBirdId.Gender != "Male")
+                {
                     return NotFound("Father Bird not found");
                 }
             }
@@ -164,17 +204,8 @@ namespace BFRS_API_V1.Controllers
                 }
             }
 
-            if(birdAddRequest.EggId != null)
-            {
-                var egg = await _eggService.GetEggByIdAsync(birdAddRequest.EggId);
-                if (egg == null)
-                {
-                    return NotFound("Invalid Egg");
-                }
-            }
-
             var result = await _birdService.CreateBirdAsync(birdAddRequest);
-            if(result < 1)
+            if (result < 1)
             {
                 return BadRequest("Something wrong with the server, please try again!");
             }
@@ -182,7 +213,6 @@ namespace BFRS_API_V1.Controllers
             var bird = await _birdService.GetBirdByIdAsync(result);
             return Ok(bird);
         }
-
         // DELETE: api/Birds/5
         /*[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBird(int id)

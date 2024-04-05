@@ -245,6 +245,7 @@ namespace BusinessObjects.IService.Implements
 
                     breeding.CoupleSeperated = true;
                     breeding.Status = "Closed";
+                    breeding.Phase = 0;
                     breeding.UpdatedBy = breedingCloseRequest.ManagerId;
                     breeding.UpdatedDate = DateTime.Now;
                     _breedingRepository.SaveChanges();
@@ -300,6 +301,7 @@ namespace BusinessObjects.IService.Implements
 
                     breeding.CoupleSeperated = true;
                     breeding.Status = breedingUpdateRequest.Status;
+                    breeding.Phase = 0;
                     breeding.UpdatedBy = breedingUpdateRequest.ManagerId;
                     breeding.UpdatedDate = DateTime.Now;
                     _breedingRepository.SaveChanges();
@@ -347,6 +349,7 @@ namespace BusinessObjects.IService.Implements
                 foreach (var item in clutches)
                 {
                     item.Status = "Closed";
+                    item.Phase = 0;
                 }
                 _clutchRepository.SaveChanges();
             }
