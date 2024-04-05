@@ -133,6 +133,10 @@ namespace BFRS_API_V1.Controllers
                     {
                         return BadRequest("An Egg is in development");
                     }
+                    if(item.Status == "Hatched" && item.BirdId == 0)
+                    {
+                        return BadRequest("An egg is hatched but no related bird profile!");
+                    }
                 }
             }
 

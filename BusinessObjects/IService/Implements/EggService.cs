@@ -256,14 +256,9 @@ namespace BusinessObjects.IService.Implements
             var eggResponse = _mapper.Map<EggResponse>(egg);
 
             var eggBird = egg.EggBirds.FirstOrDefault();
-            if(eggBird != null)
+            if(eggBird != null && eggBird.Bird != null)
             {
-                var bird = eggBird.Bird;
-                if(bird != null)
-                {
-                    eggResponse.BirdId = bird.BirdId;
-                    eggResponse.BandNumber = bird.BandNumber;
-                }
+                eggResponse.BandNumber = eggBird.Bird.BandNumber;
             }
             
             return eggResponse;
