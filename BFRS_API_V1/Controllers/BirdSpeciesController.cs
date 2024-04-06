@@ -9,6 +9,7 @@ using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 using Microsoft.AspNetCore.OData.Query;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -25,6 +26,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/BirdSpecies
         [HttpGet]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<BirdSpeciesResponse>>> GetBirdSpecies()
         {
             var birdSpecies = await _birdSpeciesService.GetBirdSpeciesAsync();
@@ -37,39 +39,15 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/BirdSpecies/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<BirdSpeciesDetailResponse>> GetBirdSpecy(int id)
         {
             var birdspecy = await _birdSpeciesService.GetBirdSpeciesByIdAsync(id);
-            if(birdspecy == null)
+            if (birdspecy == null)
             {
                 return NotFound("There are no bird species");
             }
             return Ok(birdspecy);
         }
-
-        /*
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutBirdSpecy(int id, BirdSpecy birdSpecy)
-        {
-
-            return NoContent();
-        }
-
-        // POST: api/BirdSpecies
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<BirdSpecy>> PostBirdSpecy(BirdSpecy birdSpecy)
-        {
-
-            return CreatedAtAction("GetBirdSpecy", new { id = birdSpecy.BirdSpeciesId }, birdSpecy);
-        }
-
-        // DELETE: api/BirdSpecies/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBirdSpecy(int id)
-        {
-
-            return NoContent();
-        }*/
     }
 }

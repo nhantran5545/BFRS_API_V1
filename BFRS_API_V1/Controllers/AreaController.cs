@@ -36,7 +36,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Areas/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<AreaResponse>> GetAreaById(int id)
         {
             var bird = await _areaService.GetAreaByIdAsync(id);

@@ -80,5 +80,21 @@ namespace BFRS_API_V1.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutAccount(int id, [FromBody] AccountUpdateRequest accountUpdate)
+        {
+            var account  = await _accountService.GetAccountByIdAsync(accountUpdate.AccountId);
+            if (account == null)
+            {
+                return NotFound("Account not found");
+            }
+
+            if (await _accountService.UpdateAccount(accountUpdate))
+            {
+                return Ok(accountUpdate);
+            }
+            return BadRequest("Something wrong with the server Please try again");
+        }
+
     }
 }

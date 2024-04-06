@@ -4,9 +4,11 @@ using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace BusinessObjects.IService.Implements
 {
@@ -16,28 +18,20 @@ namespace BusinessObjects.IService.Implements
         private readonly IConfiguration _configuration;
         private readonly IMemoryCache _memoryCache;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
 
-        public AccountService(IAccountRepository accountRepository, IConfiguration configuration, IMemoryCache memoryCache, IMapper mapper)
+        public AccountService(IAccountRepository accountRepository, IConfiguration configuration, IMemoryCache memoryCache, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _accountRepository = accountRepository;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
             ProvideToken.Initialize(_configuration, _memoryCache);
         }
 
 
-        public async Task CreateAccountAsync(Account account)
-        {
-            await _accountRepository.AddAsync(account);
-            _accountRepository.SaveChanges();
-        }
-
-        public void DeleteAccount(Account account)
-        {
-            throw new NotImplementedException();
-        }
 
         public void DeleteAccountById(object accountId)
         {
@@ -85,10 +79,30 @@ namespace BusinessObjects.IService.Implements
             }
 
             var account = _mapper.Map<Account>(accountSignUp);
-            account.Status = "Active"; 
+            account.Status = "Active";
 
             await _accountRepository.AddAsync(account);
             _accountRepository.SaveChanges();
+        }
+
+        public async Task<int> GetAccountIdFromToken()
+        {
+            int result = 0;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                if (!string.IsNullOrEmpty(token))
+                {
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var tokenS = tokenHandler.ReadJwtToken(token);
+                    var accountId = tokenS.Claims.FirstOrDefault(claim => claim.Type == "AccountId");
+                    if (accountId != null && int.TryParse(accountId.Value, out int accountIdValue))
+                    {
+                        result = accountIdValue;
+                    }
+                }
+            }
+            return result;
         }
 
         public async Task<IEnumerable<AccountDetailResponse>> GetManagerAccountsAsync()
@@ -113,10 +127,35 @@ namespace BusinessObjects.IService.Implements
             return false;
         }
 
-
-        public void UpdateAccount(Account account)
+        public async Task<AccountDetailResponse?> GetAccountByIdAsync(object accId)
         {
-            throw new NotImplementedException();
+            var acc = await _accountRepository.GetByIdAsync(accId);
+            return _mapper.Map<AccountDetailResponse>(acc);
+        }
+
+
+
+
+        public async Task<bool> UpdateAccount(AccountUpdateRequest accountUpdate)
+        {
+            var account = await _accountRepository.GetByIdAsync(accountUpdate.AccountId);
+            if (account == null)
+            {
+                return false;
+            }
+
+            account.FirstName = accountUpdate.FirstName;
+            account.LastName = accountUpdate.LastName;
+            account.PhoneNumber = accountUpdate.PhoneNumber;
+            account.City = accountUpdate.City;
+            account.Address = accountUpdate.Address;
+
+            var result = _accountRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

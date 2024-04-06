@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,12 @@ namespace DataAccess.IRepositories.Implements
     {
         public BirdSpeciesRepository(BFRS_DBContext context) : base(context)
         {
+        }
+        public override async Task<IEnumerable<BirdSpecy>> GetAllAsync()
+        {
+            return await _context.BirdSpecies
+                .Include(b => b.BirdType)
+                .ToListAsync();
         }
     }
 }

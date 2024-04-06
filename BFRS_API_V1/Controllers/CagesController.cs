@@ -58,7 +58,7 @@ namespace BFRS_API_V1.Controllers
                 }
                 else
                 {
-                    return StatusCode(500, "Failed to update cage");
+                    return BadRequest("Failed to update cage");
                 }
             }
             catch (InvalidOperationException ex)
