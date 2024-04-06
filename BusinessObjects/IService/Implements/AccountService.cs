@@ -85,7 +85,7 @@ namespace BusinessObjects.IService.Implements
             }
 
             var account = _mapper.Map<Account>(accountSignUp);
-            account.Status = "Active"; 
+            account.Status = "Active";
 
             await _accountRepository.AddAsync(account);
             _accountRepository.SaveChanges();
@@ -113,10 +113,33 @@ namespace BusinessObjects.IService.Implements
             return false;
         }
 
-
-        public void UpdateAccount(Account account)
+        public async Task<AccountDetailResponse?> GetAccountByIdAsync(object accId)
         {
-            throw new NotImplementedException();
+            var acc = await _accountRepository.GetByIdAsync(accId);
+            return _mapper.Map<AccountDetailResponse>(acc);
+        }
+
+
+        public async Task<bool> UpdateAccount(AccountUpdateRequest accountUpdate)
+        {
+            var account = await _accountRepository.GetByIdAsync(accountUpdate.AccountId);
+            if (account == null)
+            {
+                return false;
+            }
+
+            account.FirstName = accountUpdate.FirstName;
+            account.LastName = accountUpdate.LastName;
+            account.PhoneNumber = accountUpdate.PhoneNumber;
+            account.City = accountUpdate.City;
+            account.Address = accountUpdate.Address;
+
+            var result = _accountRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

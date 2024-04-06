@@ -8,7 +8,8 @@ namespace BusinessObjects.IService
     {
 
         Task<(string token, AccountResponse accountResponse)> AuthenticateAsync(AccountLoginRequest loginRequest);
-        void UpdateAccount(Account account);
+        Task<bool> UpdateAccount(AccountUpdateRequest accountUpdate);
+        Task<AccountDetailResponse?> GetAccountByIdAsync(object accId);
         void DeleteAccount(Account account);
         void DeleteAccountById(object accountId);
         Task<IEnumerable<Account>> GetAllAccountsAsync();
