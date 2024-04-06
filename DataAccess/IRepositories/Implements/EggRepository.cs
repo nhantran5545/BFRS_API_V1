@@ -14,6 +14,14 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
+        public override async Task<IEnumerable<Egg>> GetAllAsync()
+        {
+            return await _context.Eggs
+                .Include(e => e.EggBirds)
+                .ThenInclude(eb => eb.Bird)
+                .ToListAsync();
+        }
+
         public override async Task<Egg?> GetByIdAsync(object id)
         {
             return await _context.Eggs

@@ -145,7 +145,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Egg is either in development or dead");
             }
 
-            if(egg.BirdId != null)
+            if(egg.BirdId != 0)
             {
                 return BadRequest("This egg have bird profile already");
             }

@@ -27,5 +27,6 @@ namespace BusinessObjects.ResponseModels
         public int? ImmaturePhaseTo { get; set; }
         public int? AdultPhaseFrom { get; set; }
         public int? AdultPhaseTo { get; set; }
+        public List<IndividualMutation>? IndividualMutations { get; set; }
     }
 }

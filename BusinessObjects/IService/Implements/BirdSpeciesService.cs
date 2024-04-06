@@ -41,12 +41,31 @@ namespace BusinessObjects.IService.Implements
         public async Task<BirdSpeciesDetailResponse?> GetBirdSpeciesByIdAsync(object BirdSpecyId)
         {
             var birdSpecies = await _birdSpeciesRepository.GetByIdAsync(BirdSpecyId);
-            return _mapper.Map<BirdSpeciesDetailResponse>(birdSpecies);
+            if(birdSpecies == null)
+            {
+                return null;
+            }
+            return ConvertToResponse(birdSpecies);
         }
 
         public void UpdateBirdSpecies(BirdSpecy birdSpecy)
         {
             throw new NotImplementedException();
+        }
+
+        private BirdSpeciesDetailResponse ConvertToResponse(BirdSpecy birdSpecies)
+        {
+            var birdSpeciesResponse = _mapper.Map<BirdSpeciesDetailResponse>(birdSpecies);
+            if(birdSpecies.SpeciesMutations.Any())
+            {
+                List<IndividualMutation> mutations = new List<IndividualMutation>();
+                foreach (var item in birdSpecies.SpeciesMutations)
+                {
+                    mutations.Add(_mapper.Map<IndividualMutation>(item.Mutation));
+                }
+                birdSpeciesResponse.IndividualMutations = mutations;
+            }
+            return birdSpeciesResponse;
         }
     }
 }

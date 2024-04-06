@@ -19,5 +19,15 @@ namespace DataAccess.IRepositories.Implements
                 .Include(b => b.BirdType)
                 .ToListAsync();
         }
+
+        public override async Task<BirdSpecy?> GetByIdAsync(object id)
+        {
+            return await _context.BirdSpecies
+                .Include(b => b.BirdType)
+                .Include(b => b.SpeciesMutations)
+                .ThenInclude(sm => sm.Mutation)
+                .Where(b => b.BirdSpeciesId.Equals(id))
+                .FirstOrDefaultAsync();
+        }
     }
 }

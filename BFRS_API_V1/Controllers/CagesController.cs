@@ -128,31 +128,5 @@ namespace BFRS_API_V1.Controllers
             }
             return Ok(cage);
         }
-
-        // PUT: api/Cages/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        /*[HttpPut("{id}")]
-        public async Task<IActionResult> PutCage(int id, Cage cage)
-        {
-
-            return NoContent();
-        }
-
-        // POST: api/Cages
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Cage>> PostCage(Cage cage)
-        {
-
-            return CreatedAtAction("GetCage", new { id = cage.CageId }, cage);
-        }
-
-        // DELETE: api/Cages/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCage(int id)
-        {
-
-            return NoContent();
-        }*/
     }
 }

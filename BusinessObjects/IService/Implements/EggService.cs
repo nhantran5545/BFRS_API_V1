@@ -199,6 +199,7 @@ namespace BusinessObjects.IService.Implements
 
                     egg.HatchedDate = eggHatchRequest.HatchedDate;
                     egg.Status = "Hatched";
+                    egg.HatchedDate = DateTime.Now;
                     egg.UpdatedBy = eggHatchRequest.UpdatedBy;
                     egg.UpdatedDate = DateTime.Now;
 
