@@ -43,14 +43,14 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Breeding>> GetAllBreedingsByStaffId(object staffId)
+        public async Task<IEnumerable<Breeding>> GetAllBreedingsByStaff()
         {
             return await _context.Breedings
                 .Include(br => br.FatherBird)
                 .Include(br => br.MotherBird)
                 .Include(br => br.Clutches)
                 .Include(br => br.Cage)
-                .Where(c => c.Cage.AccountId.Equals(staffId))
+                .Where(c => c.Cage.Account.Role == "Staff")
                 .ToListAsync();
         }
 

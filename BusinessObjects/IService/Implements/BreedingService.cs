@@ -142,18 +142,8 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<IEnumerable<BreedingResponse>> GetBreedingsByStaffIdAsync(int staffId)
         {
-            var account = await _accountRepository.GetByIdAsync(staffId);
-            if (account == null)
-            {
-                throw new Exception("Invalid staff ID");
-            }
 
-            if (account.Role != "Staff")
-            {
-                throw new Exception("The provided account is not a staff member");
-            }
-
-            var breedings = await _breedingRepository.GetAllBreedingsByStaffId(account.AccountId);
+            var breedings = await _breedingRepository.GetAllBreedingsByStaff();
             return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 
