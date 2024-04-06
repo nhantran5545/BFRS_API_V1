@@ -150,7 +150,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Clutch to closed phase");
             }
 
-            var breedingCheckListResponse = await _breedingCheckListService.GetTodayBreedingCheckListDetail(clutchId, clutch.Phase);
+            var breedingCheckListResponse = await _breedingCheckListService.GetTodayClutchCheckListDetail(clutchId, clutch.Phase);
             if (breedingCheckListResponse == null)
             {
                 return BadRequest("Clutch's phase is invalid");
@@ -167,7 +167,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Invalid clutch");
             }
 
-            var clutch = await _breedingService.GetBreedingById(clutchCheckListAddRequest.ClutchId);
+            var clutch = await _clutchService.GetClutchByIdAsync(clutchCheckListAddRequest.ClutchId);
             if (clutch == null)
             {
                 return NotFound("Clutch not found");
