@@ -8,7 +8,7 @@ namespace BusinessObjects.RequestModels
 {
     public class MutationRequest
     {
-        public int BirdId { get; set; }
         public int MutationId { get; set; }
+        public string? MutationName { get; set; }
     }
 }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
+using DataAccess.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +11,8 @@ namespace BusinessObjects.IService
 {
     public interface IMutationService
     {
+        Task<int> CreateMutationAsync(MutationRequest mutationRequest);
+        Task<IEnumerable<IndividualMutation>> GetAllMutationsAsync();
+        Task<IndividualMutation?> GetMutationByIdAsync(object mutationId);
     }
 }

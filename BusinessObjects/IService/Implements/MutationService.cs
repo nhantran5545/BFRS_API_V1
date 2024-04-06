@@ -1,4 +1,9 @@
-﻿using System;
+﻿using AutoMapper;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
+using DataAccess.IRepositories;
+using DataAccess.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +13,37 @@ namespace BusinessObjects.IService.Implements
 {
     public class MutationService : IMutationService
     {
+        private readonly IMutationRepository _mutationRepository;
+        private readonly IMapper _mapper;
+
+        public MutationService(IMutationRepository mutationRepository, IMapper mapper)
+        {
+            _mutationRepository = mutationRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<int> CreateMutationAsync(MutationRequest mutationRequest)
+        {
+            var mutation = _mapper.Map<Mutation>(mutationRequest);
+            if(mutation == null)
+            {
+                return -1;
+            }
+            await _mutationRepository.AddAsync(mutation);
+            _mutationRepository.SaveChanges();
+            return mutation.MutationId;
+        }
+
+        public async Task<IEnumerable<IndividualMutation>> GetAllMutationsAsync()
+        {
+            var mutations = await _mutationRepository.GetAllAsync();
+            return mutations.Select(mutation => _mapper.Map<IndividualMutation>(mutation));
+        }
+
+        public async Task<IndividualMutation?> GetMutationByIdAsync(object mutationId)
+        {
+            var mutation = await _mutationRepository.GetByIdAsync(mutationId);
+            return _mapper.Map<IndividualMutation>(mutation);
+        }
     }
 }

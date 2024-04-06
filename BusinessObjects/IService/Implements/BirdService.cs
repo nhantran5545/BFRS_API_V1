@@ -16,12 +16,15 @@ namespace BusinessObjects.IService.Implements
         private readonly IBirdRepository _birdRepository;
         private readonly IEggRepository _eggRepository;
         private readonly IEggBirdRepository _eggBirdRepository;
+        private readonly IBirdMutationRepository _birdMutationRepository;
         private readonly IMapper _mapper;
 
-        public BirdService(IBirdRepository birdRepository, IEggBirdRepository eggBirdRepository, IMapper mapper, IEggRepository eggRepository)
+        public BirdService(IBirdRepository birdRepository, IEggBirdRepository eggBirdRepository,
+            IBirdMutationRepository birdMutationRepository, IMapper mapper, IEggRepository eggRepository)
         {
             _birdRepository = birdRepository;
             _eggBirdRepository = eggBirdRepository;
+            _birdMutationRepository = birdMutationRepository;
             _mapper = mapper;
             _eggRepository = eggRepository;
         }
@@ -40,16 +43,10 @@ namespace BusinessObjects.IService.Implements
                     await _birdRepository.AddAsync(bird);
                     _birdRepository.SaveChanges();
 
-                    /*if (birdAddRequest.EggId != null)
+                    if(birdAddRequest.MutationRequests != null && birdAddRequest.MutationRequests.Any())
                     {
-                        EggBird eggBird = new EggBird()
-                        {
-                            EggId = birdAddRequest.EggId.Value,
-                            BirdId = bird.BirdId
-                        };
-                        await _eggBirdRepository.AddAsync(eggBird);
-                        _eggBirdRepository.SaveChanges();
-                    }*/
+                        await AddMutation(birdAddRequest.MutationRequests, bird.BirdId);
+                    }
 
                     transaction.Commit();
                     return bird.BirdId;
@@ -94,6 +91,11 @@ namespace BusinessObjects.IService.Implements
                     bird.HatchedDate = egg.HatchedDate;
                     await _birdRepository.AddAsync(bird);
                     _birdRepository.SaveChanges();
+
+                    if (birdAddFromEggRequest.MutationRequests != null && birdAddFromEggRequest.MutationRequests.Any())
+                    {
+                        await AddMutation(birdAddFromEggRequest.MutationRequests, bird.BirdId);
+                    }
 
                     EggBird eggBird = new EggBird()
                     {
@@ -186,6 +188,19 @@ namespace BusinessObjects.IService.Implements
             return true;
         }
 
+        private async Task AddMutation (List<MutationRequest> mutationRequests, int birdId)
+        {
+            foreach (var item in mutationRequests)
+            {
+                var birdMutation = new BirdMutation()
+                {
+                    BirdId = birdId,
+                    MutationId = item.MutationId
+                };
+                await _birdMutationRepository.AddAsync(birdMutation);
+            }
 
+            _birdMutationRepository.SaveChanges();
+        }
     }
 }

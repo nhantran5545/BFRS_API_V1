@@ -16,5 +16,6 @@ namespace BusinessObjects.RequestModels
         public string? LifeStage { get; set; }
         public string? Status { get; set; }
         public int EggId { get; set; }
+        public List<MutationRequest>? MutationRequests { get; set; }
     }
 }
