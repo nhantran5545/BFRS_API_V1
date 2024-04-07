@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -79,6 +80,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("BreedingToday/{breedingId}")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> GetTodayBreedingCheckListByBreedingId(int breedingId)
         {
             var breeding = await _breedingService.GetBreedingById(breedingId);
@@ -102,6 +104,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost("BreedingToday/{breedingId}")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CreateTodayBreedingCheckListByBreedingId(int breedingId, BreedingCheckListAddRequest breedingCheckListAddRequest)
         {
             if(breedingId != breedingCheckListAddRequest.BreedingId)
@@ -137,6 +140,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ClutchToday/{clutchId}")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> GetTodayBreedingCheckListByClutchId(int clutchId)
         {
             var clutch = await _clutchService.GetClutchByIdAsync(clutchId);
@@ -160,6 +164,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost("ClutchToday/{clutchId}")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> CreateTodayBreedingCheckListByClutchId(int clutchId, ClutchCheckListAddRequest clutchCheckListAddRequest)
         {
             if (clutchId != clutchCheckListAddRequest.ClutchId)

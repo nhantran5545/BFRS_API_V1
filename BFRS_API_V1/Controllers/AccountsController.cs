@@ -28,6 +28,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("managers")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetManagerAccounts()
         {
             try
@@ -42,6 +43,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("staff")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStaffAccounts()
         {
             try
@@ -58,9 +60,9 @@ namespace BFRS_API_V1.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(AccountLoginRequest loginRequest)
         {
-            var (token, account) = await _accountService.AuthenticateAsync(loginRequest);
-            if (token == null || account == null)
-                return Unauthorized();
+            var (token, account) = await _accountService.LoginAsync(loginRequest);
+            if ( account == null)
+                return Unauthorized("Username or password are not correct");
 
             return Ok(new { token, account });
         }
@@ -81,6 +83,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutAccount(int id, [FromBody] AccountUpdateRequest accountUpdate)
         {
             var account  = await _accountService.GetAccountByIdAsync(accountUpdate.AccountId);

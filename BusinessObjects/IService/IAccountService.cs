@@ -7,7 +7,7 @@ namespace BusinessObjects.IService
     public interface IAccountService
     {
 
-        Task<(string token, AccountResponse accountResponse)> AuthenticateAsync(AccountLoginRequest loginRequest);
+        Task<(string token, AccountResponse accountResponse)> LoginAsync(AccountLoginRequest loginRequest);
         Task<bool> UpdateAccount(AccountUpdateRequest accountUpdate);
         Task<AccountDetailResponse?> GetAccountByIdAsync(object accId);
         void DeleteAccountById(object accountId);
