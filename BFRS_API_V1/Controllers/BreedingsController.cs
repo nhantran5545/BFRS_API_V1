@@ -9,6 +9,7 @@ using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
 using Microsoft.AspNetCore.OData.Query;
 using BusinessObjects.ResponseModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -72,6 +73,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("staff")]
+        [Authorize(Roles = "Staff")]
         [EnableQuery]
         public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedingsByStaff()
         {

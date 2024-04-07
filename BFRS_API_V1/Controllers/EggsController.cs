@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 using BusinessObjects.RequestModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -37,6 +38,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ByClutch/{clutchId}")]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<IEnumerable<EggResponse>>> GetEggsByClutchId(int clutchId)
         {
             var eggs = await _eggService.GetEggsByClutchIdAsync(clutchId);
@@ -60,6 +62,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Eggs/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<EggResponse>> GetEgg(int id)
         {
             var egg = await _eggService.GetEggByIdAsync(id);
@@ -84,6 +87,7 @@ namespace BFRS_API_V1.Controllers
         // PUT: api/Eggs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("Other/{id}")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> PutEgg(int id, [FromBody]EggUpdateRequest eggUpdateRequest)
         {
             if(id != eggUpdateRequest.EggId)
@@ -126,6 +130,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("Hatched/{id}")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> EggHatched(int id, [FromBody]EggHatchRequest eggHatchRequest)
         {
             if (id != eggHatchRequest.EggId)
@@ -164,6 +169,7 @@ namespace BFRS_API_V1.Controllers
         // POST: api/Eggs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<EggResponse>> PostEgg(EggAddRequest eggAddRequest)
         {
             var clutch = await _clutchService.GetClutchByIdAsync(eggAddRequest.ClutchId);

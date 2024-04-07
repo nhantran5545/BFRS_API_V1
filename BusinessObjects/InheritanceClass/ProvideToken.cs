@@ -51,7 +51,5 @@ namespace BusinessObjects.InheritanceClass
 
             return (tokenString, role);
         }
-
-        
     }
 }
