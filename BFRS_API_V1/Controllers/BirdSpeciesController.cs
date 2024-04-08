@@ -18,10 +18,12 @@ namespace BFRS_API_V1.Controllers
     public class BirdSpeciesController : ControllerBase
     {
         private readonly IBirdSpeciesService _birdSpeciesService;
+        private readonly IAccountService _accountService;
 
-        public BirdSpeciesController(IBirdSpeciesService birdSpeciesService)
+        public BirdSpeciesController(IBirdSpeciesService birdSpeciesService, IAccountService accountService)
         {
             _birdSpeciesService = birdSpeciesService;
+            _accountService = accountService;
         }
 
         // GET: api/BirdSpecies

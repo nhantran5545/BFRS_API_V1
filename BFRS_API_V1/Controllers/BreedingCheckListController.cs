@@ -14,14 +14,16 @@ namespace BFRS_API_V1.Controllers
         private readonly IBreedingService _breedingService;
         private readonly IClutchService _clutchService;
         private readonly ICheckListService _checkListService;
+        private readonly IAccountService _accountService;
 
         public BreedingCheckListController(IBreedingCheckListService breedingCheckListService, IBreedingService breedingService,
-            IClutchService clutchService, ICheckListService checkListService)
+            IClutchService clutchService, ICheckListService checkListService , IAccountService accountService)
         {
             _breedingCheckListService = breedingCheckListService ?? throw new ArgumentNullException(nameof(breedingCheckListService));
             _breedingService = breedingService;
             _clutchService = clutchService;
             _checkListService = checkListService;
+            _accountService = accountService;
         }
 
         [HttpGet]

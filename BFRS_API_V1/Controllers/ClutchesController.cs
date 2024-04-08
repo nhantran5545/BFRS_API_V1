@@ -18,11 +18,12 @@ namespace BFRS_API_V1.Controllers
     {
         private readonly IClutchService _clutchService;
         private readonly IBreedingService _breedingService;
-
-        public ClutchesController(IClutchService clutchService, IBreedingService breedingService)
+        private readonly IAccountService _accountService;
+        public ClutchesController(IClutchService clutchService, IBreedingService breedingService, IAccountService accountService)
         {
             _breedingService = breedingService;
             _clutchService = clutchService;
+            _accountService = accountService;
         }
 
         // GET: api/Clutches

@@ -10,10 +10,11 @@ namespace BFRS_API_V1.Controllers
     public class MutationsController : ControllerBase
     {
         private readonly IMutationService _mutationService;
-
-        public MutationsController(IMutationService mutationService)
+        private readonly IAccountService _accountService;
+        public MutationsController(IMutationService mutationService, IAccountService accountService)
         {
             _mutationService = mutationService;
+            _accountService = accountService;
         }
 
         [HttpGet]

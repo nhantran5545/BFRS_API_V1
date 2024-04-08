@@ -18,11 +18,12 @@ namespace BFRS_API_V1.Controllers
     {
         private readonly IEggService _eggService;
         private readonly IClutchService _clutchService;
-
-        public EggsController(IEggService eggService, IClutchService clutchService)
+        private readonly IAccountService _accountService;
+        public EggsController(IEggService eggService, IClutchService clutchService , IAccountService accountService)
         {
             _eggService = eggService;
             _clutchService = clutchService;
+            _accountService = accountService;
         }
 
         // GET: api/Eggs

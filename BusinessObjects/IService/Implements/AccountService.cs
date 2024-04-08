@@ -32,13 +32,6 @@ namespace BusinessObjects.IService.Implements
         }
 
 
-
-        public void DeleteAccountById(object accountId)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
             return await _accountRepository.GetAllAsync();
@@ -68,8 +61,6 @@ namespace BusinessObjects.IService.Implements
                 return (null, null);
             }
         }
-
-
 
 
         public async Task RegisterAccountAsync(AccountSignUpRequest accountSignUp)
@@ -163,6 +154,25 @@ namespace BusinessObjects.IService.Implements
             account.PhoneNumber = accountUpdate.PhoneNumber;
             account.City = accountUpdate.City;
             account.Address = accountUpdate.Address;
+
+            var result = _accountRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> InActiveAccountById(int accId )
+        {
+
+            var account = await _accountRepository.GetByIdAsync(accId);
+            if (account == null)
+            {
+                return false;
+            }
+
+            account.Status = "INACTIVE";
 
             var result = _accountRepository.SaveChanges();
             if (result < 1)
