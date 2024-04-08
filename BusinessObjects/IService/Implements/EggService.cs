@@ -48,26 +48,12 @@ namespace BusinessObjects.IService.Implements
                         clutch.Status = "Hatched";
                         clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
-
-                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
-                        if(breeding != null)
-                        {
-                            breeding.Phase = 3;
-                            _breedingRepository.SaveChanges();
-                        }*/
                     }
                     else if (clutch.Status == "Weaned" && egg.Status == "In Development")
                     {
                         clutch.Status = "Banding";
                         clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
-
-                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
-                        if (breeding != null)
-                        {
-                            breeding.Phase = 3;
-                            _breedingRepository.SaveChanges();
-                        }*/
                     }
 
                     egg.CreatedDate = DateTime.Now;
@@ -240,13 +226,16 @@ namespace BusinessObjects.IService.Implements
                         clutch.Status = "Weaned";
                         clutch.Phase = 4;
                         _clutchRepository.SaveChanges();
-
-                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
-                        if (breeding != null)
-                        {
-                            breeding.Phase = 4;
-                            _breedingRepository.SaveChanges();
-                        }*/
+                    }
+                }
+                else
+                {
+                    var clutch = await _clutchRepository.GetByIdAsync(clutchId);
+                    if (clutch != null)
+                    {
+                        clutch.Status = "Banding";
+                        clutch.Phase = 3;
+                        _clutchRepository.SaveChanges();
                     }
                 }
             }

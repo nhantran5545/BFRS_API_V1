@@ -58,6 +58,13 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Bird>> GetBirdsByStaffId(object staffId)
+        {
+            return await _context.Birds
+                .Include(b => b.Cage)
+                .Where(b => b.Cage.AccountId.Equals(staffId))
+                .ToListAsync();
+        }
         public override async Task<Bird?> GetByIdAsync(object id)
         {
             return await _context.Birds

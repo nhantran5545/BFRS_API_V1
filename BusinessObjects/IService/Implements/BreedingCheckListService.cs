@@ -234,7 +234,7 @@ namespace BusinessObjects.IService.Implements
             return ConvertToResponse(breedingCheckList);
         }
 
-        public async Task<int> CreateClutchCheckList(ClutchCheckListAddRequest clutchCheckListAddRequest, int phase)
+        public async Task<int> CreateClutchCheckList(ClutchCheckListAddRequest clutchCheckListAddRequest, int phase, int breedingId)
         {
             using (var transaction = _breedingCheckListRepository.BeginTransaction())
             {
@@ -250,6 +250,7 @@ namespace BusinessObjects.IService.Implements
                             return -1;
                         }
 
+                        breedingCheckList.BreedingId = breedingId;
                         breedingCheckList.CreateDate = DateTime.Today;
                         breedingCheckList.Phase = phase;
                         await _breedingCheckListRepository.AddAsync(breedingCheckList);
