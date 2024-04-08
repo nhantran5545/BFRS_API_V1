@@ -50,12 +50,17 @@ namespace BFRS_API_V1.Controllers
             return Ok(bird);
         }
 
-        [HttpGet("GetAreasByFarmId/{managerId}")]
+        [HttpGet("GetAreasByFarmId")]
         [Authorize(Roles = "Admin, Manager")]
-        public IActionResult GetAreasByFarmId(int managerId)
+        public IActionResult GetAreasByFarmId()
         {
             try
             {
+                var managerId = _accountService.GetAccountIdFromToken();
+                if (!_accountService.IsManager(managerId))
+                {
+                    throw new UnauthorizedAccessException("User is not authorized to access this resource.");
+                }
                 var areas = _areaService.GetAreaByManagerId(managerId);
                 return Ok(areas);
             }

@@ -12,6 +12,7 @@ namespace DataAccess.IRepositories
         Task<Account> AuthenticateAsync(string username, string password);
         Task<IEnumerable<Account>> GetAccountsByRoleAsync(string role);
         Account GetAccountById(int accountId);
+        Task<IEnumerable<Account>> GetStaffByFarmAsync(int farmId);
         Task<Account> GetByUsernameAsync(string username);
     }
 }

@@ -78,6 +78,11 @@ namespace BFRS_API_V1.Controllers
         {
             try
             {
+
+                if (await _accountService.CheckUsernameExist(accountSignUp.Username))
+                {
+                      BadRequest("Username already exists");
+                }
                 await _accountService.RegisterAccountAsync(accountSignUp);
                 return Ok("Account registered successfully");
             }
@@ -135,6 +140,31 @@ namespace BFRS_API_V1.Controllers
             catch (UnauthorizedAccessException ex)
             {
                 return Forbid(ex.Message);
+            }
+        }
+
+        [HttpGet("staff/farm")]
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> GetStaffByFarm()
+        {
+            try
+            {
+                var managerAccountId = _accountService.GetAccountIdFromToken();
+                if (managerAccountId == null)
+                {
+                    return BadRequest("Invalid ManagerId");
+                }
+                if (!_accountService.IsManager(managerAccountId))
+                {
+                    return Forbid("You are not authorized to access this resource.");
+                }
+
+                var staffAccounts = await _accountService.GetStaffByFarmAsync(managerAccountId);
+                return Ok(staffAccounts);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 

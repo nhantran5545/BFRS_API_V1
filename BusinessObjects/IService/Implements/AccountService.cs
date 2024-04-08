@@ -94,13 +94,9 @@ namespace BusinessObjects.IService.Implements
                 throw new ArgumentException("Invalid role. Only 'Manager' or 'Staff' roles are allowed.");
             }
 
-            if (await CheckUsernameExist(accountSignUp.Username))
-            {
-                throw new ArgumentException("Username already exists");
-            }
 
             var account = _mapper.Map<Account>(accountSignUp);
-            account.Status = "Active";
+            account.Status = "ACTIVE";
 
             await _accountRepository.AddAsync(account);
             _accountRepository.SaveChanges();
@@ -178,5 +174,20 @@ namespace BusinessObjects.IService.Implements
             }
             return true;
         }
+        public async Task<IEnumerable<AccountDetailResponse>> GetStaffByFarmAsync(int managerId)
+        {
+            var managerAccount = await _accountRepository.GetByIdAsync(managerId);
+
+            var staffAccounts = await _accountRepository.GetStaffByFarmAsync(managerAccount.FarmId.Value);
+            return _mapper.Map<IEnumerable<AccountDetailResponse>>(staffAccounts);
+        }
+
+        public bool IsManager(int accountId)
+        {
+            var account = _accountRepository.GetAccountById(accountId);
+            return account != null && account.Role == "Manager";
+        }
+
+
     }
 }

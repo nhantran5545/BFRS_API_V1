@@ -34,5 +34,13 @@ namespace DataAccess.IRepositories.Implements
             return await _context.Accounts
                 .FirstOrDefaultAsync(a => a.Username == username);
         }
+
+        public async Task<IEnumerable<Account>> GetStaffByFarmAsync(int farmId)
+        {
+            return await _context.Accounts
+                .Where(a => a.FarmId == farmId && a.Role == "Staff" && a.Status == "Active")
+                .ToListAsync();
+        }
+
     }
 }

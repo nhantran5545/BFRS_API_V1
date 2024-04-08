@@ -55,10 +55,6 @@ namespace BusinessObjects.IService.Implements
 
         public IEnumerable<AreaResponse> GetAreaByManagerId(int managerId)
         {
-            if (!IsManager(managerId))
-            {
-                throw new UnauthorizedAccessException("User is not authorized to access this resource.");
-            }
 
             int farmId = GetFarmIdByAccountId(managerId);
 
@@ -93,10 +89,6 @@ namespace BusinessObjects.IService.Implements
             return _mapper.Map<AreaResponse>(area);
         }
 
-        private bool IsManager(int accountId)
-        {
-            var account = _accountRepository.GetAccountById(accountId);
-            return account != null && account.Role == "Manager";
-        }
+
     }
 }

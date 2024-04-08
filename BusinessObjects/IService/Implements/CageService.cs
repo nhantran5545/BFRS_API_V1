@@ -108,19 +108,19 @@ namespace BusinessObjects.IService.Implements
             var cage = await _cageRepository.GetByIdAsync(cageId);
             if (cage == null)
             {
-                throw new Exception("Cage not found");
+                throw new ArgumentException("Cage not found");
             }
 
             var currentArea = await _areaRepository.GetByIdAsync(cage.AreaId);
             if (currentArea == null)
             {
-                throw new Exception("Current area not found");
+                throw new ArgumentException("Current area not found");
             }
 
             var targetArea = await _areaRepository.GetByIdAsync(request.AreaId);
             if (targetArea == null)
             {
-                throw new Exception("Target area not found");
+                throw new ArgumentException("Target area not found");
             }
 
             // Check if the cage has birds
@@ -128,7 +128,7 @@ namespace BusinessObjects.IService.Implements
 
             if (currentArea.Status == "For Nourishing" && targetArea.Status == "For Breeding" && birdsInCage.Any())
             {
-                throw new Exception("Please move birds to another cage before transferring the cage to a breeding area");
+                throw new ArgumentException("Please move birds to another cage before transferring the cage to a breeding area");
             }
 
             if (currentArea.Status == "For Nourishing" && targetArea.Status == "For Breeding" && !birdsInCage.Any())
@@ -138,7 +138,7 @@ namespace BusinessObjects.IService.Implements
 
             if (currentArea.Status == "For Breeding" && targetArea.Status == "For Nourishing" && cage.Status != "Standby")
             {
-                throw new Exception("You can only transfer a cage with standby status from breeding area to nourishing area");
+                throw new ArgumentException("You can only transfer a cage with standby status from breeding area to nourishing area");
             } 
             cage.ManufacturedDate = request.ManufacturedDate;
             cage.ManufacturedAt = request.ManufacturedAt;

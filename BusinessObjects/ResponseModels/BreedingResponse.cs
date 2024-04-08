@@ -18,6 +18,7 @@ namespace BusinessObjects.ResponseModels
         public int SpeciesId { get; set; }
         public string? SpeciesName { get; set; }
         public bool? CoupleSeperated { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public int CageId { get; set; }
         public int Phase { get; set; }
         public DateTime? NextCheck { get; set; }
