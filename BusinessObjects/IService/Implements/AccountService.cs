@@ -32,31 +32,36 @@ namespace BusinessObjects.IService.Implements
         }
 
 
-
-        public void DeleteAccountById(object accountId)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public async Task<IEnumerable<Account>> GetAllAccountsAsync()
         {
             return await _accountRepository.GetAllAsync();
         }
 
-        public async Task<(string token, AccountResponse accountResponse)> AuthenticateAsync(AccountLoginRequest loginRequest)
+        public async Task<(string token, AccountResponse accountResponse)> LoginAsync(AccountLoginRequest loginRequest)
         {
-            var user = await _accountRepository.AuthenticateAsync(loginRequest.Username, loginRequest.Password);
+            var account = await _accountRepository.AuthenticateAsync(loginRequest.Username, loginRequest.Password);
+        
+            if (account != null)
+            {
+                if (account.Status != "INACTIVE")
+                {
+                    var token = ProvideToken.Instance.GenerateToken(account.AccountId, account.Role);
 
-            if (user == null)
+                    var accountResponse = _mapper.Map<AccountResponse>(account);
+
+                        return (token.token, accountResponse);
+                }
+                else
+                {
+                    throw new UnauthorizedAccessException("Your account is not active, please contact Admin");
+                }
+            }
+            else
+            {
                 return (null, null);
-
-            var token = ProvideToken.Instance.GenerateToken(user.AccountId, user.Role);
-
-            var account = _mapper.Map<AccountResponse>(user);
-
-            return (token.token, account);
+            }
         }
+
 
         public async Task RegisterAccountAsync(AccountSignUpRequest accountSignUp)
         {
@@ -90,7 +95,7 @@ namespace BusinessObjects.IService.Implements
             int result = 0;
             if (_httpContextAccessor.HttpContext != null)
             {
-                var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+                var token = _httpContextAccessor.HttpContext.Request.Headers[" "].FirstOrDefault()?.Split(" ").Last();
                 if (!string.IsNullOrEmpty(token))
                 {
                     var tokenHandler = new JwtSecurityTokenHandler();
@@ -149,6 +154,25 @@ namespace BusinessObjects.IService.Implements
             account.PhoneNumber = accountUpdate.PhoneNumber;
             account.City = accountUpdate.City;
             account.Address = accountUpdate.Address;
+
+            var result = _accountRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public async Task<bool> InActiveAccountById(int accId )
+        {
+
+            var account = await _accountRepository.GetByIdAsync(accId);
+            if (account == null)
+            {
+                return false;
+            }
+
+            account.Status = "INACTIVE";
 
             var result = _accountRepository.SaveChanges();
             if (result < 1)

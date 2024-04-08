@@ -13,10 +13,12 @@ namespace BFRS_API_V1.Controllers
     public class AreaController : ControllerBase
     {
         private readonly IAreaService _areaService;
+        private readonly IAccountService _accountService;
 
-        public AreaController(IAreaService areaService)
+        public AreaController(IAreaService areaService, IAccountService accountService)
         {
             _areaService = areaService;
+            _accountService = accountService;
         }
 
         [HttpPost]

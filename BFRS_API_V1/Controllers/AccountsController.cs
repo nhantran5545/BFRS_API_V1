@@ -12,6 +12,7 @@ using BusinessObjects.InheritanceClass;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -28,6 +29,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("managers")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetManagerAccounts()
         {
             try
@@ -42,6 +44,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("staff")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStaffAccounts()
         {
             try
@@ -58,9 +61,9 @@ namespace BFRS_API_V1.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(AccountLoginRequest loginRequest)
         {
-            var (token, account) = await _accountService.AuthenticateAsync(loginRequest);
-            if (token == null || account == null)
-                return Unauthorized();
+            var (token, account) = await _accountService.LoginAsync(loginRequest);
+            if ( account == null)
+                return Unauthorized("Username or password are not correct");
 
             return Ok(new { token, account });
         }
@@ -81,6 +84,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutAccount(int id, [FromBody] AccountUpdateRequest accountUpdate)
         {
             var account  = await _accountService.GetAccountByIdAsync(accountUpdate.AccountId);
@@ -95,6 +99,40 @@ namespace BFRS_API_V1.Controllers
             }
             return BadRequest("Something wrong with the server Please try again");
         }
+
+        [HttpPut("deactivate/{id}")]
+        public async Task<IActionResult> InActivateAccount(int id)
+        {
+            try
+            {
+                var account = await _accountService.InActiveAccountById(id);
+
+                if (account == null)
+                {
+                    return NotFound("Account not found.");
+                }
+
+                if (!User.IsInRole("Admin"))
+                {
+                    return Forbid(); // Returns 403 Forbidden status code
+                }
+
+                if (account)
+                {
+                    return Ok("Account deactivated successfully.");
+                }
+                return NotFound($"Account with ID {id} not found.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
+        }
+
 
     }
 }

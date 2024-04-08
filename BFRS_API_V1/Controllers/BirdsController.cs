@@ -21,13 +21,15 @@ namespace BFRS_API_V1.Controllers
         private readonly IBirdSpeciesService _birdSpeciesService;
         private readonly ICageService _cageService;
         private readonly IEggService _eggService;
+        private readonly IAccountService _accountService;
 
-        public BirdsController(IBirdService birdService, IBirdSpeciesService birdSpeciesService, ICageService cageService, IEggService eggService)
+        public BirdsController(IBirdService birdService, IBirdSpeciesService birdSpeciesService, ICageService cageService, IEggService eggService, IAccountService accountService)
         {
             _birdService = birdService;
             _birdSpeciesService = birdSpeciesService;
             _cageService = cageService;
             _eggService = eggService;
+            _accountService = accountService;
         }
 
         // GET: api/Birds

@@ -16,10 +16,11 @@ namespace BFRS_API_V1.Controllers
     public class FarmsController : ControllerBase
     {
         private readonly IFarmService _farmService;
-
-        public FarmsController(IFarmService farmService)
+        private readonly IAccountService _accountService;
+        public FarmsController(IFarmService farmService, IAccountService accountService)
         {
             _farmService = farmService;
+            _accountService = accountService;
         }
 
         // GET: api/Farms

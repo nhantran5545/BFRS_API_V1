@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 using BusinessObjects.RequestModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -17,11 +18,12 @@ namespace BFRS_API_V1.Controllers
     {
         private readonly IClutchService _clutchService;
         private readonly IBreedingService _breedingService;
-
-        public ClutchesController(IClutchService clutchService, IBreedingService breedingService)
+        private readonly IAccountService _accountService;
+        public ClutchesController(IClutchService clutchService, IBreedingService breedingService, IAccountService accountService)
         {
             _breedingService = breedingService;
             _clutchService = clutchService;
+            _accountService = accountService;
         }
 
         // GET: api/Clutches
@@ -37,6 +39,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ByBreeding/{breedingId}")]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<IEnumerable<ClutchResponse>>> GetClutchesByBreedingId(int breedingId)
         {
             var clutches = await _clutchService.GetClutchsByBreedingId(breedingId);
@@ -60,6 +63,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Clutches/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<ClutchDetailResponse>> GetClutch(int id)
         {
             var clutch = await _clutchService.GetClutchByIdAsync(id);
@@ -73,6 +77,7 @@ namespace BFRS_API_V1.Controllers
         // POST: api/Clutches
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<ClutchResponse>> CreateClutch(ClutchAddRequest clutchAddRequest)
         {
             var breeding = await _breedingService.GetBreedingById(clutchAddRequest.BreedingId);
