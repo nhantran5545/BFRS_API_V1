@@ -16,10 +16,12 @@ namespace BFRS_API_V1.Controllers
     public class CheckListsController : ControllerBase
     {
         private readonly ICheckListService _checkListService;
+        private readonly IAccountService _accountService;
 
-        public CheckListsController(ICheckListService checkListService)
+        public CheckListsController(ICheckListService checkListService , IAccountService accountService)
         {
             _checkListService = checkListService;
+            _accountService = accountService;s
         }
 
         // GET: api/CheckLists
