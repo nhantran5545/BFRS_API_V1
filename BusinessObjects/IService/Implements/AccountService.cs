@@ -9,6 +9,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace BusinessObjects.IService.Implements
 {
@@ -62,6 +63,20 @@ namespace BusinessObjects.IService.Implements
             }
         }
 
+        public int GetAccountIdFromToken()
+        {
+            int result = 0;
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext != null && httpContext.User.Identity.IsAuthenticated)
+            {
+                var accountIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == "AccountId");
+                if (accountIdClaim != null && int.TryParse(accountIdClaim.Value, out int accountId))
+                {
+                    return result = accountId;
+                }
+            }
+            return result;
+        }
 
 
         public async Task RegisterAccountAsync(AccountSignUpRequest accountSignUp)
@@ -91,25 +106,6 @@ namespace BusinessObjects.IService.Implements
             _accountRepository.SaveChanges();
         }
 
-        public int GetAccountIdFromToken()
-        {
-            int result = 0;
-            if (_httpContextAccessor.HttpContext != null)
-            {
-                var token = _httpContextAccessor.HttpContext.Request.Headers[" "].FirstOrDefault()?.Split(" ").Last();
-                if (!string.IsNullOrEmpty(token))
-                {
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var tokenS = tokenHandler.ReadJwtToken(token);
-                    var accountId = tokenS.Claims.FirstOrDefault(claim => claim.Type == "AccountId");
-                    if (accountId != null && int.TryParse(accountId.Value, out int accountIdValue))
-                    {
-                        result = accountIdValue;
-                    }
-                }
-            }
-            return result;
-        }
 
         public async Task<IEnumerable<AccountDetailResponse>> GetManagerAccountsAsync()
         {
