@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObjects.RequestModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace BusinessObjects.IService
 {
     public interface IFileService
     {
+        Task<string> Upload(FileRequest fileRequest);
+        Task<Stream> Get(string name);
     }
 }

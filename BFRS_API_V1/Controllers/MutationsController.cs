@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllAsync()
         {
             var mutations = await _mutationService.GetAllMutationsAsync();
@@ -29,6 +31,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("{mutationId}")]
+        [Authorize]
         public async Task<IActionResult> GetById(int mutationId)
         {
             var mutation = await _mutationService.GetMutationByIdAsync(mutationId);
@@ -40,6 +43,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateMutation(MutationRequest mutationRequest)
         {
             var result = await _mutationService.CreateMutationAsync(mutationRequest);

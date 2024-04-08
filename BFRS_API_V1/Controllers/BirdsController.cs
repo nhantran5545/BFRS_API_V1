@@ -35,7 +35,6 @@ namespace BFRS_API_V1.Controllers
         // GET: api/Birds
         [HttpGet]
         [Authorize(Roles = "Admin, Manager")]
-        //[Authorize(Roles = "Manager")]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetAllBirds()
         {
             try
@@ -55,6 +54,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("InFarm")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsByFarmId(int FarmId)
         {
             var birds = await _birdService.GetBirdsByFarmId(FarmId);
@@ -66,6 +66,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("BySpeciesAndFarm")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsBySpeciesIdAndFarmId(int SpeciesId, int FarmId)
         {
             var birds = await _birdService.GetInRestBirdsBySpeciesIdAndFarmId(SpeciesId, FarmId);
@@ -76,9 +77,11 @@ namespace BFRS_API_V1.Controllers
             return Ok(birds);
         }
 
-        [HttpGet("Staff/{staffId}")]
-        public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsByStaffId(int staffId)
+        [HttpGet("Staff")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsByStaffId()
         {
+            var staffId = _accountService.GetAccountIdFromToken();
             var birds = await _birdService.GetBirdsByStaffId(staffId);
             if (birds == null || !birds.Any())
             {
@@ -89,6 +92,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Birds/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<BirdResponse>> GetBird(int id)
         {
             var bird = await _birdService.GetBirdByIdAsync(id);
@@ -100,6 +104,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("Pedigree/{id}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> GetBirdPedigree(int id)
         {
             var pedigree = await _birdService.GetPedigreeOfABird(id);
@@ -109,6 +114,7 @@ namespace BFRS_API_V1.Controllers
         // PUT: api/Birds/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> PutBird(int id, [FromBody]BirdUpdateRequest birdUpdateRequest)
         {
             var bird = await _birdService.GetBirdByIdAsync(birdUpdateRequest.BirdId);
@@ -145,6 +151,7 @@ namespace BFRS_API_V1.Controllers
         // POST: api/Birds
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("ForEgg")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<BirdResponse>> PostBirdForEgg(BirdAddFromEggRequest birdAddFromEggRequest)
         {
             var egg = await _eggService.GetEggByIdAsync(birdAddFromEggRequest.EggId);
@@ -185,6 +192,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<BirdResponse>> PostBird(BirdAddRequest birdAddRequest)
         {
             var species = await _birdSpeciesService.GetBirdSpeciesByIdAsync(birdAddRequest.BirdSpeciesId);

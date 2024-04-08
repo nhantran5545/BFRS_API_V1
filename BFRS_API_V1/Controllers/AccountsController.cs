@@ -105,6 +105,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("deactivate/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> InActivateAccount(int id)
         {
             try

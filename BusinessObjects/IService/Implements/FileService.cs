@@ -1,12 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using BusinessObjects.RequestModels;
 
 namespace BusinessObjects.IService.Implements
 {
     public class FileService : IFileService
     {
+        private readonly BlobServiceClient _blobServiceClient;
+        private readonly string _containerName = "bfrsimage";
+
+        public FileService(BlobServiceClient blobServiceClient)
+        {
+            _blobServiceClient = blobServiceClient;
+        }
+
+        public async Task<string> Upload(FileRequest fileRequest)
+        {
+            var containerInstance = _blobServiceClient.GetBlobContainerClient(_containerName);
+            var blobName = Path.GetFileName(fileRequest.imageFile.FileName); 
+
+            var blobInstance = containerInstance.GetBlobClient(blobName);
+            await blobInstance.UploadAsync(fileRequest.imageFile.OpenReadStream());
+
+            return blobInstance.Uri.ToString();
+        }
+
+        public async Task<Stream> Get(string name)
+        {
+            var containerInstance = _blobServiceClient.GetBlobContainerClient(_containerName);
+            var blobInstance = containerInstance.GetBlobClient(name);
+            var downloadContent = await blobInstance.DownloadAsync();
+            return downloadContent.Value.Content;
+        }
     }
 }

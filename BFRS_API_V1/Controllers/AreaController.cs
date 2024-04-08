@@ -22,6 +22,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<int>> CreateArea(AreaAddRequest areaAddRequest)
         {
             try
@@ -50,7 +51,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("GetAreasByFarmId/{managerId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         public IActionResult GetAreasByFarmId(int managerId)
         {
             try
@@ -64,7 +65,7 @@ namespace BFRS_API_V1.Controllers
             }
         }
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<AreaResponse>>> GetAllArea()
         {
             try

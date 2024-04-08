@@ -28,7 +28,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/BirdSpecies
         [HttpGet]
-        [Authorize(Roles = "Admin, Manager, Staff")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<BirdSpeciesResponse>>> GetBirdSpecies()
         {
             var birdSpecies = await _birdSpeciesService.GetBirdSpeciesAsync();
@@ -41,7 +41,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/BirdSpecies/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin, Manager, Staff")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<BirdSpeciesDetailResponse>> GetBirdSpecy(int id)
         {
             var birdspecy = await _birdSpeciesService.GetBirdSpeciesByIdAsync(id);

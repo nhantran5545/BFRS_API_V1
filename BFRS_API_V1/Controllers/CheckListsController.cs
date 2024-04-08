@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -26,6 +27,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/CheckLists
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<CheckList>>> GetCheckLists()
         {
             var checkLists = await _checkListService.GetAllCheckListsAsync();
@@ -39,6 +41,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/CheckLists/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<CheckList>> GetCheckList(Guid id)
         {
             var checkList = await _checkListService.GetCheckListByIdAsync(id);

@@ -9,6 +9,7 @@ using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
 using BusinessObjects.IService.Implements;
 using BusinessObjects.RequestModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -31,6 +32,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Cages
         [HttpGet]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<CageResponse>>> GetCages()
         {
             var cages = await _cageService.GetAllCagesAsync();
@@ -42,6 +44,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> CreateCage([FromBody] CageAddRequest request)
         {
                 await _cageService.CreateCageAsync(request);
@@ -49,6 +52,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("{cageId}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> UpdateCage(int cageId, CageUpdateRequest request)
         {
             try
@@ -71,6 +75,7 @@ namespace BFRS_API_V1.Controllers
 
 
         [HttpGet("ForBreeding")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<CageResponse>>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId)
         {
             var fatherBird = await _birdService.GetBirdByIdAsync(fatherBirdId);
@@ -103,6 +108,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ForBreeding/{farmId}")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<CageResponse>>> GetCagesForBreedingByFarm(int farmId)
         {
             var farm = await _farmService.GetFarmByIdAsync(farmId);
@@ -121,6 +127,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Cages/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<CageDetailResponse>> GetCage(int id)
         {
             var cage = await _cageService.GetCageByIdAsync(id);

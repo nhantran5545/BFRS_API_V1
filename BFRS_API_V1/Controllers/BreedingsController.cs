@@ -31,7 +31,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("InbreedingCoefficient")]
-        [Authorize]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> GetInbreedingCoefficientPercentage(int fatherBirdId, int motherBirdId)
         {
             var fatherBird = await _birdService.GetBirdByIdAsync(fatherBirdId);
@@ -51,7 +51,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedings()
         {
             var breedings = await _breedingService.GetAllBreedings();
@@ -90,7 +90,7 @@ namespace BFRS_API_V1.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<BreedingDetailResponse>> GetBreeding(int id)
+        public async Task<ActionResult<BreedingDetailResponse>> GetBreedingById(int id)
         {
             var breeding = await _breedingService.GetBreedingById(id);
             if(breeding == null)
