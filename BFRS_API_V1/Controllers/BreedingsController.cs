@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
-using Microsoft.AspNetCore.OData.Query;
 using BusinessObjects.ResponseModels;
 using Microsoft.AspNetCore.Authorization;
 
@@ -32,6 +31,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("InbreedingCoefficient")]
+        [Authorize]
         public async Task<IActionResult> GetInbreedingCoefficientPercentage(int fatherBirdId, int motherBirdId)
         {
             var fatherBird = await _birdService.GetBirdByIdAsync(fatherBirdId);
@@ -51,6 +51,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedings()
         {
             var breedings = await _breedingService.GetAllBreedings();
@@ -61,9 +62,11 @@ namespace BFRS_API_V1.Controllers
             return Ok(breedings); 
         }
 
-        [HttpGet("manager/{managerId}")]
-        public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedingsByManagerId(int managerId)
+        [HttpGet("manager")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedingsByManagerId()
         {
+            var managerId = _accountService.GetAccountIdFromToken();
             var breedings = await _breedingService.GetAllBreedingsByManagerId(managerId);
             if (breedings == null)
             {
@@ -73,11 +76,10 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("staff")]
-        [Authorize(Roles = "Staff")]
-        [EnableQuery]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedingsByStaff()
         {
-            var accountId = await _accountService.GetAccountIdFromToken();
+            var accountId = _accountService.GetAccountIdFromToken();
             var breedings = await _breedingService.GetBreedingsByStaffIdAsync(accountId);
             if (breedings == null)
             {
@@ -87,6 +89,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<BreedingDetailResponse>> GetBreeding(int id)
         {
             var breeding = await _breedingService.GetBreedingById(id);
@@ -98,8 +101,10 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<BreedingResponse>> OpenBreeding(BreedingAddRequest breedingAddRequest)
         {
+            var managerId = _accountService.GetAccountIdFromToken();
             var fatherBird = await _birdService.GetBirdByIdAsync(breedingAddRequest.FatherBirdId);
             if (fatherBird == null || fatherBird.Gender != "Male")
             {
@@ -133,7 +138,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Cage is either not for breeding or in breeding progress");
             }
 
-            var result = await _breedingService.CreateBreeding(breedingAddRequest);
+            var result = await _breedingService.CreateBreeding(breedingAddRequest, managerId);
             if(result < 1)
             {
                 return BadRequest("Something is wrong with the server, please try again!");
@@ -142,60 +147,18 @@ namespace BFRS_API_V1.Controllers
             return Ok(breeding);
         }
 
-        /*[HttpPut("PutBirdsTogether")]
-        public async Task<IActionResult> PutBirdsTogether(BreedingUpdateRequest breedingUpdateRequest)
-        {
-            var breeding = await _breedingService.GetBreedingById(breedingUpdateRequest.BreedingId);
-            if (breeding == null)
-            {
-                return NotFound("Breeding not found");
-            }
-
-            var cage = await _cageService.GetCageByIdAsync(breeding.CageId);
-            if (cage == null || cage.AccountId != breedingUpdateRequest.StaffId)
-            {
-                return BadRequest("You are not in charge of this breeding!");
-            }
-
-            if (await _breedingService.PutBirdsToBreeding(breedingUpdateRequest))
-            {
-                return Ok("Update Successfully");
-            }
-            return BadRequest("Something is wrong with the server please try again!");
-        }*/
-
-        /*[HttpPut("BreedingInProgress")]
-        public async Task<IActionResult> BreedingInProgress(BreedingUpdateRequest breedingUpdateRequest)
-        {
-            var breeding = await _breedingService.GetBreedingById(breedingUpdateRequest.BreedingId);
-            if (breeding == null)
-            {
-                return NotFound("Breeding not found");
-            }
-
-            var cage = await _cageService.GetCageByIdAsync(breeding.CageId);
-            if (cage == null || cage.AccountId != breedingUpdateRequest.StaffId)
-            {
-                return BadRequest("You are not in charge of this breeding!");
-            }
-
-            if (await _breedingService.BreedingInProgress(breedingUpdateRequest))
-            {
-                return Ok("Update Successfully");
-            }
-            return BadRequest("Something is wrong with the server please try again!");
-        }*/
-
         [HttpPut("closeBreeding")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> CloseBreeding(BreedingCloseRequest breedingCloseRequest)
         {
+            var managerId = _accountService.GetAccountIdFromToken();
             var breeding = await _breedingService.GetBreedingById(breedingCloseRequest.BreedingId);
             if (breeding == null)
             {
                 return NotFound("Breeding not found");
             }
 
-            if(breeding.CreatedBy != breedingCloseRequest.ManagerId)
+            if(breeding.CreatedBy != managerId)
             {
                 return BadRequest("This is not your breeding");
             }
@@ -223,7 +186,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Mother can not move to this cage");
             }
 
-            if (await _breedingService.CloseBreeding(breedingCloseRequest))
+            if (await _breedingService.CloseBreeding(breedingCloseRequest, managerId))
             {
                 return Ok("Update Successfully");
             }
@@ -231,9 +194,11 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("cancelBreeding")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> CancelBreeding(BreedingUpdateRequest breedingUpdateRequest)
         {
-            if(breedingUpdateRequest.Status != "Failed" && breedingUpdateRequest.Status != "Cancelled")
+            var managerId = _accountService.GetAccountIdFromToken();
+            if (breedingUpdateRequest.Status != "Failed" && breedingUpdateRequest.Status != "Cancelled")
             {
                 return BadRequest("Invalid Status");
             }
@@ -244,7 +209,7 @@ namespace BFRS_API_V1.Controllers
                 return NotFound("Breeding not found");
             }
 
-            if (breeding.CreatedBy != breedingUpdateRequest.ManagerId)
+            if (breeding.CreatedBy != managerId)
             {
                 return BadRequest("This is not your breeding");
             }
@@ -261,18 +226,11 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Mother can not move to this cage");
             }
 
-            if (await _breedingService.CancelBreeding(breedingUpdateRequest))
+            if (await _breedingService.CancelBreeding(breedingUpdateRequest, managerId))
             {
                 return Ok("Update Successfully");
             }
             return BadRequest("Something is wrong with the server please try again!");
         }
-        /*// DELETE: api/Breedings/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBreeding(Guid id)
-        {
-
-            return NoContent();
-        }*/
     }
 }

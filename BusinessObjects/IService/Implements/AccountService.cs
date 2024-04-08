@@ -91,7 +91,7 @@ namespace BusinessObjects.IService.Implements
             _accountRepository.SaveChanges();
         }
 
-        public async Task<int> GetAccountIdFromToken()
+        public int GetAccountIdFromToken()
         {
             int result = 0;
             if (_httpContextAccessor.HttpContext != null)

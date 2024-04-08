@@ -42,7 +42,7 @@ namespace BusinessObjects.IService.Implements
             return InbreedingPercentage;
         }
 
-        public async Task<int> CreateBreeding(BreedingAddRequest breedingAddRequest)
+        public async Task<int> CreateBreeding(BreedingAddRequest breedingAddRequest, int managerId)
         {
             using (var transaction = _breedingRepository.BeginTransaction())
             {
@@ -57,7 +57,7 @@ namespace BusinessObjects.IService.Implements
                     breeding.CoupleSeperated = false;
                     breeding.Status = "Mating";
                     breeding.Phase = 1;
-                    breeding.CreatedBy = breedingAddRequest.ManagerId;
+                    breeding.CreatedBy = managerId;
                     breeding.CreatedDate = DateTime.Now;
                     await _breedingRepository.AddAsync(breeding);
                     var result = _breedingRepository.SaveChanges();
@@ -103,16 +103,6 @@ namespace BusinessObjects.IService.Implements
 
         }
 
-        public void DeleteBreeding(BreedingAddRequest breeding)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteBreedingById(object breedingId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IEnumerable<BreedingResponse>> GetAllBreedings()
         {
             var breedings = await _breedingRepository.GetAllAsync();
@@ -143,7 +133,7 @@ namespace BusinessObjects.IService.Implements
         public async Task<IEnumerable<BreedingResponse>> GetBreedingsByStaffIdAsync(int staffId)
         {
 
-            var breedings = await _breedingRepository.GetAllBreedingsByStaff();
+            var breedings = await _breedingRepository.GetAllBreedingsByStaff(staffId);
             return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 
@@ -166,62 +156,7 @@ namespace BusinessObjects.IService.Implements
             return breedingResponse;
         }
 
-        /*public async Task<bool> PutBirdsToBreeding(BreedingUpdateRequest breedingUpdateRequest)
-        {
-            using (var transaction = _breedingRepository.BeginTransaction())
-            {
-                try
-                {
-                    var breeding = await _breedingRepository.GetByIdAsync(breedingUpdateRequest.BreedingId);
-                    if (breeding == null || breeding.Status != "Opened")
-                    {
-                        return false;
-                    }
-
-                    breeding.CageId = null;
-                    breeding.CoupleSeperated = false;
-                    breeding.Status = "Mating";
-                    breeding.UpdatedBy = breedingUpdateRequest.StaffId;
-                    breeding.UpdatedDate = DateTime.Now;
-                    _breedingRepository.SaveChanges();
-
-                    var fatherBird = await _birdRepository.GetByIdAsync(breeding.FatherBirdId);
-                    fatherBird.CageId = breeding.CageId;
-                    fatherBird.Status = "InReproductionPeriod";
-                    var motherBird = await _birdRepository.GetByIdAsync(breeding.MotherBirdId);
-                    motherBird.CageId = breeding.CageId;
-                    motherBird.Status = "InReproductionPeriod";
-                    _birdRepository.SaveChanges();
-
-                    transaction.Commit();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback(); 
-                    return false;
-                }
-            }
-        }
-        public async Task<bool> BreedingInProgress(BreedingUpdateRequest breedingUpdateRequest)
-        {
-            var breeding = await _breedingRepository.GetByIdAsync(breedingUpdateRequest.BreedingId);
-            if (breeding == null || breeding.Status != "Mating")
-            {
-                return false;
-            }
-            breeding.Status = "InProgress";
-            breeding.UpdatedBy = breedingUpdateRequest.StaffId;
-            breeding.UpdatedDate = DateTime.Now;
-            int result = _breedingRepository.SaveChanges();
-            if (result < 1)
-            {
-                return false;
-            }
-            return true;
-        }*/
-
-        public async Task<bool> CloseBreeding(BreedingCloseRequest breedingCloseRequest)
+        public async Task<bool> CloseBreeding(BreedingCloseRequest breedingCloseRequest, int managerId)
         {
             using (var transaction = _breedingRepository.BeginTransaction())
             {
@@ -236,7 +171,7 @@ namespace BusinessObjects.IService.Implements
                     breeding.CoupleSeperated = true;
                     breeding.Status = "Closed";
                     breeding.Phase = 0;
-                    breeding.UpdatedBy = breedingCloseRequest.ManagerId;
+                    breeding.UpdatedBy = managerId;
                     breeding.UpdatedDate = DateTime.Now;
                     _breedingRepository.SaveChanges();
 
@@ -275,7 +210,7 @@ namespace BusinessObjects.IService.Implements
             }
         }
 
-        public async Task<bool> CancelBreeding(BreedingUpdateRequest breedingUpdateRequest)
+        public async Task<bool> CancelBreeding(BreedingUpdateRequest breedingUpdateRequest, int managerId)
         {
             using (var transaction = _breedingRepository.BeginTransaction())
             {
@@ -292,7 +227,7 @@ namespace BusinessObjects.IService.Implements
                     breeding.CoupleSeperated = true;
                     breeding.Status = breedingUpdateRequest.Status;
                     breeding.Phase = 0;
-                    breeding.UpdatedBy = breedingUpdateRequest.ManagerId;
+                    breeding.UpdatedBy = managerId;
                     breeding.UpdatedDate = DateTime.Now;
                     _breedingRepository.SaveChanges();
 

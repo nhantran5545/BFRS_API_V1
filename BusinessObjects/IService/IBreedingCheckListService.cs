@@ -19,7 +19,7 @@ namespace BusinessObjects.IService
         Task<BreedingCheckListResponse?> GetTodayBreedingCheckListDetail(int breedingId, int phase);
         Task<BreedingCheckListResponse?> GetTodayClutchCheckListDetail(int clutchId, int phase);
         Task<int> CreateBreedingCheckList(BreedingCheckListAddRequest breedingCheckListAddRequest, int phase);
-        Task<int> CreateClutchCheckList(ClutchCheckListAddRequest clutchCheckListAddRequest, int phase);
+        Task<int> CreateClutchCheckList(ClutchCheckListAddRequest clutchCheckListAddRequest, int phase, int breedingId);
     }
 
 }

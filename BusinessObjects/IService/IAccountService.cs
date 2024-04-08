@@ -14,7 +14,7 @@ namespace BusinessObjects.IService
         Task<bool> InActiveAccountById(int accId);
         Task<IEnumerable<Account>> GetAllAccountsAsync();
         Task<bool> CheckUsernameExist(string username);
-        Task<int> GetAccountIdFromToken();
+        int GetAccountIdFromToken();
         Task RegisterAccountAsync(AccountSignUpRequest accountSignUp);
         Task<IEnumerable<AccountDetailResponse>> GetManagerAccountsAsync();
         Task<IEnumerable<AccountDetailResponse>> GetStaffAccountsAsync();

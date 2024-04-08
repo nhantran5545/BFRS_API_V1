@@ -26,7 +26,7 @@ namespace BusinessObjects.IService.Implements
             _breedingRepository = breedingRepository;
         }
 
-        public async Task<int> CreateEggAsync(EggAddRequest eggAddRequest)
+        public async Task<int> CreateEggAsync(EggAddRequest eggAddRequest, int accountId)
         {
             using(var transaction = _eggRepository.BeginTransaction())
             {
@@ -48,28 +48,15 @@ namespace BusinessObjects.IService.Implements
                         clutch.Status = "Hatched";
                         clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
-
-                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
-                        if(breeding != null)
-                        {
-                            breeding.Phase = 3;
-                            _breedingRepository.SaveChanges();
-                        }*/
                     }
                     else if (clutch.Status == "Weaned" && egg.Status == "In Development")
                     {
                         clutch.Status = "Banding";
                         clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
-
-                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
-                        if (breeding != null)
-                        {
-                            breeding.Phase = 3;
-                            _breedingRepository.SaveChanges();
-                        }*/
                     }
 
+                    egg.CreatedBy = accountId;
                     egg.CreatedDate = DateTime.Now;
                     await _eggRepository.AddAsync(egg);
                     _eggRepository.SaveChanges();
@@ -83,21 +70,6 @@ namespace BusinessObjects.IService.Implements
                     return -1;
                 }
             }
-        }
-
-        public void DeleteEgg(CheckList checkList)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteEgg(Egg egg)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteEggById(object checkListId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<EggResponse>> GetAllEggsAsync()
@@ -144,7 +116,7 @@ namespace BusinessObjects.IService.Implements
             return convertToResponse(egg);
         }
 
-        public async Task<bool> UpdateEgg(EggUpdateRequest eggUpdateRequest)
+        public async Task<bool> UpdateEgg(EggUpdateRequest eggUpdateRequest, int accountId)
         {
             using(var transaction = _eggRepository.BeginTransaction())
             {
@@ -157,7 +129,7 @@ namespace BusinessObjects.IService.Implements
                     }
 
                     egg.Status = eggUpdateRequest.Status;
-                    egg.UpdatedBy = eggUpdateRequest.UpdatedBy;
+                    egg.UpdatedBy = accountId;
                     egg.UpdatedDate = DateTime.Now;
 
                     _eggRepository.SaveChanges();
@@ -174,7 +146,7 @@ namespace BusinessObjects.IService.Implements
             }
         }
 
-        public async Task<bool> EggHatched(EggHatchRequest eggHatchRequest)
+        public async Task<bool> EggHatched(EggHatchRequest eggHatchRequest, int accountId)
         {
             using(var transaction =  _eggRepository.BeginTransaction())
             {
@@ -200,7 +172,7 @@ namespace BusinessObjects.IService.Implements
                     egg.HatchedDate = eggHatchRequest.HatchedDate;
                     egg.Status = "Hatched";
                     egg.HatchedDate = DateTime.Now;
-                    egg.UpdatedBy = eggHatchRequest.UpdatedBy;
+                    egg.UpdatedBy = accountId;
                     egg.UpdatedDate = DateTime.Now;
 
                     _eggRepository.SaveChanges();
@@ -240,13 +212,16 @@ namespace BusinessObjects.IService.Implements
                         clutch.Status = "Weaned";
                         clutch.Phase = 4;
                         _clutchRepository.SaveChanges();
-
-                        /*var breeding = await _breedingRepository.GetByIdAsync(clutch.BreedingId);
-                        if (breeding != null)
-                        {
-                            breeding.Phase = 4;
-                            _breedingRepository.SaveChanges();
-                        }*/
+                    }
+                }
+                else
+                {
+                    var clutch = await _clutchRepository.GetByIdAsync(clutchId);
+                    if (clutch != null)
+                    {
+                        clutch.Status = "Banding";
+                        clutch.Phase = 3;
+                        _clutchRepository.SaveChanges();
                     }
                 }
             }

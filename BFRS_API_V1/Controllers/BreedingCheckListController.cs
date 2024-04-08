@@ -27,6 +27,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetBreedingCheckLists()
         {
             var breedingCheckLists = await _breedingCheckListService.GetBreedingCheckListsAsync();
@@ -38,6 +39,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ByBreeding/{breedingId}")]
+        [Authorize]
         public async Task<IActionResult> GetBreedingCheckListsByBreedingId(int breedingId)
         {
             var breedingCheckLists = await _breedingCheckListService.GetBreedingCheckListsByBreedingId(breedingId);
@@ -49,6 +51,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ByBreedingAndPhase")]
+        [Authorize]
         public async Task<IActionResult> GetBreedingCheckListsByBreedingId(int breedingId, int phase)
         {
             var breedingCheckLists = await _breedingCheckListService.GetBreedingCheckListsByBreedingIdAndPhase(breedingId, phase);
@@ -60,6 +63,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ByClutchAndPhase")]
+        [Authorize]
         public async Task<IActionResult> GetBreedingCheckListsByClutchId(int clutchId, int phase)
         {
             var breedingCheckLists = await _breedingCheckListService.GetBreedingCheckListsByClutchIdAndPhase(clutchId, phase);
@@ -71,6 +75,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("{breedingCheckListId}")]
+        [Authorize]
         public async Task<IActionResult> GetBreedingCheckList(int breedingCheckListId)
         {
             var breedingCheckList = await _breedingCheckListService.GetBreedingCheckListDetail(breedingCheckListId);
@@ -82,7 +87,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("BreedingToday/{breedingId}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<IActionResult> GetTodayBreedingCheckListByBreedingId(int breedingId)
         {
             var breeding = await _breedingService.GetBreedingById(breedingId);
@@ -106,7 +111,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost("BreedingToday/{breedingId}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<IActionResult> CreateTodayBreedingCheckListByBreedingId(int breedingId, BreedingCheckListAddRequest breedingCheckListAddRequest)
         {
             if(breedingId != breedingCheckListAddRequest.BreedingId)
@@ -142,7 +147,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ClutchToday/{clutchId}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<IActionResult> GetTodayBreedingCheckListByClutchId(int clutchId)
         {
             var clutch = await _clutchService.GetClutchByIdAsync(clutchId);
@@ -166,7 +171,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost("ClutchToday/{clutchId}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<IActionResult> CreateTodayBreedingCheckListByClutchId(int clutchId, ClutchCheckListAddRequest clutchCheckListAddRequest)
         {
             if (clutchId != clutchCheckListAddRequest.ClutchId)
@@ -191,7 +196,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Clutch can only be added checklist in phase " + clutch.Phase);
             }
 
-            var result = await _breedingCheckListService.CreateClutchCheckList(clutchCheckListAddRequest, clutch.Phase);
+            var result = await _breedingCheckListService.CreateClutchCheckList(clutchCheckListAddRequest, clutch.Phase, clutch.BreedingId);
             if (result < 1)
             {
                 return BadRequest("Something is wrong with the server. Please try again");

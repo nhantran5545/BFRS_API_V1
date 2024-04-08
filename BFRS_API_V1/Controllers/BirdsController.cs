@@ -76,6 +76,17 @@ namespace BFRS_API_V1.Controllers
             return Ok(birds);
         }
 
+        [HttpGet("Staff/{staffId}")]
+        public async Task<ActionResult<IEnumerable<BirdResponse>>> GetBirdsByStaffId(int staffId)
+        {
+            var birds = await _birdService.GetBirdsByStaffId(staffId);
+            if (birds == null || !birds.Any())
+            {
+                return NotFound("There are no birds");
+            }
+            return Ok(birds);
+        }
+
         // GET: api/Birds/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BirdResponse>> GetBird(int id)
