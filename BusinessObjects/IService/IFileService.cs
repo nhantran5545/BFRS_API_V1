@@ -11,5 +11,6 @@ namespace BusinessObjects.IService
     {
         Task<string> Upload(FileRequest fileRequest);
         Task<Stream> Get(string name);
+        bool IsImageFile(string fileName);
     }
 }

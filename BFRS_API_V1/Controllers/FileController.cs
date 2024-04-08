@@ -20,7 +20,11 @@ namespace BFRS_API_V1.Controllers
         [HttpPost("uploadFile")]
         public async Task<IActionResult> UploadImage([FromForm] FileRequest fileRequest)
         {
-
+            // Kiểm tra xem file có phải là hình ảnh hay không
+            if (!_fileService.IsImageFile(fileRequest.imageFile.FileName))
+            {
+                BadRequest("Only image files are allowed.");
+            }
             var imageUrl = await _fileService.Upload(fileRequest);
             return Ok(new { imageUrl });
 
