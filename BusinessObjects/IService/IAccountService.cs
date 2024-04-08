@@ -20,5 +20,6 @@ namespace BusinessObjects.IService
         Task<IEnumerable<AccountDetailResponse>> GetManagerAccountsAsync();
         Task<IEnumerable<AccountDetailResponse>> GetStaffAccountsAsync();
         bool IsManager(int accountId);
+        bool IsStaff(int accountId);
     }
 }

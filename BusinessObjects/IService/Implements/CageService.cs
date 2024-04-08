@@ -2,6 +2,7 @@
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
+using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -69,6 +70,14 @@ namespace BusinessObjects.IService.Implements
             var cage = await _cageRepository.GetByIdAsync(cageId);
             return _mapper.Map<CageDetailResponse>(cage);
         }
+
+        public async Task<IEnumerable<CageResponse>> GetCagesByStaffIdAsync(int staffAccountId)
+        {
+            var cages = await _cageRepository.GetCagesManagedByStaffAsync(staffAccountId);
+            return _mapper.Map<IEnumerable<CageResponse>>(cages);
+        }
+
+
 
         public async Task<IEnumerable<CageResponse>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId)
         {

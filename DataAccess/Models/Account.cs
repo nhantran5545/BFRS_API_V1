@@ -48,4 +48,6 @@ namespace DataAccess.Models
         public virtual ICollection<Issue> IssueCreatedByNavigations { get; set; }
         public virtual ICollection<Issue> IssueUpdatedByNavigations { get; set; }
     }
+
+
 }

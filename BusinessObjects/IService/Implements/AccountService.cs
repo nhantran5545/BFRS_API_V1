@@ -187,7 +187,10 @@ namespace BusinessObjects.IService.Implements
             var account = _accountRepository.GetAccountById(accountId);
             return account != null && account.Role == "Manager";
         }
-
-
+        public bool IsStaff(int accountId)
+        {
+            var account =  _accountRepository.GetAccountById(accountId);
+            return account != null && account.Role == "Staff";
+        }
     }
 }

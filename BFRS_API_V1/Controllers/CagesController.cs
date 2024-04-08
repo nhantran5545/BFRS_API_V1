@@ -43,6 +43,28 @@ namespace BFRS_API_V1.Controllers
             return Ok(cages);
         }
 
+        [HttpGet("staff")]
+        [Authorize(Roles = "Staff")]
+        public async Task<IActionResult> GetCagesByStaffId()
+        {
+            try
+            {
+                var staffAccountId =  _accountService.GetAccountIdFromToken();
+
+                if (!_accountService.IsStaff(staffAccountId))
+                {
+                    return Forbid("You are not authorized to access this resource.");
+                }
+
+                var cages = await _cageService.GetCagesByStaffIdAsync(staffAccountId);
+                return Ok(cages);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> CreateCage([FromBody] CageAddRequest request)

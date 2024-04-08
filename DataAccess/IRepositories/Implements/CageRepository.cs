@@ -32,6 +32,14 @@ namespace DataAccess.IRepositories.Implements
                 .Where(br => br.CageId.Equals(cageId))
                 .FirstOrDefaultAsync();
         }
+        public async Task<IEnumerable<Cage>> GetCagesManagedByStaffAsync(int staffId)
+        {
+            return await _context.Cages
+                .Include(c => c.Account)
+                .Include(c => c.Birds)
+                .Where(c => c.AccountId == staffId)
+                .ToListAsync();
+        }
 
         public async Task<IEnumerable<Cage>> GetStandbyCagesByFarmId(int farmId)
         {
