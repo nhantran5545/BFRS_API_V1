@@ -82,7 +82,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize]
         public async Task<ActionResult<ClutchResponse>> CreateClutch(ClutchAddRequest clutchAddRequest)
         {
-            var accountId = await _accountService.GetAccountIdFromToken();
+            var accountId = _accountService.GetAccountIdFromToken();
             var breeding = await _breedingService.GetBreedingById(clutchAddRequest.BreedingId);
             if (breeding == null)
             {
@@ -118,7 +118,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize]
         public async Task<IActionResult> CloseClutch(int id, [FromBody] ClutchCloseRequest clutchUpdateRequest)
         {
-            var accountId = await _accountService.GetAccountIdFromToken();
+            var accountId = _accountService.GetAccountIdFromToken();
             if (id != clutchUpdateRequest.ClutchId)
             {
                 return BadRequest("clutch id conflict");
@@ -161,7 +161,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateClutchInfo(int id, [FromBody]ClutchUpdateRequest clutchUpdateRequest)
         {
-            var accountId = await _accountService.GetAccountIdFromToken();
+            var accountId = _accountService.GetAccountIdFromToken();
             if (clutchUpdateRequest.BroodStartDate != null && clutchUpdateRequest.BroodEndDate != null
                 && clutchUpdateRequest.BroodEndDate < clutchUpdateRequest.BroodStartDate)
             {

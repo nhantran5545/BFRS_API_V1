@@ -94,7 +94,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize]
         public async Task<IActionResult> PutEgg(int id, [FromBody]EggUpdateRequest eggUpdateRequest)
         {
-            var accountId = await _accountService.GetAccountIdFromToken();
+            var accountId = _accountService.GetAccountIdFromToken();
             if(id != eggUpdateRequest.EggId)
             {
                 return BadRequest("Egg Id conflict");
@@ -138,7 +138,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize]
         public async Task<IActionResult> EggHatched(int id, [FromBody]EggHatchRequest eggHatchRequest)
         {
-            var accountId = await _accountService.GetAccountIdFromToken();
+            var accountId = _accountService.GetAccountIdFromToken();
             if (id != eggHatchRequest.EggId)
             {
                 return BadRequest("Egg Id conflict");
@@ -178,7 +178,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize]
         public async Task<ActionResult<EggResponse>> PostEgg(EggAddRequest eggAddRequest)
         {
-            var accountId = await _accountService.GetAccountIdFromToken();
+            var accountId = _accountService.GetAccountIdFromToken();
             var clutch = await _clutchService.GetClutchByIdAsync(eggAddRequest.ClutchId);
             if(clutch == null)
             {

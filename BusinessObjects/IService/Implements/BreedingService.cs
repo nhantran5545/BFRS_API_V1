@@ -133,7 +133,7 @@ namespace BusinessObjects.IService.Implements
         public async Task<IEnumerable<BreedingResponse>> GetBreedingsByStaffIdAsync(int staffId)
         {
 
-            var breedings = await _breedingRepository.GetAllBreedingsByStaff();
+            var breedings = await _breedingRepository.GetAllBreedingsByStaff(staffId);
             return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
         }
 

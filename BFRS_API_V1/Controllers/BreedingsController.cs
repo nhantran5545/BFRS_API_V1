@@ -66,7 +66,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedingsByManagerId()
         {
-            var managerId = await _accountService.GetAccountIdFromToken();
+            var managerId = _accountService.GetAccountIdFromToken();
             var breedings = await _breedingService.GetAllBreedingsByManagerId(managerId);
             if (breedings == null)
             {
@@ -79,7 +79,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<BreedingResponse>>> GetBreedingsByStaff()
         {
-            var accountId = await _accountService.GetAccountIdFromToken();
+            var accountId = _accountService.GetAccountIdFromToken();
             var breedings = await _breedingService.GetBreedingsByStaffIdAsync(accountId);
             if (breedings == null)
             {
@@ -104,7 +104,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<ActionResult<BreedingResponse>> OpenBreeding(BreedingAddRequest breedingAddRequest)
         {
-            var managerId = await _accountService.GetAccountIdFromToken();
+            var managerId = _accountService.GetAccountIdFromToken();
             var fatherBird = await _birdService.GetBirdByIdAsync(breedingAddRequest.FatherBirdId);
             if (fatherBird == null || fatherBird.Gender != "Male")
             {
@@ -151,7 +151,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> CloseBreeding(BreedingCloseRequest breedingCloseRequest)
         {
-            var managerId = await _accountService.GetAccountIdFromToken();
+            var managerId = _accountService.GetAccountIdFromToken();
             var breeding = await _breedingService.GetBreedingById(breedingCloseRequest.BreedingId);
             if (breeding == null)
             {
@@ -197,7 +197,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> CancelBreeding(BreedingUpdateRequest breedingUpdateRequest)
         {
-            var managerId = await _accountService.GetAccountIdFromToken();
+            var managerId = _accountService.GetAccountIdFromToken();
             if (breedingUpdateRequest.Status != "Failed" && breedingUpdateRequest.Status != "Cancelled")
             {
                 return BadRequest("Invalid Status");
