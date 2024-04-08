@@ -28,6 +28,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Eggs
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<EggResponse>>> GetEggs()
         {
             var eggs = await _eggService.GetAllEggsAsync();
@@ -39,7 +40,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ByClutch/{clutchId}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<EggResponse>>> GetEggsByClutchId(int clutchId)
         {
             var eggs = await _eggService.GetEggsByClutchIdAsync(clutchId);
@@ -51,6 +52,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ByBreeding/{breedingId}")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<EggResponse>>> GetEggsByBreedingId(int breedingId)
         {
             var eggs = await _eggService.GetEggsByBreedingIdAsync(breedingId);
@@ -63,7 +65,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Eggs/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<ActionResult<EggResponse>> GetEgg(int id)
         {
             var egg = await _eggService.GetEggByIdAsync(id);
@@ -75,6 +77,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("Bird/{birdId}")]
+        [Authorize]
         public async Task<ActionResult<EggResponse>> GetEggByBirdId(int birdId)
         {
             var egg = await _eggService.GetEggByBirdIdAsync(birdId);
@@ -88,9 +91,10 @@ namespace BFRS_API_V1.Controllers
         // PUT: api/Eggs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("Other/{id}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<IActionResult> PutEgg(int id, [FromBody]EggUpdateRequest eggUpdateRequest)
         {
+            var accountId = await _accountService.GetAccountIdFromToken();
             if(id != eggUpdateRequest.EggId)
             {
                 return BadRequest("Egg Id conflict");
@@ -123,7 +127,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Clutch is closed or elminated");
             }
 
-            if (await _eggService.UpdateEgg(eggUpdateRequest))
+            if (await _eggService.UpdateEgg(eggUpdateRequest, accountId))
             {
                 return Ok("Update Sucessfully");
             }
@@ -131,9 +135,10 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("Hatched/{id}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<IActionResult> EggHatched(int id, [FromBody]EggHatchRequest eggHatchRequest)
         {
+            var accountId = await _accountService.GetAccountIdFromToken();
             if (id != eggHatchRequest.EggId)
             {
                 return BadRequest("Egg Id conflict");
@@ -161,7 +166,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Clutch is closed or elminated");
             }
 
-            if (await _eggService.EggHatched(eggHatchRequest))
+            if (await _eggService.EggHatched(eggHatchRequest, accountId))
             {
                 return Ok("Update Sucessfully");
             }
@@ -170,9 +175,10 @@ namespace BFRS_API_V1.Controllers
         // POST: api/Eggs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<ActionResult<EggResponse>> PostEgg(EggAddRequest eggAddRequest)
         {
+            var accountId = await _accountService.GetAccountIdFromToken();
             var clutch = await _clutchService.GetClutchByIdAsync(eggAddRequest.ClutchId);
             if(clutch == null)
             {
@@ -184,7 +190,7 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest("Clutch is closed or elminated");
             }
 
-            var result = await _eggService.CreateEggAsync(eggAddRequest);
+            var result = await _eggService.CreateEggAsync(eggAddRequest, accountId);
             if(result < 1)
             {
                 return BadRequest("Something is wrong with server , please try again");

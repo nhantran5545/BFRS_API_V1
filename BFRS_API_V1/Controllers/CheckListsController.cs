@@ -21,7 +21,7 @@ namespace BFRS_API_V1.Controllers
         public CheckListsController(ICheckListService checkListService , IAccountService accountService)
         {
             _checkListService = checkListService;
-            _accountService = accountService;s
+            _accountService = accountService;
         }
 
         // GET: api/CheckLists

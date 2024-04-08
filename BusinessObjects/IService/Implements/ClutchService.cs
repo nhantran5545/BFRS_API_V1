@@ -24,7 +24,7 @@ namespace BusinessObjects.IService.Implements
             _mapper = mapper;
         }
 
-        public async Task<int> CreateClutchAsync(ClutchAddRequest clutchAddRequest)
+        public async Task<int> CreateClutchAsync(ClutchAddRequest clutchAddRequest, int accountId)
         {
             using(var transaction = _clutchRepository.BeginTransaction())
             {
@@ -50,6 +50,7 @@ namespace BusinessObjects.IService.Implements
 
                     clutch.Status = "Created";
                     clutch.Phase = 2;
+                    clutch.CreatedBy = accountId;
                     clutch.CreatedDate = DateTime.Now;
                     await _clutchRepository.AddAsync(clutch);
                     _clutchRepository.SaveChanges();
@@ -106,9 +107,9 @@ namespace BusinessObjects.IService.Implements
             return clutchResponse;
         }
 
-        public async Task<bool> UpdateClutch(ClutchUpdateRequest clutchUpdateRequest)
+        public async Task<bool> UpdateClutch(int clutchId, ClutchUpdateRequest clutchUpdateRequest, int accountId)
         {
-            var clutch = await _clutchRepository.GetByIdAsync(clutchUpdateRequest.ClutchId);
+            var clutch = await _clutchRepository.GetByIdAsync(clutchId);
             if (clutch == null)
             {
                 return false;
@@ -117,7 +118,7 @@ namespace BusinessObjects.IService.Implements
             clutch.BroodStartDate = clutchUpdateRequest.BroodStartDate;
             clutch.BroodEndDate = clutchUpdateRequest.BroodEndDate;
             //clutch.CageId = clutch.CageId;
-            clutch.UpdatedBy = clutchUpdateRequest.UpdatedBy;
+            clutch.UpdatedBy = accountId;
             clutch.UpdatedDate = DateTime.Now;
             var result = _clutchRepository.SaveChanges();
             if(result < 1)
@@ -127,9 +128,9 @@ namespace BusinessObjects.IService.Implements
             return true;
         }
 
-        public async Task<bool> CloseClutch(ClutchCloseRequest clutchCloseRequest)
+        public async Task<bool> CloseClutch(int clutchId, ClutchCloseRequest clutchCloseRequest, int accountId)
         {
-            var clutch = await _clutchRepository.GetByIdAsync(clutchCloseRequest.ClutchId);
+            var clutch = await _clutchRepository.GetByIdAsync(clutchId);
             if(clutch == null)
             {
                 return false;
@@ -137,7 +138,7 @@ namespace BusinessObjects.IService.Implements
 
             clutch.Status = clutchCloseRequest.Status;
             clutch.Phase = 0;
-            clutch.UpdatedBy = clutchCloseRequest.UpdatedBy;
+            clutch.UpdatedBy = accountId;
             clutch.UpdatedDate = DateTime.Now;
             var result = _clutchRepository.SaveChanges();
             if (result < 1)

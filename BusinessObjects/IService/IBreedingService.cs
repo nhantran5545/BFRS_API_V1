@@ -12,13 +12,9 @@ namespace BusinessObjects.IService
     public interface IBreedingService
     {
         Task<double> CalculateInbreedingPercentage(int fatherBirdId, int motherBirdId);
-        Task<int> CreateBreeding(BreedingAddRequest breedingAddRequest);
-        /*Task<bool> PutBirdsToBreeding(BreedingUpdateRequest breedingUpdateRequest);
-        Task<bool> BreedingInProgress(BreedingUpdateRequest breedingUpdateRequest);*/
-        Task<bool> CloseBreeding(BreedingCloseRequest breedingCloseRequest);
-        Task<bool> CancelBreeding(BreedingUpdateRequest breedingUpdateRequest);
-        void DeleteBreeding(BreedingAddRequest breeding);
-        void DeleteBreedingById(object breedingId);
+        Task<int> CreateBreeding(BreedingAddRequest breedingAddRequest, int managerId);
+        Task<bool> CloseBreeding(BreedingCloseRequest breedingCloseRequest, int managerId);
+        Task<bool> CancelBreeding(BreedingUpdateRequest breedingUpdateRequest, int managerId);
         Task<IEnumerable<BreedingResponse>> GetAllBreedings();
         Task<IEnumerable<BreedingResponse>> GetAllBreedingsByManagerId(object managerId);
         Task<IEnumerable<BreedingResponse>> GetBreedingsByStaffIdAsync(int staffId);

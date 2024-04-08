@@ -9,7 +9,7 @@ namespace BusinessObjects.RequestModels
     public class EggUpdateRequest
     {
         public int EggId { get; set; }
-        public int UpdatedBy { get; set; }
+        //public int UpdatedBy { get; set; }
         public string? Status { get; set; }
     }
 }

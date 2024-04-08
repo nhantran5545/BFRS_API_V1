@@ -28,6 +28,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Clutches
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ClutchResponse>>> GetClutches()
         {
             var clutches = await _clutchService.GetAllClutchsAsync();
@@ -39,7 +40,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ByBreeding/{breedingId}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ClutchResponse>>> GetClutchesByBreedingId(int breedingId)
         {
             var clutches = await _clutchService.GetClutchsByBreedingId(breedingId);
@@ -51,6 +52,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpGet("ByCreated/{createdById}")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ClutchResponse>>> GetClutchesByCreatedById(int createdById)
         {
             var clutches = await _clutchService.GetClutchsByCreatedById(createdById);
@@ -63,7 +65,7 @@ namespace BFRS_API_V1.Controllers
 
         // GET: api/Clutches/5
         [HttpGet("{id}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<ActionResult<ClutchDetailResponse>> GetClutch(int id)
         {
             var clutch = await _clutchService.GetClutchByIdAsync(id);
@@ -77,9 +79,10 @@ namespace BFRS_API_V1.Controllers
         // POST: api/Clutches
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Staff")]
+        [Authorize]
         public async Task<ActionResult<ClutchResponse>> CreateClutch(ClutchAddRequest clutchAddRequest)
         {
+            var accountId = await _accountService.GetAccountIdFromToken();
             var breeding = await _breedingService.GetBreedingById(clutchAddRequest.BreedingId);
             if (breeding == null)
             {
@@ -102,7 +105,7 @@ namespace BFRS_API_V1.Controllers
                 }
             }
             
-            var result = await _clutchService.CreateClutchAsync(clutchAddRequest);
+            var result = await _clutchService.CreateClutchAsync(clutchAddRequest, accountId);
             if (result < 1)
             {
                 return BadRequest("Something is wrong with the server, please try again!");
@@ -112,8 +115,10 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("Close/{id}")]
+        [Authorize]
         public async Task<IActionResult> CloseClutch(int id, [FromBody] ClutchCloseRequest clutchUpdateRequest)
         {
+            var accountId = await _accountService.GetAccountIdFromToken();
             if (id != clutchUpdateRequest.ClutchId)
             {
                 return BadRequest("clutch id conflict");
@@ -145,7 +150,7 @@ namespace BFRS_API_V1.Controllers
                 }
             }
 
-            if (await _clutchService.CloseClutch(clutchUpdateRequest))
+            if (await _clutchService.CloseClutch(id, clutchUpdateRequest, accountId))
             {
                 return Ok("Close successfully!");
             }
@@ -153,14 +158,11 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateClutchInfo(int id, [FromBody]ClutchUpdateRequest clutchUpdateRequest)
         {
-            if(id != clutchUpdateRequest.ClutchId)
-            {
-                return BadRequest("Id must be the same");
-            }
-
-            if(clutchUpdateRequest.BroodStartDate != null && clutchUpdateRequest.BroodEndDate != null
+            var accountId = await _accountService.GetAccountIdFromToken();
+            if (clutchUpdateRequest.BroodStartDate != null && clutchUpdateRequest.BroodEndDate != null
                 && clutchUpdateRequest.BroodEndDate < clutchUpdateRequest.BroodStartDate)
             {
                 return BadRequest("Brood Start Date must before Brood End Date");
@@ -172,7 +174,7 @@ namespace BFRS_API_V1.Controllers
                 return NotFound("clutch not found");
             }
 
-            if(await _clutchService.UpdateClutch(clutchUpdateRequest))
+            if(await _clutchService.UpdateClutch(id, clutchUpdateRequest, accountId))
             {
                 return Ok("Update Successfully");
             }
