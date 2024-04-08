@@ -69,7 +69,7 @@ namespace BFRS_API_V1.Controllers
             if(egg == null)
             {
                 return NotFound("Egg not found");
-            }
+            }   
             return Ok(egg);
         }
 
