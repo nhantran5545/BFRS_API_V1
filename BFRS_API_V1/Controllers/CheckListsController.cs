@@ -21,7 +21,7 @@ namespace BFRS_API_V1.Controllers
         public CheckListsController(ICheckListService checkListService , IAccountService accountService)
         {
             _checkListService = checkListService;
-            _accountService = accountService;s
+            _accountService = accountService;
         }
 
         // GET: api/CheckLists
@@ -49,31 +49,6 @@ namespace BFRS_API_V1.Controllers
             return Ok(checkList);
         }
 
-        // PUT: api/CheckLists/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        /*[HttpPut("{id}")]
-        public async Task<IActionResult> PutCheckList(Guid id, CheckList checkList)
-        {
-
-            return NoContent();
-        }
-
-        // POST: api/CheckLists
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<CheckList>> PostCheckList(CheckList checkList)
-        {
-
-            return CreatedAtAction("GetCheckList", new { id = checkList.CheckListId }, checkList);
-        }
-
-        // DELETE: api/CheckLists/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCheckList(Guid id)
-        {
-
-            return NoContent();
-        }*/
 
 
 

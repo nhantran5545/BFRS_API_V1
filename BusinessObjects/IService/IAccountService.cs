@@ -8,7 +8,7 @@ namespace BusinessObjects.IService
     public interface IAccountService
     {
 
-        Task<(string token, AccountResponse accountResponse)> LoginAsync(AccountLoginRequest loginRequest);
+        Task<(string token, AccountResponse accountResponse, string errorMessage)> LoginAsync(AccountLoginRequest loginRequest);
         Task<bool> UpdateAccount(AccountUpdateRequest accountUpdate);
         Task<AccountDetailResponse?> GetAccountByIdAsync(object accId);
         Task<bool> InActiveAccountById(int accId);

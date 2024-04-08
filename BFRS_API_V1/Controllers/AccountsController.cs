@@ -61,12 +61,16 @@ namespace BFRS_API_V1.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(AccountLoginRequest loginRequest)
         {
-            var (token, account) = await _accountService.LoginAsync(loginRequest);
-            if ( account == null)
-                return Unauthorized("Username or password are not correct");
+            var (token, account, errorMessage) = await _accountService.LoginAsync(loginRequest);
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                return Unauthorized(errorMessage);
+            }
 
             return Ok(new { token, account });
         }
+
 
         [HttpPost("signup")]
         [Authorize(Roles = "Admin")]

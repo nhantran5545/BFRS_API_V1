@@ -37,10 +37,10 @@ namespace BusinessObjects.IService.Implements
             return await _accountRepository.GetAllAsync();
         }
 
-        public async Task<(string token, AccountResponse accountResponse)> LoginAsync(AccountLoginRequest loginRequest)
+        public async Task<(string token, AccountResponse accountResponse, string errorMessage)> LoginAsync(AccountLoginRequest loginRequest)
         {
             var account = await _accountRepository.AuthenticateAsync(loginRequest.Username, loginRequest.Password);
-        
+
             if (account != null)
             {
                 if (account.Status != "INACTIVE")
@@ -49,18 +49,19 @@ namespace BusinessObjects.IService.Implements
 
                     var accountResponse = _mapper.Map<AccountResponse>(account);
 
-                        return (token.token, accountResponse);
+                    return (token.token, accountResponse, null);
                 }
                 else
                 {
-                    throw new UnauthorizedAccessException("Your account is not active, please contact Admin");
+                    return (null, null, "Your account is not active, please contact Admin");
                 }
             }
             else
             {
-                return (null, null);
+                return (null, null, "Username or password are not correct");
             }
         }
+
 
 
         public async Task RegisterAccountAsync(AccountSignUpRequest accountSignUp)

@@ -14,13 +14,13 @@ namespace BusinessObjects.IService.Implements
 {
     public class AreaService : IAreaService
     {
-        private readonly IAreaRepository _repository;
+        private readonly IAreaRepository _areaRepository;
         private readonly IAccountRepository _accountRepository; 
         private readonly IMapper _mapper;
 
-        public AreaService(IAreaRepository repository, IAccountRepository accountRepository, IMapper mapper)
+        public AreaService(IAreaRepository areaRepository, IAccountRepository accountRepository, IMapper mapper)
         {
-            _repository = repository;
+            _areaRepository = areaRepository;
             _accountRepository = accountRepository;
             _mapper = mapper;
         }
@@ -37,8 +37,8 @@ namespace BusinessObjects.IService.Implements
             }
 
             var area = _mapper.Map<Area>(areaAddRequest);
-            await _repository.AddAsync(area);
-            var result = _repository.SaveChanges();
+            await _areaRepository.AddAsync(area);
+            var result = _areaRepository.SaveChanges();
             if (result < 1)
             {
                 return result;
@@ -49,7 +49,7 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<IEnumerable<AreaResponse>> GetAllAreaAsync()
         {
-            var area = await _repository.GetAllAsync();
+            var area = await _areaRepository.GetAllAsync();
             return area.Select(b => _mapper.Map<AreaResponse>(b));
         }
 
@@ -62,7 +62,7 @@ namespace BusinessObjects.IService.Implements
 
             int farmId = GetFarmIdByAccountId(managerId);
 
-            var areas = _repository.GetAreasByFarmId(farmId);
+            var areas = _areaRepository.GetAreasByFarmId(farmId);
 
             var areaDTOs = areas.Select(a => new AreaResponse
             {
@@ -89,7 +89,7 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<AreaResponse?> GetAreaByIdAsync(object areaId)
         {
-            var area = await _repository.GetByIdAsync(areaId);
+            var area = await _areaRepository.GetByIdAsync(areaId);
             return _mapper.Map<AreaResponse>(area);
         }
 
