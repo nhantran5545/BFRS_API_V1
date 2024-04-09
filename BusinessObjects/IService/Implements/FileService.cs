@@ -50,9 +50,6 @@ namespace BusinessObjects.IService.Implements
             return allowedExtensions.Contains(extension);
         }
 
-        bool IFileService.IsImageFile(string fileName)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }
