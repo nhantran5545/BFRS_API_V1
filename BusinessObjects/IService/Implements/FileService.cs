@@ -19,6 +19,11 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<string> Upload(FileRequest fileRequest)
         {
+            // Kiểm tra xem file có phải là hình ảnh hay không
+            if (!IsImageFile(fileRequest.imageFile.FileName))
+            {
+                throw new ArgumentException("Only image files are allowed.");
+            }
 
             var containerInstance = _blobServiceClient.GetBlobContainerClient(_containerName);
             var blobName = Path.GetFileName(fileRequest.imageFile.FileName);
@@ -37,7 +42,7 @@ namespace BusinessObjects.IService.Implements
             return downloadContent.Value.Content;
         }
 
-        private bool IsImageFile(string fileName)
+        public bool IsImageFile(string fileName)
         {
             string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
 

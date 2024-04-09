@@ -81,7 +81,7 @@ namespace BFRS_API_V1.Controllers
 
                 if (await _accountService.CheckUsernameExist(accountSignUp.Username))
                 {
-                      BadRequest("Username already exists");
+                    BadRequest("Username already exists");
                 }
                 await _accountService.RegisterAccountAsync(accountSignUp);
                 return Ok("Account registered successfully");
@@ -96,7 +96,7 @@ namespace BFRS_API_V1.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutAccount(int id, [FromBody] AccountUpdateRequest accountUpdate)
         {
-            var account  = await _accountService.GetAccountByIdAsync(accountUpdate.AccountId);
+            var account = await _accountService.GetAccountByIdAsync(accountUpdate.AccountId);
             if (account == null)
             {
                 return NotFound("Account not found");
@@ -109,13 +109,15 @@ namespace BFRS_API_V1.Controllers
             return BadRequest("Something wrong with the server Please try again");
         }
 
-        [HttpPut("deactivate/{id}")]
+
+
+        [HttpPut("status/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> InActivateAccount(int id)
+        public async Task<IActionResult> ChangStatusAccount(int id)
         {
             try
             {
-                var account = await _accountService.InActiveAccountById(id);
+                var account = await _accountService.ChangStatusAccountById(id);
 
                 if (account == null)
                 {
@@ -129,7 +131,7 @@ namespace BFRS_API_V1.Controllers
 
                 if (account)
                 {
-                    return Ok("Account deactivated successfully.");
+                    return Ok("Change status successfully.");
                 }
                 return NotFound($"Account with ID {id} not found.");
             }
