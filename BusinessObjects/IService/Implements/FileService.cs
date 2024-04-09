@@ -49,5 +49,10 @@ namespace BusinessObjects.IService.Implements
             string extension = Path.GetExtension(fileName).ToLower();
             return allowedExtensions.Contains(extension);
         }
+
+        bool IFileService.IsImageFile(string fileName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
