@@ -51,10 +51,11 @@ namespace BFRS_API_V1.Controllers
             return Ok(clutches);
         }
 
-        [HttpGet("ByCreated/{createdById}")]
+        [HttpGet("ByCreated")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<ClutchResponse>>> GetClutchesByCreatedById(int createdById)
+        public async Task<ActionResult<IEnumerable<ClutchResponse>>> GetClutchesByCreatedById()
         {
+            var createdById = _accountService.GetAccountIdFromToken();
             var clutches = await _clutchService.GetClutchsByCreatedById(createdById);
             if (clutches == null)
             {

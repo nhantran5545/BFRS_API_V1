@@ -35,6 +35,11 @@ namespace BusinessObjects.IService.Implements
             if (bird == null) { return; }
             pedigreeIndividual.Add(ancestor, bird);
 
+            if(ancestor.Length == 3)
+            {
+                return;
+            }
+
             if (bird.FatherBirdId != null)
             {
                 string fatherAncestor = ancestor + "s";
@@ -72,7 +77,7 @@ namespace BusinessObjects.IService.Implements
 
             if (bird == null) { return; }
             AddInd(ancestor, birdId);
-            pedigreeIndividual.Add(ancestor, bird);
+            //pedigreeIndividual.Add(ancestor, bird);
 
             if (bird.FatherBirdId != null)
             {
