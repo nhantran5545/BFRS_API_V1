@@ -19,14 +19,15 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<string> Upload(FileRequest fileRequest)
         {
-            // Kiểm tra xem file có phải là hình ảnh hay không
-            if (!IsImageFile(fileRequest.imageFile.FileName))
-            {
-                throw new ArgumentException("Only image files are allowed.");
-            }
-
             var containerInstance = _blobServiceClient.GetBlobContainerClient(_containerName);
             var blobName = Path.GetFileName(fileRequest.imageFile.FileName);
+
+            // Kiểm tra xem blob đã tồn tại trong container chưa
+            var blobClient = containerInstance.GetBlobClient(blobName);
+            if (await blobClient.ExistsAsync())
+            {
+                blobName = GetUniqueBlobName(containerInstance, blobName);
+            }
 
             var blobInstance = containerInstance.GetBlobClient(blobName);
             await blobInstance.UploadAsync(fileRequest.imageFile.OpenReadStream());
@@ -45,11 +46,25 @@ namespace BusinessObjects.IService.Implements
         public bool IsImageFile(string fileName)
         {
             string[] allowedExtensions = { ".jpg", ".jpeg", ".png" };
-
             string extension = Path.GetExtension(fileName).ToLower();
             return allowedExtensions.Contains(extension);
         }
 
+        private string GetUniqueBlobName(BlobContainerClient containerClient, string blobName)
+        {
+            // Tạo một tên mới cho blob
+            string uniqueBlobName = blobName;
+            int counter = 1;
 
+            while (containerClient.GetBlobClient(uniqueBlobName).Exists())
+            {
+                string extension = Path.GetExtension(blobName);
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(blobName);
+                uniqueBlobName = $"{fileNameWithoutExtension}_{counter}{extension}";
+                counter++;
+            }
+
+            return uniqueBlobName;
+        }
     }
 }
