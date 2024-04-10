@@ -52,7 +52,7 @@ namespace BFRS_API_V1.Controllers
 
         [HttpGet("GetAreasByFarmId")]
         [Authorize(Roles = "Admin, Manager")]
-        public IActionResult GetAreasByFarmId()
+        public IActionResult GetAreasByFarm()
         {
             try
             {
