@@ -156,7 +156,7 @@ namespace BusinessObjects.IService.Implements
             return true;
         }
 
-        public async Task<bool> InActiveAccountById(int accId )
+        public async Task<bool> ChangStatusAccountById(int accId )
         {
 
             var account = await _accountRepository.GetByIdAsync(accId);
@@ -165,7 +165,7 @@ namespace BusinessObjects.IService.Implements
                 return false;
             }
 
-            account.Status = "INACTIVE";
+            account.Status = account.Status == "ACTIVE" ? "INACTIVE" : "ACTIVE";
 
             var result = _accountRepository.SaveChanges();
             if (result < 1)
@@ -174,6 +174,8 @@ namespace BusinessObjects.IService.Implements
             }
             return true;
         }
+
+        
         public async Task<IEnumerable<AccountDetailResponse>> GetStaffByFarmAsync(int managerId)
         {
             var managerAccount = await _accountRepository.GetByIdAsync(managerId);

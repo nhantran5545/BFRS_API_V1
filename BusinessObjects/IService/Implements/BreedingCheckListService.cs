@@ -29,27 +29,6 @@ namespace BusinessObjects.IService.Implements
             _mapper = mapper;
         }
 
-        /*public BreedingCheckListResponse GetBreedingCheckList(int breedingId, int phase)
-        {
-            var breedingCheckList = _repository.GetBreedingCheckList(breedingId, phase);
-            var breedingCheckListDTO = new BreedingCheckListResponse
-            {
-                BreedingCheckListId = breedingCheckList.BreedingCheckListId,
-                BreedingId = breedingCheckList.BreedingId,
-                Phase = breedingCheckList.Phase,
-                CheckListDetails = breedingCheckList.CheckList.CheckListDetails.Select(cd => new CheckListDetailResponse
-                {
-                    CheckListDetailId = cd.CheckListDetailId,
-                    QuestionName = cd.QuestionName,
-                    Compulsory = cd.Compulsory,
-                    Positive = cd.Positive,
-                    Priority = cd.Priority,
-                    CheckValue = breedingCheckList.BreedingCheckListDetails.FirstOrDefault(bcd => bcd.CheckListDetailId == cd.CheckListDetailId)?.CheckValue
-                }).ToList()
-            };
-            return breedingCheckListDTO;
-        }*/
-
         public async Task<IEnumerable<BreedingCheckListResponse>> GetBreedingCheckListsAsync()
         {
             var breedingCheckLists = await _breedingCheckListRepository.GetAllAsync();

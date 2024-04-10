@@ -12,7 +12,7 @@ namespace BusinessObjects.IService
         Task<bool> UpdateAccount(AccountUpdateRequest accountUpdate);
         Task<AccountDetailResponse?> GetAccountByIdAsync(object accId);
         Task<IEnumerable<AccountDetailResponse>> GetStaffByFarmAsync(int managerId);
-        Task<bool> InActiveAccountById(int accId);
+        Task<bool> ChangStatusAccountById(int accId);
         int GetAccountIdFromToken();
         Task<IEnumerable<Account>> GetAllAccountsAsync();
         Task<bool> CheckUsernameExist(string username);
