@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface IBreedingReasonRepository : IGenericRepository<BreedingReason>
     {
+        Task<IEnumerable<BreedingReason>> GetReasonsByBreedingIdAsync(object breedingId);
     }
 }
