@@ -37,6 +37,7 @@ namespace DataAccess.IRepositories.Implements
         {
             return await _context.Breedings
                 .Include(br => br.FatherBird)
+                .ThenInclude(fb => fb.BirdSpecies)
                 .Include(br => br.MotherBird)
                 .Include(br => br.Clutches)
                 .Where(br => br.CreatedBy.Equals(managerId))

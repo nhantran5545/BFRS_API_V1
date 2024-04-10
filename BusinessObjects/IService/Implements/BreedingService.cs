@@ -20,17 +20,19 @@ namespace BusinessObjects.IService.Implements
         private readonly ICageRepository _cageRepository;
         private readonly IBirdSpeciesRepository _birdSpeciesRepository;
         private readonly IClutchRepository _clutchRepository;
+        private readonly IBreedingReasonRepository _breedingReasonRepository;
         private readonly IMapper _mapper;
 
         public BreedingService(IBreedingRepository breedingRepository, IBirdRepository birdRepository,
             ICageRepository cageRepository, IBirdSpeciesRepository birdSpeciesRepository, IClutchRepository clutchRepository,
-            IMapper mapper, IAccountRepository accountRepository)
+            IBreedingReasonRepository breedingReasonRepository, IMapper mapper, IAccountRepository accountRepository)
         {
             _breedingRepository = breedingRepository;
             _birdRepository = birdRepository;
             _cageRepository = cageRepository;
             _birdSpeciesRepository = birdSpeciesRepository;
             _clutchRepository = clutchRepository;
+            _breedingReasonRepository = breedingReasonRepository;
             _mapper = mapper;
             _accountRepository = accountRepository;
         }
@@ -224,8 +226,20 @@ namespace BusinessObjects.IService.Implements
 
                     await CloseClutchesByBreedingId(breeding.BreedingId);
 
+                    if(breeding.Status == "Mating")
+                    {
+                        breeding.Status = "Failed";
+                    }
+                    else if(breeding.Status == "In Progress")
+                    {
+                        breeding.Status = "Cancelled";
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
                     breeding.CoupleSeperated = true;
-                    breeding.Status = breedingUpdateRequest.Status;
                     breeding.Phase = 0;
                     breeding.UpdatedBy = managerId;
                     breeding.UpdatedDate = DateTime.Now;
@@ -253,6 +267,16 @@ namespace BusinessObjects.IService.Implements
                     }
 
                     _cageRepository.SaveChanges();
+
+                    var breedingReason = new BreedingReason()
+                    {
+                        BreedingId = breeding.BreedingId,
+                        Description = breedingUpdateRequest.Reason,
+                        CreatedDate = DateTime.Now,
+                        CreatedBy = managerId
+                    };
+                    await _breedingReasonRepository.AddAsync(breedingReason);
+                    _breedingReasonRepository.SaveChanges();
 
                     transaction.Commit();
                     return true;
