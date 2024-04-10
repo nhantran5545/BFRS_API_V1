@@ -49,15 +49,6 @@ namespace BusinessObjects.IService.Implements
              await _cageRepository.AddAsync(cage);
             _cageRepository.SaveChanges();
         }
-        public void DeleteCage(Cage cage)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteCageById(object cageId)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<IEnumerable<CageResponse>> GetAllCagesAsync()
         {
@@ -77,7 +68,11 @@ namespace BusinessObjects.IService.Implements
             return _mapper.Map<IEnumerable<CageResponse>>(cages);
         }
 
-
+        public async Task<IEnumerable<CageResponse>> GetCagesByFarmIdAsync(int farmId)
+        {
+            var cages = await _cageRepository.GetCagesByFarmIdAsync(farmId);
+            return _mapper.Map<IEnumerable<CageResponse>>(cages);
+        }
 
         public async Task<IEnumerable<CageResponse>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId)
         {
@@ -109,8 +104,6 @@ namespace BusinessObjects.IService.Implements
             var cages = await _cageRepository.GetStandbyCagesByFarmId(farmId);
             return cages.Select(c => _mapper.Map<CageResponse>(c));
         }
-
-
 
         public async Task<bool> UpdateCageAsync(int cageId, CageUpdateRequest request)
         {

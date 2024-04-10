@@ -51,6 +51,13 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
-
+        public async Task<IEnumerable<Cage>> GetCagesByFarmIdAsync(int farmId)
+        {
+            return await _context.Cages
+                .Include(c => c.Area)
+                .Include(c => c.Account)
+                .Where(c => c.Area != null && c.Area.FarmId.Equals(farmId))
+                .ToListAsync();
+        }
     }
 }

@@ -65,6 +65,24 @@ namespace BFRS_API_V1.Controllers
             }
         }
 
+        [HttpGet("farm/{farmId}")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> GetCagesByFarmId(int farmId)
+        {
+            var farm = await _farmService.GetFarmByIdAsync(farmId);
+            if(farm == null)
+            {
+                return NotFound("Farm not found");
+            }
+
+            var cages = await _cageService.GetCagesByFarmIdAsync(farmId);
+            if (cages == null)
+            {
+                return NotFound("Cages not found");
+            }
+            return Ok(cages);
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> CreateCage([FromBody] CageAddRequest request)
