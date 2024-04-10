@@ -37,6 +37,7 @@ namespace DataAccess.IRepositories.Implements
             return await _context.Cages
                 .Include(c => c.Account)
                 .Include(c => c.Birds)
+                .Include(c => c.Area)
                 .Where(c => c.AccountId == staffId)
                 .ToListAsync();
         }
