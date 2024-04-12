@@ -11,7 +11,6 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Azure.Storage.Blobs;
-using BFRS_API_V1.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -171,7 +170,6 @@ app.UseCors(builder =>
 
 app.UseAuthentication();
 app.UseAuthorization();
-//app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 
