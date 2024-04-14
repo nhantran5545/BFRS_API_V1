@@ -18,21 +18,28 @@ namespace BusinessObjects.IService.Implements
         private readonly ICageRepository _cageRepository;
         private readonly IBirdRepository _birdRepository;
         private readonly IAreaRepository _areaRepository;
+        private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
-        public CageService(ICageRepository cageRepository, IBirdRepository birdRepository, IMapper mapper, IAreaRepository areaRepository)
+        public CageService(ICageRepository cageRepository, IBirdRepository birdRepository, IMapper mapper, IAreaRepository areaRepository , IAccountRepository accountRepository)
         {
             _cageRepository = cageRepository;
             _birdRepository = birdRepository;
             _areaRepository = areaRepository;
+            _accountRepository = accountRepository;
             _mapper = mapper;
         }
         public async Task CreateCageAsync(CageAddRequest request)
         {
             var area = await _areaRepository.GetByIdAsync(request.AreaId);
-
             if (area == null)
             {
-                throw new Exception("Invalid area");
+                throw new Exception("Invalid area or Area is not exist");
+            }
+
+            var account = await _accountRepository.GetByIdAsync(request.AccountId);
+            if (account == null)
+            {
+                throw new Exception("Invalid account or Account is not exist");
             }
 
             var cage = _mapper.Map<Cage>(request);
@@ -46,9 +53,10 @@ namespace BusinessObjects.IService.Implements
                 cage.Status = "Standby";
             }
 
-             await _cageRepository.AddAsync(cage);
+            await _cageRepository.AddAsync(cage);
             _cageRepository.SaveChanges();
         }
+
 
         public async Task<IEnumerable<CageResponse>> GetAllCagesAsync()
         {
@@ -110,7 +118,7 @@ namespace BusinessObjects.IService.Implements
             var cage = await _cageRepository.GetByIdAsync(cageId);
             if (cage == null)
             {
-                throw new ArgumentException("Cage not found");
+                 return false;
             }
 
             var currentArea = await _areaRepository.GetByIdAsync(cage.AreaId);

@@ -2,6 +2,7 @@
 using BusinessObjects.IService.Implements;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,11 +29,31 @@ namespace BFRS_API_V1.Controllers
             try
             {
                 var areaId = await _areaService.CreateAreaAsync(areaAddRequest);
-                return Ok("add successful");
+                return Ok("Add successful");
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{areaId}")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> UpdateCage(int areaId, AreaUpdateRequest areaUpdateRequest)
+        {
+            var cage = await _areaService.GetAreaByIdAsync(areaId);
+            if (cage == null)
+            {
+                return NotFound("Area Not Found");
+            }
+            var success = await _areaService.UpdateAreaAsync(areaId, areaUpdateRequest);
+            if (success)
+            {
+                return Ok("Area updated successfully");
+            }
+            else
+            {
+                return BadRequest("Failed to update area");
             }
         }
 
@@ -71,7 +92,7 @@ namespace BFRS_API_V1.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "Admin, Manager")]
-        public async Task<ActionResult<IEnumerable<AreaResponse>>> GetAllArea()
+        public async Task<ActionResult<IEnumerable<AreaResponse>>> GetAllAreas()
         {
             try
             {

@@ -18,6 +18,7 @@ namespace BusinessObjects.IService
         Task<IEnumerable<BirdResponse>> GetBirdsByFarmId(object farmId);
         Task<IEnumerable<BirdResponse>> GetInRestBirdsBySpeciesIdAndFarmId(object speciesId, object farmId);
         Task<IEnumerable<BirdResponse>> GetBirdsByStaffId(object staffId);
+        Task<int> GetTotalBirdCountByStaffId(object staffId);
         Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId);
         Task<BirdDetailResponse?> GetBirdByEggIdAsync(object eggId);
         Task<Dictionary<string, BirdPedi>> GetPedigreeOfABird(int birdId);

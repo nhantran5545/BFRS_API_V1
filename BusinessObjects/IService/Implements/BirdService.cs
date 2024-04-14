@@ -156,6 +156,12 @@ namespace BusinessObjects.IService.Implements
             var birds = await _birdRepository.GetBirdsByStaffId(staffId);
             return birds.Select(b => _mapper.Map<BirdResponse>(b));
         }
+        public async Task<int> GetTotalBirdCountByStaffId(object staffId)
+        {
+            var birds = await _birdRepository.GetBirdsByStaffId(staffId);
+            return birds.Count();
+        }
+
 
         public async Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId)
         {

@@ -10,6 +10,8 @@ using BusinessObjects.ResponseModels;
 using Microsoft.AspNetCore.OData.Query;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.IService.Implements;
+using BusinessObjects.RequestModels;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -39,6 +41,25 @@ namespace BFRS_API_V1.Controllers
             return Ok(birdSpecies);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<ActionResult<int>> CreateBirdSpecies(BirdSpeciesRequest speciesRequest)
+        {
+            try
+            {
+                var species = await _birdSpeciesService.CreateBirdSpeciesAsync(speciesRequest);
+                return Ok("Add successful");
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return StatusCode(403, "You are not authorized to access this resource.");
+            }
+        }
+
         // GET: api/BirdSpecies/5
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin, Manager")]
@@ -50,6 +71,23 @@ namespace BFRS_API_V1.Controllers
                 return NotFound("There are no bird species");
             }
             return Ok(birdspecy);
+        }
+
+        [HttpPut("{speciesId}")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> UpdateSpecies(int speciesId, [FromBody] BirdSpeciesRequest request)
+        {
+            var birdSpecies = await _birdSpeciesService.GetBirdSpeciesByIdAsync(speciesId);
+            if (birdSpecies == null)
+            {
+                return NotFound("Farm not found");
+            }
+
+            if (await _birdSpeciesService.UpdateSpeciesAsync(speciesId, request))
+            {
+                return Ok(request);
+            }
+            return BadRequest("Something wrong with the server Please try again");
         }
     }
 }

@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
+using Azure;
+using Azure.Core;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
+using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -20,10 +25,19 @@ namespace BusinessObjects.IService.Implements
             _mapper = mapper;
         }
 
-        public async Task CreateFarmAsync(Farm farm)
+        public async Task<int> CreateFarmAsync(FarmRequest farmRequest)
         {
+           
+            var farm = _mapper.Map<Farm>(farmRequest);
+            farm.Status = "Active";
+
             await _farmRepository.AddAsync(farm);
-            _farmRepository.SaveChanges();
+            var result = _farmRepository.SaveChanges();
+            if (result < 1)
+            {
+                return result;
+            }
+            return farm.FarmId;
         }
 
         public void DeleteFarm(Farm farm)
@@ -36,19 +50,37 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Farm>> GetAllFarmsAsync()
+        public async Task<IEnumerable<FarmResponse>> GetAllFarmsAsync()
         {
-            return await _farmRepository.GetAllAsync();
+            var farm = await _farmRepository.GetAllAsync();
+            return farm.Select(b => _mapper.Map<FarmResponse>(b));
         }
 
-        public async Task<Farm?> GetFarmByIdAsync(object farmId)
+        public async Task<FarmResponse?> GetFarmByIdAsync(int farmId)
         {
-            return await _farmRepository.GetByIdAsync(farmId);
+            var farm = await _farmRepository.GetByIdAsync(farmId);
+            return _mapper.Map<FarmResponse>(farm);
         }
 
-        public void UpdateFarm(Farm farm)
+        public async Task<bool> UpdateFarmAsync(int farmId, FarmUpdateRequest request)
         {
-            throw new NotImplementedException();
+            var farm = await _farmRepository.GetByIdAsync(farmId);
+            if(farm == null)
+            {
+                return false;
+            }
+            farm.FarmName = request.FarmName;
+            farm.Address = request.Address;
+            farm.PhoneNumber = request.PhoneNumber;
+            farm.Description = request.Description;
+            farm.Status = request.Status;
+
+            var result = _farmRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

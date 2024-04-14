@@ -82,35 +82,38 @@ namespace BFRS_API_V1.Controllers
             }
             return Ok(cages);
         }
-
         [HttpPost]
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> CreateCage([FromBody] CageAddRequest request)
         {
+            try
+            {
                 await _cageService.CreateCageAsync(request);
-                return Ok("Cage created successfully.");
+                return Ok("Add cage successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{cageId}")]
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> UpdateCage(int cageId, CageUpdateRequest request)
         {
-            try
+            var cage = await _cageService.GetCageByIdAsync(cageId);
+            if (cage == null)
             {
-
-                var success = await _cageService.UpdateCageAsync(cageId, request);
-                if (success)
-                {
-                    return Ok("Cage updated successfully");
-                }
-                else
-                {
-                    return BadRequest("Failed to update cage");
-                }
+                return NotFound("Cage Not Found");
             }
-            catch (InvalidOperationException ex)
+            var success = await _cageService.UpdateCageAsync(cageId, request);
+            if (success)
             {
-                return BadRequest(ex.Message);
+                return Ok("Cage updated successfully");
+            }
+            else
+            {
+                return BadRequest("Failed to update cage");
             }
         }
 
@@ -167,11 +170,11 @@ namespace BFRS_API_V1.Controllers
         }
 
         // GET: api/Cages/5
-        [HttpGet("{id}")]
+        [HttpGet("{cageId}")]
         [Authorize]
-        public async Task<ActionResult<CageDetailResponse>> GetCage(int id)
+        public async Task<ActionResult<CageDetailResponse>> GetCage(int cageId)
         {
-            var cage = await _cageService.GetCageByIdAsync(id);
+            var cage = await _cageService.GetCageByIdAsync(cageId);
             if(cage == null)
             {
                 return NotFound("Cage not found");

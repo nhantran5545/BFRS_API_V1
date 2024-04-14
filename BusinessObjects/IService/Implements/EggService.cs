@@ -2,6 +2,7 @@
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
+using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -114,6 +115,16 @@ namespace BusinessObjects.IService.Implements
                 return null;
             }
             return convertToResponse(egg);
+        }
+        public async Task<int> GetTotalEggCountByStaffId(object staffId)
+        {
+            var eggs = await _eggRepository.GetEggsByStaffId(staffId);
+            return eggs.Count();
+        }
+
+        public async Task<int> GetEggCountByStatusNameAndManagedByStaff(string status, int staffId)
+        {
+            return await _eggRepository.GetEggCountByStatusNameAndManagedByStaff(status, staffId);
         }
 
         public async Task<bool> UpdateEgg(EggUpdateRequest eggUpdateRequest, int accountId)

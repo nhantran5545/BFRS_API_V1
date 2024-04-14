@@ -46,6 +46,21 @@ namespace DataAccess.IRepositories.Implements
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<Egg>> GetEggsByStaffId(object staffId)
+        {
+            return await _context.Eggs
+                .Where(b => b.CreatedByNavigation.AccountId.Equals(staffId))
+                .Where(b => b.UpdatedByNavigation.AccountId.Equals(staffId))
+                .ToListAsync();
+        }
+
+        public async Task<int> GetEggCountByStatusNameAndManagedByStaff(string statusName, int staffId)
+        {
+            return await _context.Eggs
+                .Where(e => e.Status == statusName && (e.CreatedBy == staffId || e.UpdatedBy == staffId))
+                .CountAsync();
+        }
+
         public async Task<Egg?> GetEggDetailsAsync(object eggId)
         {
             return await _context.Eggs

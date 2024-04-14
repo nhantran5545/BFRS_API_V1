@@ -1,4 +1,6 @@
-﻿using DataAccess.Models;
+﻿using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,11 @@ namespace BusinessObjects.IService
 {
     public interface IIssueService
     {
-        Task CreateIssueAsync(Issue issue);
+        Task<int> CreateIssueAsync(IssueAddRequest issueAddRequest, int accountId);
         void UpdateIssue(Issue issue);
         void DeleteIssue(Issue issue);
         void DeleteIssueById(object issueId);
-        Task<IEnumerable<Issue>> GetAllIssuesAsync();
-        Task<Issue?> GetIssueByIdAsync(object issueId);
+        Task<IEnumerable<IssueResponse>> GetAllIssuesAsync();
+        Task<IssueResponse> GetIssueByIdAsync(int issueId);
     }
 }

@@ -12,5 +12,7 @@ namespace DataAccess.IRepositories
         Task<IEnumerable<Egg>> GetEggsByClutchIdAsync(object clutchId);
         Task<Egg?> GetEggByBirdIdAsync(object birdId);
         Task<Egg?> GetEggDetailsAsync(object eggId);
+        Task<IEnumerable<Egg>> GetEggsByStaffId(object staffId);
+        Task<int> GetEggCountByStatusNameAndManagedByStaff(string statusName, int staffId);
     }
 }

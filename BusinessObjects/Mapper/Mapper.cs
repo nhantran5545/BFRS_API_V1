@@ -90,6 +90,8 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.Account != null ? src.Account.FirstName : string.Empty))
                 .ForMember(dest => dest.LastName,
                             opt => opt.MapFrom(src => src.Account != null ? src.Account.LastName : string.Empty))
+                                .ForMember(dest => dest.BirdQuantity,
+                            opt => opt.MapFrom(src => src.Birds.Count()))
                 .ReverseMap();
             CreateMap<Clutch, ClutchResponse>()
                 .ForMember(dest => dest.CreatedByFirstName,
@@ -121,7 +123,21 @@ namespace BusinessObjects.Mapper
                 .ReverseMap();
             CreateMap<CheckList, CheckListResponse>()
                 .ReverseMap();
+            CreateMap<Farm, FarmResponse>()
 
+                .ReverseMap();
+            CreateMap<Issue, IssueResponse>()
+                .ForMember(dest => dest.CreatedByFirstName,
+                            opt => opt.MapFrom(src => src.CreatedByNavigation != null ? src.CreatedByNavigation.FirstName : string.Empty))
+                .ForMember(dest => dest.CreatedByLastName,
+                            opt => opt.MapFrom(src => src.CreatedByNavigation != null ? src.CreatedByNavigation.LastName : string.Empty))
+                .ForMember(dest => dest.UpdatedByFirstName,
+                            opt => opt.MapFrom(src => src.UpdatedByNavigation != null ? src.UpdatedByNavigation.FirstName : string.Empty))
+                .ForMember(dest => dest.UpdatedByLastName,
+                            opt => opt.MapFrom(src => src.UpdatedByNavigation != null ? src.UpdatedByNavigation.LastName : string.Empty))
+                .ForMember(dest => dest.IssueTypeName,
+                            opt => opt.MapFrom(src => src.IssueType != null ? src.IssueType.IssueName : string.Empty))
+                .ReverseMap();
             CreateMap<CheckListDetail, CheckListDetailResponse>()
                 .ReverseMap();
 
@@ -133,6 +149,8 @@ namespace BusinessObjects.Mapper
             CreateMap<AreaAddRequest, Area>()
                 .ReverseMap();
             CreateMap<BirdAddRequest, Bird>()
+                .ReverseMap();
+            CreateMap<BirdSpeciesRequest, BirdSpecy>()
                 .ReverseMap();
             CreateMap<BirdAddFromEggRequest, Bird>()
                 .ReverseMap();
@@ -153,8 +171,12 @@ namespace BusinessObjects.Mapper
             CreateMap<EggAddRequest, Egg>()
                 .ReverseMap();
             CreateMap<MutationRequest, Mutation>()
+                .ReverseMap(); 
+            CreateMap<FarmRequest, Farm>()
                 .ReverseMap();
             CreateMap<AccountLoginRequest, Account>()
+                .ReverseMap();            
+            CreateMap<IssueAddRequest, Issue>()
                 .ReverseMap();
             #endregion
         }
