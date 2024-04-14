@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.IRepositories.Implements
 {
-    public class EggReasonRepository : GenericRepository<EggReason>, IEggReasonRepository
+    public class ClutchStatusChangeRepository : GenericRepository<ClutchStatusChange>, IClutchStatusChangeRepository
     {
-        public EggReasonRepository(BFRS_DBContext context) : base(context)
+        public ClutchStatusChangeRepository(BFRS_DBContext context) : base(context)
         {
         }
     }

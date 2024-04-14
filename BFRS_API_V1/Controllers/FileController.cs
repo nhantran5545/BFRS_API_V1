@@ -1,5 +1,6 @@
 ﻿using BusinessObjects.IService;
 using BusinessObjects.RequestModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,6 +19,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPost("uploadFile")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> UploadImage([FromForm] FileRequest fileRequest)
         {
             // Kiểm tra xem file có phải là hình ảnh hay không

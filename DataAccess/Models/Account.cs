@@ -8,14 +8,14 @@ namespace DataAccess.Models
         public Account()
         {
             BreedingCreatedByNavigations = new HashSet<Breeding>();
-            BreedingReasons = new HashSet<BreedingReason>();
+            BreedingStatusChanges = new HashSet<BreedingStatusChange>();
             BreedingUpdatedByNavigations = new HashSet<Breeding>();
             Cages = new HashSet<Cage>();
             ClutchCreatedByNavigations = new HashSet<Clutch>();
-            ClutchReasons = new HashSet<ClutchReason>();
+            ClutchStatusChanges = new HashSet<ClutchStatusChange>();
             ClutchUpdatedByNavigations = new HashSet<Clutch>();
             EggCreatedByNavigations = new HashSet<Egg>();
-            EggReasons = new HashSet<EggReason>();
+            EggStatusChanges = new HashSet<EggStatusChange>();
             EggUpdatedByNavigations = new HashSet<Egg>();
             IssueAssignedToNavigations = new HashSet<Issue>();
             IssueCreatedByNavigations = new HashSet<Issue>();
@@ -35,19 +35,17 @@ namespace DataAccess.Models
         public string? Status { get; set; }
 
         public virtual ICollection<Breeding> BreedingCreatedByNavigations { get; set; }
-        public virtual ICollection<BreedingReason> BreedingReasons { get; set; }
+        public virtual ICollection<BreedingStatusChange> BreedingStatusChanges { get; set; }
         public virtual ICollection<Breeding> BreedingUpdatedByNavigations { get; set; }
         public virtual ICollection<Cage> Cages { get; set; }
         public virtual ICollection<Clutch> ClutchCreatedByNavigations { get; set; }
-        public virtual ICollection<ClutchReason> ClutchReasons { get; set; }
+        public virtual ICollection<ClutchStatusChange> ClutchStatusChanges { get; set; }
         public virtual ICollection<Clutch> ClutchUpdatedByNavigations { get; set; }
         public virtual ICollection<Egg> EggCreatedByNavigations { get; set; }
-        public virtual ICollection<EggReason> EggReasons { get; set; }
+        public virtual ICollection<EggStatusChange> EggStatusChanges { get; set; }
         public virtual ICollection<Egg> EggUpdatedByNavigations { get; set; }
         public virtual ICollection<Issue> IssueAssignedToNavigations { get; set; }
         public virtual ICollection<Issue> IssueCreatedByNavigations { get; set; }
         public virtual ICollection<Issue> IssueUpdatedByNavigations { get; set; }
     }
-
-
 }

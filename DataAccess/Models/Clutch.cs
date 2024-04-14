@@ -8,12 +8,12 @@ namespace DataAccess.Models
         public Clutch()
         {
             BreedingCheckLists = new HashSet<BreedingCheckList>();
-            ClutchReasons = new HashSet<ClutchReason>();
+            ClutchStatusChanges = new HashSet<ClutchStatusChange>();
             Eggs = new HashSet<Egg>();
         }
 
         public int ClutchId { get; set; }
-        public int BreedingId { get; set; }
+        public int? BreedingId { get; set; }
         public DateTime? BroodStartDate { get; set; }
         public DateTime? BroodEndDate { get; set; }
         public int? CageId { get; set; }
@@ -29,7 +29,7 @@ namespace DataAccess.Models
         public virtual Account? CreatedByNavigation { get; set; }
         public virtual Account? UpdatedByNavigation { get; set; }
         public virtual ICollection<BreedingCheckList> BreedingCheckLists { get; set; }
-        public virtual ICollection<ClutchReason> ClutchReasons { get; set; }
+        public virtual ICollection<ClutchStatusChange> ClutchStatusChanges { get; set; }
         public virtual ICollection<Egg> Eggs { get; set; }
     }
 }
