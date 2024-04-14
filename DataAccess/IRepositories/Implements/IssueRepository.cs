@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,25 @@ namespace DataAccess.IRepositories.Implements
     {
         public IssueRepository(BFRS_DBContext context) : base(context)
         {
+        }
+        public override async Task<IEnumerable<Issue>> GetAllAsync()
+        {
+            return await _context.Issues
+                //.Include(c => c.Breeding)
+                .Include(c => c.IssueType)
+                .Include(c => c.CreatedByNavigation)
+                .ToListAsync();
+        }
+
+        public override async Task<Issue?> GetByIdAsync(object id)
+        {
+            return await _context.Issues
+               //.Include(c => c.Breeding)
+               .Include(c => c.IssueType)
+               .Include(c => c.CreatedByNavigation)
+               .Include(c => c.UpdatedByNavigation)
+               .Where(c => c.IssueId.Equals(id))
+               .FirstOrDefaultAsync();
         }
     }
 }

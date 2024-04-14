@@ -124,6 +124,19 @@ namespace BusinessObjects.Mapper
             CreateMap<CheckList, CheckListResponse>()
                 .ReverseMap();
             CreateMap<Farm, FarmResponse>()
+
+                .ReverseMap();
+            CreateMap<Issue, IssueResponse>()
+                .ForMember(dest => dest.CreatedByFirstName,
+                            opt => opt.MapFrom(src => src.CreatedByNavigation != null ? src.CreatedByNavigation.FirstName : string.Empty))
+                .ForMember(dest => dest.CreatedByLastName,
+                            opt => opt.MapFrom(src => src.CreatedByNavigation != null ? src.CreatedByNavigation.LastName : string.Empty))
+                .ForMember(dest => dest.UpdatedByFirstName,
+                            opt => opt.MapFrom(src => src.UpdatedByNavigation != null ? src.UpdatedByNavigation.FirstName : string.Empty))
+                .ForMember(dest => dest.UpdatedByLastName,
+                            opt => opt.MapFrom(src => src.UpdatedByNavigation != null ? src.UpdatedByNavigation.LastName : string.Empty))
+                .ForMember(dest => dest.IssueTypeName,
+                            opt => opt.MapFrom(src => src.IssueType != null ? src.IssueType.IssueName : string.Empty))
                 .ReverseMap();
             CreateMap<CheckListDetail, CheckListDetailResponse>()
                 .ReverseMap();
@@ -162,6 +175,8 @@ namespace BusinessObjects.Mapper
             CreateMap<FarmRequest, Farm>()
                 .ReverseMap();
             CreateMap<AccountLoginRequest, Account>()
+                .ReverseMap();            
+            CreateMap<IssueAddRequest, Issue>()
                 .ReverseMap();
             #endregion
         }

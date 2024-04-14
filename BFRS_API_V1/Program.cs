@@ -101,7 +101,6 @@ builder.Services.AddScoped<ICheckListService, CheckListService>();
 builder.Services.AddScoped<IClutchService, ClutchService>();
 builder.Services.AddScoped<IEggService, EggService>();
 builder.Services.AddScoped<IFarmService, FarmService>();
-builder.Services.AddScoped<IIssueService, IssueService>();
 builder.Services.AddScoped<IMutationService, MutationService>();
 builder.Services.AddScoped<ICheckListDetailService, CheckListDetailService>();
 builder.Services.AddScoped<ICheckListService, CheckListService>();
@@ -110,6 +109,7 @@ builder.Services.AddScoped<IBreedingCheckListService, BreedingCheckListService>(
 builder.Services.AddScoped<IEggStatusChangeService, EggStatusChangeService>();
 builder.Services.AddScoped<IClutchStatusChangeService, ClutchStatusChangeService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IIssueService, IssueService>();
 
 // Mapper
 var mapperConfig = new MapperConfiguration(mc =>

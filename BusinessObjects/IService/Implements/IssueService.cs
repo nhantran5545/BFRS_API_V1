@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;
@@ -12,16 +14,40 @@ namespace BusinessObjects.IService.Implements
     public class IssueService : IIssueService
     {
         private readonly IIssueRepository _issueRepository;
+        private readonly IBreedingRepository _breedingRepository;
         private readonly IMapper _mapper;
-        public IssueService(IIssueRepository issueRepository, IMapper mapper)
+        public IssueService(IIssueRepository issueRepository, IMapper mapper, IBreedingRepository breedingRepository)
         {
             _issueRepository = issueRepository;
             _mapper = mapper;
+            _breedingRepository = breedingRepository;
         }
 
-        public Task CreateIssueAsync(Issue issue)
+        public async Task<int> CreateIssueAsync(IssueAddRequest issueAddRequest, int accountId)
         {
-            throw new NotImplementedException();
+            var issue = _mapper.Map<Issue>(issueAddRequest);
+            if (issue == null)
+            {
+                return -1;
+            }
+
+            var breeding = await _breedingRepository.GetByIdAsync(issueAddRequest.BreedingId);
+            if (breeding == null)
+            {
+                return -1;
+            }
+            issue.IssueName = issueAddRequest.IssueName;
+            issue.BreedingId = issueAddRequest.BreedingId;
+            issue.Description = issueAddRequest.Description;
+            issue.IssueTypeId = issueAddRequest.IssueTypeId;
+            issue.CreatedBy = accountId;
+            issue.CreatedDate = DateTime.Now;
+            issue.AssignedTo = breeding.CreatedBy;
+            issue.Status = "Active";
+            await _issueRepository.AddAsync(issue);
+            _issueRepository.SaveChanges();
+            return issue.IssueId;
+
         }
 
         public void DeleteIssue(Issue issue)
@@ -34,14 +60,16 @@ namespace BusinessObjects.IService.Implements
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Issue>> GetAllIssuesAsync()
+        public async Task<IEnumerable<IssueResponse>> GetAllIssuesAsync()
         {
-            throw new NotImplementedException();
+            var issues = await _issueRepository.GetAllAsync();
+            return issues.Select(b => _mapper.Map<IssueResponse>(b));
         }
 
-        public Task<Issue?> GetIssueByIdAsync(object issueId)
+        public async Task<IssueResponse> GetIssueByIdAsync(int issueId)
         {
-            throw new NotImplementedException();
+            var issue = await _issueRepository.GetByIdAsync(issueId);
+            return _mapper.Map<IssueResponse>(issue);
         }
 
         public void UpdateIssue(Issue issue)
