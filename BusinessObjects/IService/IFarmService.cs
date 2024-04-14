@@ -1,4 +1,6 @@
-﻿using DataAccess.Models;
+﻿using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels;
+using DataAccess.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,11 @@ namespace BusinessObjects.IService
 {
     public interface IFarmService
     {
-        Task CreateFarmAsync(Farm farm);
-        void UpdateFarm(Farm farm);
+        Task<int> CreateFarmAsync(FarmRequest farmRequest);
+        Task<bool> UpdateCageAsync(int cageId, CageUpdateRequest request);
         void DeleteFarm(Farm farm);
         void DeleteFarmById(object farmId);
-        Task<IEnumerable<Farm>> GetAllFarmsAsync();
-        Task<Farm?> GetFarmByIdAsync(object farmId);
+        Task<IEnumerable<FarmResponse>> GetAllFarmsAsync();
+        Task<FarmResponse?> GetFarmByIdAsync(int farmId);
     }
 }

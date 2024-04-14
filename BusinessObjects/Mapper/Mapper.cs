@@ -153,6 +153,8 @@ namespace BusinessObjects.Mapper
             CreateMap<EggAddRequest, Egg>()
                 .ReverseMap();
             CreateMap<MutationRequest, Mutation>()
+                .ReverseMap(); 
+            CreateMap<FarmRequest, Farm>()
                 .ReverseMap();
             CreateMap<AccountLoginRequest, Account>()
                 .ReverseMap();

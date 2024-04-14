@@ -82,13 +82,20 @@ namespace BFRS_API_V1.Controllers
             }
             return Ok(cages);
         }
-
         [HttpPost]
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> CreateCage([FromBody] CageAddRequest request)
         {
+            try
+            {
                 await _cageService.CreateCageAsync(request);
-                return Ok("Cage created successfully.");
+                return Ok("Add cage successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        
         }
 
         [HttpPut("{cageId}")]

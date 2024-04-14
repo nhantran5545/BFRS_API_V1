@@ -28,7 +28,7 @@ namespace BFRS_API_V1.Controllers
             try
             {
                 var areaId = await _areaService.CreateAreaAsync(areaAddRequest);
-                return Ok("add successful");
+                return Ok("Add successful");
             }
             catch (ArgumentException ex)
             {
@@ -71,7 +71,7 @@ namespace BFRS_API_V1.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "Admin, Manager")]
-        public async Task<ActionResult<IEnumerable<AreaResponse>>> GetAllArea()
+        public async Task<ActionResult<IEnumerable<AreaResponse>>> GetAllAreas()
         {
             try
             {
