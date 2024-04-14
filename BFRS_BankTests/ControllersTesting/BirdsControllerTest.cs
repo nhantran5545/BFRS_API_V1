@@ -29,7 +29,7 @@ namespace BFRS_BankTests.ControllersTesting
         [TestMethod]
         public async Task Get_retrieves_Birds()
         {
-            var birds = await _httpClient.GetAsync("/api/Area");
+            var birds = await _httpClient.GetAsync("/api/Birds");
 
             //assert
             Assert.AreEqual(HttpStatusCode.OK, birds.StatusCode);

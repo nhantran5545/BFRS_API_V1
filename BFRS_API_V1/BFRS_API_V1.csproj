@@ -26,5 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BusinessObjects\BusinessObjects.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<InternalsVisibleTo Include="BFRS_BankTests" />
+	</ItemGroup>
 </Project>
