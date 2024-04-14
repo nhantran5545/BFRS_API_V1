@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface IBirdMutationRepository : IGenericRepository<BirdMutation>
     {
+        Task<IEnumerable<BirdMutation>> GetByBirdId(object birdId);
     }
 }

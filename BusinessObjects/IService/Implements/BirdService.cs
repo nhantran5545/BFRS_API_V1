@@ -166,7 +166,25 @@ namespace BusinessObjects.IService.Implements
         public async Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId)
         {
             var bird = await _birdRepository.GetByIdAsync(birdId);
-            return _mapper.Map<BirdDetailResponse>(bird);
+            if (bird == null)
+            {
+                return null;
+            }
+
+            var birdResponse = _mapper.Map<BirdDetailResponse>(bird);
+            if(bird.BirdMutations.Any())
+            {
+                List<IndividualMutation> mutations = new List<IndividualMutation>();
+                foreach (var item in bird.BirdMutations)
+                {
+                    var individualMutation = _mapper.Map<IndividualMutation>(item.Mutation);
+                    mutations.Add(individualMutation);
+                }
+
+                birdResponse.IndividualMutations = mutations;
+            }
+            
+            return birdResponse;
         }
 
         public async Task<BirdDetailResponse?> GetBirdByEggIdAsync(object eggId)

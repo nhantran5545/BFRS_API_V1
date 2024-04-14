@@ -23,5 +23,6 @@ namespace BusinessObjects.RequestModels
         public string? Image { get; set; }
         public string? LifeStage { get; set; }
         public string? Status { get; set; }
+        public List<MutationRequest>? MutationRequests { get; set; }
     }
 }

@@ -72,6 +72,7 @@ namespace DataAccess.IRepositories.Implements
                 .Include(b => b.BirdSpecies)
                 .Include(b => b.Cage)
                 .Include(b => b.BirdMutations)
+                .ThenInclude(bm => bm.Mutation)
                 .Where(b => b.BirdId.Equals(id))
                 .FirstOrDefaultAsync();
         }

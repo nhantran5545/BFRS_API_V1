@@ -126,6 +126,8 @@ namespace BusinessObjects.Mapper
             CreateMap<Farm, FarmResponse>()
 
                 .ReverseMap();
+            CreateMap<Mutation, IndividualMutation>()
+                .ReverseMap();
             CreateMap<Issue, IssueResponse>()
                 .ForMember(dest => dest.CreatedByFirstName,
                             opt => opt.MapFrom(src => src.CreatedByNavigation != null ? src.CreatedByNavigation.FirstName : string.Empty))
