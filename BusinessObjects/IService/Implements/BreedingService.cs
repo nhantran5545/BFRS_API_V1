@@ -20,12 +20,12 @@ namespace BusinessObjects.IService.Implements
         private readonly ICageRepository _cageRepository;
         private readonly IBirdSpeciesRepository _birdSpeciesRepository;
         private readonly IClutchRepository _clutchRepository;
-        private readonly IBreedingReasonRepository _breedingReasonRepository;
+        private readonly IBreedingStatusChangeRepository _breedingReasonRepository;
         private readonly IMapper _mapper;
 
         public BreedingService(IBreedingRepository breedingRepository, IBirdRepository birdRepository,
             ICageRepository cageRepository, IBirdSpeciesRepository birdSpeciesRepository, IClutchRepository clutchRepository,
-            IBreedingReasonRepository breedingReasonRepository, IMapper mapper, IAccountRepository accountRepository)
+            IBreedingStatusChangeRepository breedingReasonRepository, IMapper mapper, IAccountRepository accountRepository)
         {
             _breedingRepository = breedingRepository;
             _birdRepository = birdRepository;
@@ -268,12 +268,12 @@ namespace BusinessObjects.IService.Implements
 
                     _cageRepository.SaveChanges();
 
-                    var breedingReason = new BreedingReason()
+                    var breedingReason = new BreedingStatusChange()
                     {
                         BreedingId = breeding.BreedingId,
                         Description = breedingUpdateRequest.Reason,
-                        CreatedDate = DateTime.Now,
-                        CreatedBy = managerId
+                        ChangedDate = DateTime.Now,
+                        ChangedBy = managerId
                     };
                     await _breedingReasonRepository.AddAsync(breedingReason);
                     _breedingReasonRepository.SaveChanges();

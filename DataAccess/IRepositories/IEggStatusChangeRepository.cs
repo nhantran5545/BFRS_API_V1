@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.IRepositories
 {
-    public interface IClutchReasonRepository : IGenericRepository<ClutchReason>
+    public interface IEggStatusChangeRepository : IGenericRepository<EggStatusChange>
     {
     }
 }

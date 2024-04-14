@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccess.IRepositories
 {
-    public interface IEggReasonRepository : IGenericRepository<EggReason>
+    public interface IBreedingStatusChangeRepository : IGenericRepository<BreedingStatusChange>
+
     {
+        Task<IEnumerable<BreedingStatusChange>> GetReasonsByBreedingIdAsync(object breedingId);
     }
 }

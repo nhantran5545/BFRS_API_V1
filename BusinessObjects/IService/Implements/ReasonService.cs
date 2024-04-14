@@ -11,10 +11,10 @@ namespace BusinessObjects.IService.Implements
 {
     public class ReasonService : IReasonService
     {
-        private readonly IBreedingReasonRepository _breedingReasonRepository;
+        private readonly IBreedingStatusChangeRepository _breedingReasonRepository;
         private readonly IMapper _mapper;
 
-        public ReasonService(IBreedingReasonRepository breedingReasonRepository, IMapper mapper)
+        public ReasonService(IBreedingStatusChangeRepository breedingReasonRepository, IMapper mapper)
         {
             _breedingReasonRepository = breedingReasonRepository;
             _mapper = mapper;

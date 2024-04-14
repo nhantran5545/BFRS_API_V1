@@ -9,7 +9,7 @@ namespace DataAccess.Models
         {
             BreedingCheckLists = new HashSet<BreedingCheckList>();
             EggBirds = new HashSet<EggBird>();
-            EggReasons = new HashSet<EggReason>();
+            EggStatusChanges = new HashSet<EggStatusChange>();
         }
 
         public int EggId { get; set; }
@@ -27,6 +27,6 @@ namespace DataAccess.Models
         public virtual Account? UpdatedByNavigation { get; set; }
         public virtual ICollection<BreedingCheckList> BreedingCheckLists { get; set; }
         public virtual ICollection<EggBird> EggBirds { get; set; }
-        public virtual ICollection<EggReason> EggReasons { get; set; }
+        public virtual ICollection<EggStatusChange> EggStatusChanges { get; set; }
     }
 }

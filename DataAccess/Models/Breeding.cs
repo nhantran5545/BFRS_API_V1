@@ -8,17 +8,17 @@ namespace DataAccess.Models
         public Breeding()
         {
             BreedingCheckLists = new HashSet<BreedingCheckList>();
-            BreedingReasons = new HashSet<BreedingReason>();
+            BreedingStatusChanges = new HashSet<BreedingStatusChange>();
             Clutches = new HashSet<Clutch>();
             Issues = new HashSet<Issue>();
         }
 
         public int BreedingId { get; set; }
-        public int FatherBirdId { get; set; }
-        public int MotherBirdId { get; set; }
-        public bool CoupleSeperated { get; set; }
-        public int CageId { get; set; }
-        public int Phase { get; set; }
+        public int? FatherBirdId { get; set; }
+        public int? MotherBirdId { get; set; }
+        public bool? CoupleSeperated { get; set; }
+        public int? CageId { get; set; }
+        public int? Phase { get; set; }
         public DateTime? NextCheck { get; set; }
         public DateTime? CreatedDate { get; set; }
         public int? CreatedBy { get; set; }
@@ -32,7 +32,7 @@ namespace DataAccess.Models
         public virtual Bird? MotherBird { get; set; }
         public virtual Account? UpdatedByNavigation { get; set; }
         public virtual ICollection<BreedingCheckList> BreedingCheckLists { get; set; }
-        public virtual ICollection<BreedingReason> BreedingReasons { get; set; }
+        public virtual ICollection<BreedingStatusChange> BreedingStatusChanges { get; set; }
         public virtual ICollection<Clutch> Clutches { get; set; }
         public virtual ICollection<Issue> Issues { get; set; }
     }

@@ -26,15 +26,15 @@ namespace DataAccess.Models
         public virtual DbSet<BreedingCheckList> BreedingCheckLists { get; set; } = null!;
         public virtual DbSet<BreedingCheckListDetail> BreedingCheckListDetails { get; set; } = null!;
         public virtual DbSet<BreedingNorm> BreedingNorms { get; set; } = null!;
-        public virtual DbSet<BreedingReason> BreedingReasons { get; set; } = null!;
+        public virtual DbSet<BreedingStatusChange> BreedingStatusChanges { get; set; } = null!;
         public virtual DbSet<Cage> Cages { get; set; } = null!;
         public virtual DbSet<CheckList> CheckLists { get; set; } = null!;
         public virtual DbSet<CheckListDetail> CheckListDetails { get; set; } = null!;
         public virtual DbSet<Clutch> Clutches { get; set; } = null!;
-        public virtual DbSet<ClutchReason> ClutchReasons { get; set; } = null!;
+        public virtual DbSet<ClutchStatusChange> ClutchStatusChanges { get; set; } = null!;
         public virtual DbSet<Egg> Eggs { get; set; } = null!;
         public virtual DbSet<EggBird> EggBirds { get; set; } = null!;
-        public virtual DbSet<EggReason> EggReasons { get; set; } = null!;
+        public virtual DbSet<EggStatusChange> EggStatusChanges { get; set; } = null!;
         public virtual DbSet<Farm> Farms { get; set; } = null!;
         public virtual DbSet<Issue> Issues { get; set; } = null!;
         public virtual DbSet<IssueType> IssueTypes { get; set; } = null!;
@@ -43,6 +43,7 @@ namespace DataAccess.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -293,24 +294,29 @@ namespace DataAccess.Models
                     .HasConstraintName("FK_BirdSpeciesBreedingNorm");
             });
 
-            modelBuilder.Entity<BreedingReason>(entity =>
+            modelBuilder.Entity<BreedingStatusChange>(entity =>
             {
-                entity.ToTable("BreedingReason");
+                entity.HasKey(e => e.StatusChangeId)
+                    .HasName("PK__Breeding__62B7F1EB6C2FE11E");
 
-                entity.Property(e => e.CreatedDate).HasColumnType("date");
+                entity.ToTable("BreedingStatusChange");
+
+                entity.Property(e => e.ChangedDate).HasColumnType("date");
 
                 entity.Property(e => e.Description).HasMaxLength(255);
 
-                entity.Property(e => e.Status).HasMaxLength(50);
+                entity.Property(e => e.NewStatus).HasMaxLength(50);
+
+                entity.Property(e => e.OldStatus).HasMaxLength(50);
 
                 entity.HasOne(d => d.Breeding)
-                    .WithMany(p => p.BreedingReasons)
+                    .WithMany(p => p.BreedingStatusChanges)
                     .HasForeignKey(d => d.BreedingId)
                     .HasConstraintName("FK_BreedingBreedingReason");
 
-                entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.BreedingReasons)
-                    .HasForeignKey(d => d.CreatedBy)
+                entity.HasOne(d => d.ChangedByNavigation)
+                    .WithMany(p => p.BreedingStatusChanges)
+                    .HasForeignKey(d => d.ChangedBy)
                     .HasConstraintName("FK_CreatedByBreedingReason");
             });
 
@@ -400,25 +406,30 @@ namespace DataAccess.Models
                     .HasConstraintName("FK_UpdatedByClutch");
             });
 
-            modelBuilder.Entity<ClutchReason>(entity =>
+            modelBuilder.Entity<ClutchStatusChange>(entity =>
             {
-                entity.ToTable("ClutchReason");
+                entity.HasKey(e => e.ClutchChangeId)
+                    .HasName("PK__ClutchRe__681C6D1F2F5BE883");
 
-                entity.Property(e => e.CreatedDate).HasColumnType("date");
+                entity.ToTable("ClutchStatusChange");
+
+                entity.Property(e => e.ChangedDate).HasColumnType("date");
 
                 entity.Property(e => e.Description).HasMaxLength(255);
 
-                entity.Property(e => e.Status).HasMaxLength(50);
+                entity.Property(e => e.NewStatus).HasMaxLength(50);
+
+                entity.Property(e => e.OldStatus).HasMaxLength(50);
+
+                entity.HasOne(d => d.ChangedByNavigation)
+                    .WithMany(p => p.ClutchStatusChanges)
+                    .HasForeignKey(d => d.ChangedBy)
+                    .HasConstraintName("FK_CreatedByClutchReason");
 
                 entity.HasOne(d => d.Clutch)
-                    .WithMany(p => p.ClutchReasons)
+                    .WithMany(p => p.ClutchStatusChanges)
                     .HasForeignKey(d => d.ClutchId)
                     .HasConstraintName("FK_ClutchClutchReason");
-
-                entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.ClutchReasons)
-                    .HasForeignKey(d => d.CreatedBy)
-                    .HasConstraintName("FK_CreatedByClutchReason");
             });
 
             modelBuilder.Entity<Egg>(entity =>
@@ -472,23 +483,28 @@ namespace DataAccess.Models
                     .HasConstraintName("FK_EggEggBird");
             });
 
-            modelBuilder.Entity<EggReason>(entity =>
+            modelBuilder.Entity<EggStatusChange>(entity =>
             {
-                entity.ToTable("EggReason");
+                entity.HasKey(e => e.EggChangeId)
+                    .HasName("PK__EggReaso__674381AC02D6728F");
 
-                entity.Property(e => e.CreatedDate).HasColumnType("date");
+                entity.ToTable("EggStatusChange");
+
+                entity.Property(e => e.ChangedDate).HasColumnType("date");
 
                 entity.Property(e => e.Description).HasMaxLength(255);
 
-                entity.Property(e => e.Status).HasMaxLength(50);
+                entity.Property(e => e.NewStatus).HasMaxLength(50);
 
-                entity.HasOne(d => d.CreatedByNavigation)
-                    .WithMany(p => p.EggReasons)
-                    .HasForeignKey(d => d.CreatedBy)
+                entity.Property(e => e.OldStatus).HasMaxLength(50);
+
+                entity.HasOne(d => d.ChangedByNavigation)
+                    .WithMany(p => p.EggStatusChanges)
+                    .HasForeignKey(d => d.ChangedBy)
                     .HasConstraintName("FK_CreatedByEggReason");
 
                 entity.HasOne(d => d.Egg)
-                    .WithMany(p => p.EggReasons)
+                    .WithMany(p => p.EggStatusChanges)
                     .HasForeignKey(d => d.EggId)
                     .HasConstraintName("FK_EggEggReason");
             });
