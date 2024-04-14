@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using Azure.Core;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
@@ -61,9 +62,25 @@ namespace BusinessObjects.IService.Implements
             return _mapper.Map<FarmResponse>(farm);
         }
 
-        public Task<bool> UpdateFaAsync(int cageId, CageUpdateRequest request)
+        public async Task<bool> UpdateFarmAsync(int farmId, FarmUpdateRequest request)
         {
-            throw new NotImplementedException();
+            var farm = await _farmRepository.GetByIdAsync(farmId);
+            if(farm == null)
+            {
+                return false;
+            }
+            farm.FarmName = request.FarmName;
+            farm.Address = request.Address;
+            farm.PhoneNumber = request.PhoneNumber;
+            farm.Description = request.Description;
+            farm.Status = request.Status;
+
+            var result = _farmRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

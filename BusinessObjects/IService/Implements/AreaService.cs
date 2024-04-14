@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Azure.Core;
+using Azure;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
+using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -89,6 +92,24 @@ namespace BusinessObjects.IService.Implements
             return _mapper.Map<AreaResponse>(area);
         }
 
+        public async Task<bool> UpdateAreaAsync(int areaId, AreaUpdateRequest areaUpdateRequest)
+        {
+            var area = await _areaRepository.GetByIdAsync(areaId);
+            if (area == null)
+            {
+                return false;
+            }
+            area.AreaName = areaUpdateRequest.AreaName;
+            area.Description = areaUpdateRequest.Description;
+            area.FarmId = areaUpdateRequest.FarmId;
 
+            _areaRepository.Update(area);
+            var result = _areaRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

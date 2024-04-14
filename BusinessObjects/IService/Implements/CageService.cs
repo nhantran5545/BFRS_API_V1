@@ -118,7 +118,7 @@ namespace BusinessObjects.IService.Implements
             var cage = await _cageRepository.GetByIdAsync(cageId);
             if (cage == null)
             {
-                throw new ArgumentException("Cage not found");
+                 return false;
             }
 
             var currentArea = await _areaRepository.GetByIdAsync(cage.AreaId);

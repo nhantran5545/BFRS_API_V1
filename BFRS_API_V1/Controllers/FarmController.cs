@@ -11,16 +11,18 @@ using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.Authorization;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
+using BusinessObjects.IService.Implements;
+using Azure.Core;
 
 namespace BFRS_API_V1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FarmsController : ControllerBase
+    public class FarmController : ControllerBase
     {
         private readonly IFarmService _farmService;
         private readonly IAccountService _accountService;
-        public FarmsController(IFarmService farmService, IAccountService accountService)
+        public FarmController(IFarmService farmService, IAccountService accountService)
         {
             _farmService = farmService;
             _accountService = accountService;
@@ -66,11 +68,11 @@ namespace BFRS_API_V1.Controllers
         }
 
         // GET: api/Farms/5
-        [HttpGet("{id}")]
+        [HttpGet("{farmId}")]
         [Authorize]
-        public async Task<ActionResult<FarmResponse>> GetFarm(int id)
+        public async Task<ActionResult<FarmResponse>> GetFarm(int farmId)
         {
-            var farm = await _farmService.GetFarmByIdAsync(id);
+            var farm = await _farmService.GetFarmByIdAsync(farmId);
             if(farm == null)
             {
                 return NotFound("Farm not found");
@@ -78,5 +80,22 @@ namespace BFRS_API_V1.Controllers
             return Ok(farm);
         }
 
+        [HttpPut("{farmId}")]
+        [Authorize(Roles = "Admin, Manager")]
+        public async Task<IActionResult> PutFarm(int farmId, [FromBody] FarmUpdateRequest farmUpdateRequest)
+        {
+         
+                var farm = await _farmService.GetFarmByIdAsync(farmId);
+                if (farm == null)
+                {
+                    return NotFound("Farm not found");
+                }
+
+                if ( await _farmService.UpdateFarmAsync(farmId, farmUpdateRequest))
+                {
+                    return Ok(farmUpdateRequest);
+                }
+                return BadRequest("Something wrong with the server Please try again");
+        }
     }
 }
