@@ -44,14 +44,14 @@ namespace BusinessObjects.IService.Implements
             {
                 string fatherAncestor = ancestor + "s";
                 int FatherBirdId = bird.FatherBirdId.Value;
-                await TrackAncestorsAsync(fatherAncestor, FatherBirdId);
+                await TrackPedigreeAsync(fatherAncestor, FatherBirdId);
             }
 
             if (bird.MotherBirdId != null)
             {
                 string motherAncestor = ancestor + "d";
                 int MotherBirdId = bird.MotherBirdId.Value;
-                await TrackAncestorsAsync(motherAncestor, MotherBirdId);
+                await TrackPedigreeAsync(motherAncestor, MotherBirdId);
             }
             return;
         }
