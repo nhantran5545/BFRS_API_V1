@@ -128,7 +128,21 @@ namespace BusinessObjects.IService.Implements
         public async Task<IEnumerable<BreedingResponse>> GetAllBreedingsByManagerId(object managerId)
         {
             var breedings = await _breedingRepository.GetAllBreedingsByManagerId(managerId);
-            return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
+            List<BreedingResponse> breedingResponses = new List<BreedingResponse>();
+            if (breedings.Any())
+            {
+                foreach (var item in breedings)
+                {
+                    var breedingResponse = _mapper.Map<BreedingResponse>(item);
+                    var species = await _birdSpeciesRepository.GetByIdAsync(breedingResponse.SpeciesId);
+                    if (species != null)
+                    {
+                        breedingResponse.SpeciesName = species.BirdSpeciesName;
+                    }
+                    breedingResponses.Add(breedingResponse);
+                }
+            }
+            return breedingResponses;
         }
 
 
@@ -230,7 +244,7 @@ namespace BusinessObjects.IService.Implements
                     {
                         breeding.Status = "Failed";
                     }
-                    else if(breeding.Status == "In Progress")
+                    else if(breeding.Status == "InProgress")
                     {
                         breeding.Status = "Cancelled";
                     }

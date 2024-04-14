@@ -17,16 +17,19 @@ namespace BusinessObjects.IService.Implements
         private readonly IEggRepository _eggRepository;
         private readonly IEggBirdRepository _eggBirdRepository;
         private readonly IBirdMutationRepository _birdMutationRepository;
+        private readonly ICageRepository _cageRepository;
         private readonly IMapper _mapper;
 
         public BirdService(IBirdRepository birdRepository, IEggBirdRepository eggBirdRepository,
-            IBirdMutationRepository birdMutationRepository, IMapper mapper, IEggRepository eggRepository)
+            IBirdMutationRepository birdMutationRepository, ICageRepository cageRepository,
+            IMapper mapper, IEggRepository eggRepository)
         {
             _birdRepository = birdRepository;
             _eggBirdRepository = eggBirdRepository;
             _birdMutationRepository = birdMutationRepository;
             _mapper = mapper;
             _eggRepository = eggRepository;
+            _cageRepository = cageRepository;
         }
 
         public async Task<int> CreateBirdAsync(BirdAddRequest birdAddRequest)
@@ -40,6 +43,13 @@ namespace BusinessObjects.IService.Implements
                     {
                         return -1;
                     }
+
+                    var cage = await _cageRepository.GetByIdAsync(birdAddRequest.CageId);
+                    if(cage != null && cage.Area != null)//cage never null
+                    {
+                        bird.FarmId = cage.Area.FarmId;
+                    }
+
                     await _birdRepository.AddAsync(bird);
                     _birdRepository.SaveChanges();
 
@@ -84,10 +94,16 @@ namespace BusinessObjects.IService.Implements
                         return -1;
                     }
 
+                    var cage = await _cageRepository.GetByIdAsync(birdAddFromEggRequest.CageId);
+                    if (cage != null && cage.Area != null)//cage never null
+                    {
+                        bird.FarmId = cage.Area.FarmId;
+                    }
+
                     bird.BirdSpeciesId = breeding.FatherBird.BirdSpeciesId;
                     bird.FatherBirdId = breeding.FatherBirdId;
                     bird.MotherBirdId = breeding.MotherBirdId;
-                    bird.FarmId = breeding.FatherBird.FarmId;
+                    //bird.FarmId = breeding.FatherBird.FarmId;
                     bird.HatchedDate = egg.HatchedDate;
                     await _birdRepository.AddAsync(bird);
                     _birdRepository.SaveChanges();
