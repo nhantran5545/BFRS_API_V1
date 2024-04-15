@@ -83,19 +83,52 @@ namespace BFRS_API_V1.Controllers
         [HttpPut("{farmId}")]
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> PutFarm(int farmId, [FromBody] FarmUpdateRequest farmUpdateRequest)
+        {   
+             var farm = await _farmService.GetFarmByIdAsync(farmId);
+             if (farm == null)
+             {
+                 return NotFound("Farm not found");
+             }
+
+             if ( await _farmService.UpdateFarmAsync(farmId, farmUpdateRequest))
+             {
+                 return Ok(farmUpdateRequest);
+             }
+             return BadRequest("Something wrong with the server Please try again");
+        }
+
+        [HttpPut("status/{farmId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangStatusFarm(int farmId)
         {
-         
-                var farm = await _farmService.GetFarmByIdAsync(farmId);
+            try
+            {
+                var farm = await _farmService.ChangStatusFarmById(farmId);
+
                 if (farm == null)
                 {
-                    return NotFound("Farm not found");
+                    return NotFound("Farm not found.");
                 }
 
-                if ( await _farmService.UpdateFarmAsync(farmId, farmUpdateRequest))
+                if (!User.IsInRole("Admin"))
                 {
-                    return Ok(farmUpdateRequest);
+                    return Forbid(); // Returns 403 Forbidden status code
                 }
-                return BadRequest("Something wrong with the server Please try again");
+
+                if (farm)
+                {
+                    return Ok("Change status successfully.");
+                }
+                return NotFound($"Farm with ID {farmId} not found.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Forbid(ex.Message);
+            }
         }
     }
 }

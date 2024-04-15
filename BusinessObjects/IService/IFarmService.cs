@@ -17,5 +17,6 @@ namespace BusinessObjects.IService
         void DeleteFarmById(object farmId);
         Task<IEnumerable<FarmResponse>> GetAllFarmsAsync();
         Task<FarmResponse?> GetFarmByIdAsync(int farmId);
+        Task<bool> ChangStatusFarmById(int farmId);
     }
 }

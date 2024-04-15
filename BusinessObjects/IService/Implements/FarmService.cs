@@ -82,5 +82,24 @@ namespace BusinessObjects.IService.Implements
             }
             return true;
         }
+
+        public async Task<bool> ChangStatusFarmById(int farmId)
+        {
+
+            var farm = await _farmRepository.GetByIdAsync(farmId);
+            if (farm == null)
+            {
+                return false;
+            }
+
+            farm.Status = farm.Status == "Active" ? "InActive" : "Active";
+
+            var result = _farmRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
