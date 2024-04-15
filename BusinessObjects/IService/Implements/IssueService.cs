@@ -47,7 +47,6 @@ namespace BusinessObjects.IService.Implements
             await _issueRepository.AddAsync(issue);
             _issueRepository.SaveChanges();
             return issue.IssueId;
-
         }
 
         public void DeleteIssue(Issue issue)

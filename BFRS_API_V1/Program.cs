@@ -110,6 +110,7 @@ builder.Services.AddScoped<IEggStatusChangeService, EggStatusChangeService>();
 builder.Services.AddScoped<IClutchStatusChangeService, ClutchStatusChangeService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IIssueService, IssueService>();
+builder.Services.AddScoped<IIssueTypeService, IssueTypeService>();
 
 // Mapper
 var mapperConfig = new MapperConfiguration(mc =>

@@ -141,6 +141,8 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.IssueType != null ? src.IssueType.IssueName : string.Empty))
                 .ReverseMap();
             CreateMap<CheckListDetail, CheckListDetailResponse>()
+                .ReverseMap(); 
+            CreateMap<IssueType, IssueTypeResponse>()
                 .ReverseMap();
 
             #endregion
@@ -179,6 +181,8 @@ namespace BusinessObjects.Mapper
             CreateMap<AccountLoginRequest, Account>()
                 .ReverseMap();            
             CreateMap<IssueAddRequest, Issue>()
+                .ReverseMap();
+            CreateMap<IssueTypeRequest, IssueType>()
                 .ReverseMap();
             #endregion
         }
