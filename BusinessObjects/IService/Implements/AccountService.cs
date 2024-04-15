@@ -156,7 +156,7 @@ namespace BusinessObjects.IService.Implements
             return true;
         }
 
-        public async Task<bool> ChangStatusAccountById(int accId )
+        public async Task<bool> ChangStatusAccountById(int accId)
         {
 
             var account = await _accountRepository.GetByIdAsync(accId);
@@ -165,7 +165,7 @@ namespace BusinessObjects.IService.Implements
                 return false;
             }
 
-            account.Status = account.Status == "ACTIVE" ? "INACTIVE" : "ACTIVE";
+            account.Status = account.Status == "Active" ? "InActive" : "Active";
 
             var result = _accountRepository.SaveChanges();
             if (result < 1)

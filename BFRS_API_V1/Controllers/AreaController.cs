@@ -109,6 +109,5 @@ namespace BFRS_API_V1.Controllers
                 return StatusCode(403, "You are not authorized to access this resource.");
             }
         }
-
     }
 }
