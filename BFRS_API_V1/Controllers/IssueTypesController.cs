@@ -10,13 +10,13 @@ namespace BFRS_API_V1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class IssueTypeController : ControllerBase
+    public class IssueTypesController : ControllerBase
     {
 
         private readonly IIssueTypeService _issueTypeService;
         private readonly IBreedingService _breedingService;
         private readonly IAccountService _accountService;
-        public IssueTypeController(IIssueTypeService issueTypeService, IAccountService accountService)
+        public IssueTypesController(IIssueTypeService issueTypeService, IAccountService accountService)
         {
             _issueTypeService = issueTypeService;
             _accountService = accountService;

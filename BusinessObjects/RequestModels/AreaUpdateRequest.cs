@@ -12,7 +12,5 @@ namespace BusinessObjects.RequestModels
         public string AreaName { get; set; }
 
         public string Description { get; set; }
-
-        public int FarmId { get; set; }
     }
 }

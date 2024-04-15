@@ -19,6 +19,7 @@ namespace BusinessObjects.IService
         Task RegisterAccountAsync(AccountSignUpRequest accountSignUp);
         Task<IEnumerable<AccountDetailResponse>> GetManagerAccountsAsync();
         Task<IEnumerable<AccountDetailResponse>> GetStaffAccountsAsync();
+        Task<ProfileResponse?> GetProfileAccountByIdAsync(int accId);
         bool IsManager(int accountId);
         bool IsStaff(int accountId);
     }

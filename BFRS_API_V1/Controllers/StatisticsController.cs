@@ -12,14 +12,16 @@ namespace BFRS_API_V1.Controllers
         private readonly IBirdService _birdService;
         private readonly ICageService _cageService;
         private readonly IEggService _eggService;
+        private readonly IBreedingService _breedingService;
         private readonly IAccountService _accountService;
 
-        public StatisticsController(IBirdService birdService, IBirdSpeciesService birdSpeciesService, ICageService cageService, IEggService eggService, IAccountService accountService)
+        public StatisticsController(IBirdService birdService, IBirdSpeciesService birdSpeciesService, ICageService cageService, IEggService eggService, IAccountService accountService, IBreedingService breedingService)
         {
             _birdService = birdService;
             _cageService = cageService;
             _eggService = eggService;
             _accountService = accountService;
+            _breedingService = breedingService;
         }
 
         [HttpGet("TotalByStaff")]
@@ -53,6 +55,24 @@ namespace BFRS_API_V1.Controllers
             foreach (var status in statuses)
             {
                 var eggCount = await _eggService.GetEggCountByStatusNameAndManagedByStaff(status, staffId);
+                statusCounts.Add(status, eggCount);
+            }
+
+            return Ok(statusCounts);
+        }
+
+        [HttpGet("CountBreedingByStatusForStaff")]
+        [Authorize]
+        public async Task<IActionResult> GetCountBreedingByStatusNameManageByStaff()
+        {
+            var staffId = _accountService.GetAccountIdFromToken();
+            var statusCounts = new Dictionary<string, int>();
+
+            var statuses = new List<string> { "Mating", "InProgress", "Closed", "Failed", "Cancelled"};
+
+            foreach (var status in statuses)
+            {
+                var eggCount = await _breedingService.GetBreedingCountByStatusNameAndManagedByStaff(staffId, status);
                 statusCounts.Add(status, eggCount);
             }
 

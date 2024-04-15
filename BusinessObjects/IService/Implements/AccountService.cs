@@ -3,6 +3,7 @@ using BusinessObjects.InheritanceClass;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
+using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
@@ -44,7 +45,7 @@ namespace BusinessObjects.IService.Implements
 
             if (account != null)
             {
-                if (account.Status != "INACTIVE")
+                if (account.Status != "InActive")
                 {
                     var token = ProvideToken.Instance.GenerateToken(account.AccountId, account.Role);
 
@@ -96,7 +97,7 @@ namespace BusinessObjects.IService.Implements
 
 
             var account = _mapper.Map<Account>(accountSignUp);
-            account.Status = "ACTIVE";
+            account.Status = "Active";
 
             await _accountRepository.AddAsync(account);
             _accountRepository.SaveChanges();
@@ -131,8 +132,11 @@ namespace BusinessObjects.IService.Implements
             return _mapper.Map<AccountDetailResponse>(acc);
         }
 
-
-
+        public async Task<ProfileResponse?> GetProfileAccountByIdAsync(int accId)
+        {
+            var acc = await _accountRepository.GetByIdAsync(accId);
+            return _mapper.Map<ProfileResponse>(acc);
+        }
 
         public async Task<bool> UpdateAccount(AccountUpdateRequest accountUpdate)
         {

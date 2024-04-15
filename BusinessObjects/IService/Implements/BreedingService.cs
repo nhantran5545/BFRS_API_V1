@@ -2,6 +2,7 @@
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
+using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -153,6 +154,11 @@ namespace BusinessObjects.IService.Implements
 
             var breedings = await _breedingRepository.GetAllBreedingsByStaff(staffId);
             return breedings.Select(br => _mapper.Map<BreedingResponse>(br));
+        }
+
+        public async Task<int> GetBreedingCountByStatusNameAndManagedByStaff(int staffId,string status)
+        {
+            return await _breedingRepository.GetTotalBreedingsByStaff(staffId, status);
         }
 
         public async Task<BreedingDetailResponse?> GetBreedingById(object breedingId)
