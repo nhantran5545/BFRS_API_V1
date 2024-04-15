@@ -11,12 +11,12 @@ namespace BFRS_API_V1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AreaController : ControllerBase
+    public class AreasController : ControllerBase
     {
         private readonly IAreaService _areaService;
         private readonly IAccountService _accountService;
 
-        public AreaController(IAreaService areaService, IAccountService accountService)
+        public AreasController(IAreaService areaService, IAccountService accountService)
         {
             _areaService = areaService;
             _accountService = accountService;
