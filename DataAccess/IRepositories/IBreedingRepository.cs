@@ -11,6 +11,7 @@ namespace DataAccess.IRepositories
     {
         Task<IEnumerable<Breeding>> GetAllBreedingsByManagerId(object managerId);
         Task<IEnumerable<Breeding>> GetAllBreedingsByStaff(object accountId);
+        Task<int> GetTotalBreedingsByStaff(int accountId, string statusName);
         Task<List<Breeding>> GetBreedingByAccountIdAsync(int accountId);
     }
 }

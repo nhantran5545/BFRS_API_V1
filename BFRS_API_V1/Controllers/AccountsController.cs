@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using BusinessObjects.ResponseModels;
 using DataAccess.Models;
+using BusinessObjects.IService.Implements;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -143,6 +144,15 @@ namespace BFRS_API_V1.Controllers
             {
                 return Forbid(ex.Message);
             }
+        }
+        // GET: api/Areas/5
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult<ProfileResponse>> GetProfileAccountById()
+        {
+            var accId =  _accountService.GetAccountIdFromToken();
+            var profileDetail = await _accountService.GetProfileAccountByIdAsync(accId);
+            return Ok(profileDetail);
         }
 
         [HttpGet("staff/farm")]

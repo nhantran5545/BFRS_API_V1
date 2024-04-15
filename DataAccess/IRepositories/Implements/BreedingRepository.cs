@@ -55,6 +55,13 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
+        public async Task<int> GetTotalBreedingsByStaff(int accountId ,string statusName)
+        {
+            return await _context.Breedings
+                .Where(c => c.Status == statusName && c.Cage.AccountId.Equals(accountId))
+                .CountAsync();
+        }
+
         public async Task<List<Breeding>> GetBreedingByAccountIdAsync(int accountId)
         {
             if (accountId <= 0)
