@@ -44,7 +44,7 @@ namespace BFRS_API_V1.Controllers
             }
         }
 
-        [HttpGet("staff")]
+        [HttpGet("staffs")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStaffAccounts()
         {
@@ -155,7 +155,7 @@ namespace BFRS_API_V1.Controllers
             return Ok(profileDetail);
         }
 
-        [HttpGet("staff/farm")]
+        [HttpGet("staffs/farm")]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetStaffByFarm()
         {
