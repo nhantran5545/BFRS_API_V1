@@ -6,11 +6,11 @@ namespace BFRS_API_V1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReasonsController : ControllerBase
+    public class TimeLineController : ControllerBase
     {
         private readonly IReasonService _reasonService;
 
-        public ReasonsController(IReasonService reasonService)
+        public TimeLineController(IReasonService reasonService)
         {
             _reasonService = reasonService;
         }
@@ -18,7 +18,7 @@ namespace BFRS_API_V1.Controllers
         [HttpGet("Breeding/{BreedingId}")]
         public async Task<IActionResult> GetByBreedingId(int breedingId)
         {
-            var reasons = await _reasonService.GetReasonsByBreedingId(breedingId);
+            var reasons = await _reasonService.GetStatusByBreedingId(breedingId);
             if(!reasons.Any())
             {
                 return NotFound("Reason notfound");
