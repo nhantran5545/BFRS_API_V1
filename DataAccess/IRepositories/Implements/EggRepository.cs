@@ -46,11 +46,10 @@ namespace DataAccess.IRepositories.Implements
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Egg>> GetEggsByStaffId(object staffId)
+        public async Task<IEnumerable<Egg>> GetEggsByStaffId(int staffId)
         {
             return await _context.Eggs
-                .Where(b => b.CreatedByNavigation.AccountId.Equals(staffId))
-                .Where(b => b.UpdatedByNavigation.AccountId.Equals(staffId))
+                .Where(e => e.CreatedBy == staffId || e.UpdatedBy == staffId)
                 .ToListAsync();
         }
 

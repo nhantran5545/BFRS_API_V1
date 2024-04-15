@@ -116,7 +116,7 @@ namespace BusinessObjects.IService.Implements
             }
             return convertToResponse(egg);
         }
-        public async Task<int> GetTotalEggCountByStaffId(object staffId)
+        public async Task<int> GetTotalEggCountByStaffId(int staffId)
         {
             var eggs = await _eggRepository.GetEggsByStaffId(staffId);
             return eggs.Count();

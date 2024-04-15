@@ -20,7 +20,7 @@ namespace BusinessObjects.IService
         Task<IEnumerable<EggResponse>> GetEggsByBreedingIdAsync(object breedingId);
         Task<EggResponse?> GetEggByIdAsync(object eggId);
         Task<EggResponse?> GetEggByBirdIdAsync(object birdId);
-        Task<int> GetTotalEggCountByStaffId(object staffId);
+        Task<int> GetTotalEggCountByStaffId(int staffId);
         Task<int> GetEggCountByStatusNameAndManagedByStaff(string status, int staffId);
     }
 }

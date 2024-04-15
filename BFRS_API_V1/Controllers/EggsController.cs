@@ -200,35 +200,5 @@ namespace BFRS_API_V1.Controllers
             var egg = await _eggService.GetEggByIdAsync(result);
             return Ok(egg);
         }
-
-        [HttpGet("TotalEggByStaff")]
-        public async Task<IActionResult> GetTotalEggCountByStaffId()
-        {
-
-            var staffId = _accountService.GetAccountIdFromToken();
-            var totalBirdCount = await _eggService.GetTotalEggCountByStaffId(staffId);
-            if (totalBirdCount == null)
-            {
-                return NotFound("There are no eggs");
-            }
-            return Ok(totalBirdCount);
-        }
-
-        [HttpGet("CountEggByStatusForStaff")]
-        public async Task<IActionResult> GetCountEggByStatusNameManageByStaff()
-        {
-            var staffId = _accountService.GetAccountIdFromToken();
-            var statusCounts = new Dictionary<string, int>();
-
-            var statuses = new List<string> { "Unknown", "Broken", "Empty", "Abandoned", "Dead Empryo", "Dead In Shell", "In Development", "Hatched", "Missing" };
-
-            foreach (var status in statuses)
-            {
-                var eggCount = await _eggService.GetEggCountByStatusNameAndManagedByStaff(status, staffId);
-                statusCounts.Add(status, eggCount);
-            }
-
-            return Ok(statusCounts);
-        }
     }
 }
