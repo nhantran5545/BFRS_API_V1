@@ -90,19 +90,6 @@ namespace BFRS_API_V1.Controllers
             return Ok(birds);
         }
 
-        [HttpGet("TotalBirdByStaff")]
-        public async Task<IActionResult> GetTotalBirdCountByStaffId()
-        {
-         
-            var staffId = _accountService.GetAccountIdFromToken();
-            var totalBirdCount = await _birdService.GetTotalBirdCountByStaffId(staffId);
-            if (totalBirdCount == null)
-            {
-                return NotFound("There are no birds");
-            }
-            return Ok(totalBirdCount);
-        }
-
         // GET: api/Birds/5
         [HttpGet("{id}")]
         [Authorize]
