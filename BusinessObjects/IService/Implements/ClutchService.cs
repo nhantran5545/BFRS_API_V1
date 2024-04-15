@@ -15,12 +15,18 @@ namespace BusinessObjects.IService.Implements
     {
         private readonly IClutchRepository _clutchRepository;
         private readonly IBreedingRepository _breedingRepository;
+        private readonly IClutchStatusChangeRepository _clutchStatusChangeRepository;
+        private readonly IBreedingStatusChangeRepository _breedingStatusChangeRepository;
         private readonly IMapper _mapper;
 
-        public ClutchService(IClutchRepository clutchRepository, IBreedingRepository breedingRepository, IMapper mapper)
+        public ClutchService(IClutchRepository clutchRepository, IBreedingRepository breedingRepository, 
+            IClutchStatusChangeRepository clutchStatusChangeRepository, IBreedingStatusChangeRepository breedingStatusChangeRepository,
+            IMapper mapper)
         {
             _clutchRepository = clutchRepository;
             _breedingRepository = breedingRepository;
+            _clutchStatusChangeRepository = clutchStatusChangeRepository;
+            _breedingStatusChangeRepository = breedingStatusChangeRepository;
             _mapper = mapper;
         }
 
@@ -46,6 +52,8 @@ namespace BusinessObjects.IService.Implements
                         breeding.Status = "InProgress";
                         breeding.Phase = 0;
                         _breedingRepository.SaveChanges();
+
+                        await AddBreedingChangeStatus(breeding.BreedingId, null, accountId, "Mating", "InProgress");
                     }
 
                     clutch.Status = "Created";
@@ -54,6 +62,9 @@ namespace BusinessObjects.IService.Implements
                     clutch.CreatedDate = DateTime.Now;
                     await _clutchRepository.AddAsync(clutch);
                     _clutchRepository.SaveChanges();
+
+                    await AddClutchChangeStatus(clutch.ClutchId, null, accountId, null, clutch.Status);
+
                     transaction.Commit();
                     return clutch.ClutchId;
                 }
@@ -136,6 +147,7 @@ namespace BusinessObjects.IService.Implements
                 return false;
             }
 
+            var oldStatus = clutch.Status;
             clutch.Status = clutchCloseRequest.Status;
             clutch.Phase = 0;
             clutch.UpdatedBy = accountId;
@@ -145,7 +157,39 @@ namespace BusinessObjects.IService.Implements
             {
                 return false;
             }
+
+            await AddClutchChangeStatus(clutch.ClutchId, clutchCloseRequest.Status, accountId, oldStatus, clutchCloseRequest.Status);
             return true;
+        }
+
+        private async Task AddClutchChangeStatus(int clutchId, string? reason, int changedBy, string? oldStatus, string newStatus)
+        {
+            var clutchReason = new ClutchStatusChange()
+            {
+                ClutchId = clutchId,
+                Description = reason,
+                ChangedDate = DateTime.Now,
+                ChangedBy = changedBy,
+                OldStatus = oldStatus,
+                NewStatus = newStatus
+            };
+            await _clutchStatusChangeRepository.AddAsync(clutchReason);
+            _clutchStatusChangeRepository.SaveChanges();
+        }
+
+        private async Task AddBreedingChangeStatus(int breedingId, string? reason, int changedBy, string? oldStatus, string newStatus)
+        {
+            var breedingStatus = new BreedingStatusChange()
+            {
+                BreedingId = breedingId,
+                Description = reason,
+                ChangedDate = DateTime.Now,
+                ChangedBy = changedBy,
+                OldStatus = oldStatus,
+                NewStatus = newStatus
+            };
+            await _breedingStatusChangeRepository.AddAsync(breedingStatus);
+            _breedingStatusChangeRepository.SaveChanges();
         }
     }
 }

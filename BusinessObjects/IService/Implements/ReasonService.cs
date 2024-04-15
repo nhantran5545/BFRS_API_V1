@@ -11,18 +11,24 @@ namespace BusinessObjects.IService.Implements
 {
     public class ReasonService : IReasonService
     {
-        private readonly IBreedingStatusChangeRepository _breedingReasonRepository;
+        private readonly IBreedingStatusChangeRepository _breedingStatusRepository;
+        private readonly IClutchStatusChangeRepository _clutchStatusRepository;
+        private readonly IEggStatusChangeRepository _eggStatusRepository;
         private readonly IMapper _mapper;
 
-        public ReasonService(IBreedingStatusChangeRepository breedingReasonRepository, IMapper mapper)
+        public ReasonService(IBreedingStatusChangeRepository breedingStatusRepository,
+            IClutchStatusChangeRepository clutchStatusRepository,
+            IEggStatusChangeRepository eggStatusRepository, IMapper mapper)
         {
-            _breedingReasonRepository = breedingReasonRepository;
+            _breedingStatusRepository = breedingStatusRepository;
+            _clutchStatusRepository = clutchStatusRepository;
+            _eggStatusRepository = eggStatusRepository;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ReasonResponse>> GetReasonsByBreedingId(object breedingId)
+        public async Task<IEnumerable<ReasonResponse>> GetStatusByBreedingId(object breedingId)
         {
-            var breedingReasons = await _breedingReasonRepository.GetReasonsByBreedingIdAsync(breedingId);
+            var breedingReasons = await _breedingStatusRepository.GetReasonsByBreedingIdAsync(breedingId);
             return breedingReasons.Select(reason => _mapper.Map<ReasonResponse>(reason));
         }
     }

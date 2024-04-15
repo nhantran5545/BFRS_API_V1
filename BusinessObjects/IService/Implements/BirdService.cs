@@ -234,6 +234,23 @@ namespace BusinessObjects.IService.Implements
             return true;
         }
 
+        public async Task<bool> UpdatebirdMutations(int birdId, MutationRequest mutationRequest)
+        {
+            var bird = await _birdRepository.GetByIdAsync(birdId);
+            if (bird == null)
+            {
+                return false;
+            }
+
+            var birdMutations = await _birdMutationRepository.GetByBirdId(birdId);
+            if(birdMutations.Any())
+            {
+                _birdMutationRepository.Delete(birdMutations);
+            }
+
+            return true;
+        }
+
         private async Task AddMutation (List<MutationRequest> mutationRequests, int birdId)
         {
             foreach (var item in mutationRequests)

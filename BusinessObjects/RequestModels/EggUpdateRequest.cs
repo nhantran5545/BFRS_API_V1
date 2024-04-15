@@ -10,6 +10,6 @@ namespace BusinessObjects.RequestModels
     {
         public int EggId { get; set; }
         //public int UpdatedBy { get; set; }
-        public string? Status { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 }

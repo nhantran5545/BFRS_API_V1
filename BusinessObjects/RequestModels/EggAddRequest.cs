@@ -10,7 +10,7 @@ namespace BusinessObjects.RequestModels
     {
         public int ClutchId { get; set; }
         public DateTime LayDate { get; set; }
-        public string? Status { get; set; }
+        public string Status { get; set; } = string.Empty;
         //public int CreatedBy { get; set; }
     }
 }

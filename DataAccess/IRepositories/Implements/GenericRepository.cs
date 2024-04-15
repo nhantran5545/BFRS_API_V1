@@ -66,5 +66,10 @@ namespace DataAccess.IRepositories.Implements
         {
             return _context.Database.BeginTransaction();
         }
+
+        public void Delete(IEnumerable<T> entities)
+        {
+            _context.Set<T>().RemoveRange(entities);
+        }
     }
 }

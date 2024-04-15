@@ -15,6 +15,7 @@ namespace DataAccess.IRepositories
         Task AddAsync(T entity);
         void Update(T entity);
         void Delete(T entity);
+        void Delete(IEnumerable<T> entities);
         int SaveChanges();
         IDbContextTransaction BeginTransaction();
     }

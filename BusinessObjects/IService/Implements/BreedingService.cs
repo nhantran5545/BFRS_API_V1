@@ -92,6 +92,8 @@ namespace BusinessObjects.IService.Implements
                     
                     _cageRepository.SaveChanges();
 
+                    await AddBreedingChangeStatus(breeding.BreedingId, null, managerId, null, breeding.Status);
+
                     transaction.Commit();
                     return breeding.BreedingId;
                 }
@@ -184,6 +186,8 @@ namespace BusinessObjects.IService.Implements
                         return false;
                     }
 
+                    var oldStatus = breeding.Status;
+
                     breeding.CoupleSeperated = true;
                     breeding.Status = "Closed";
                     breeding.Phase = 0;
@@ -214,6 +218,8 @@ namespace BusinessObjects.IService.Implements
 
                     _cageRepository.SaveChanges();
 
+                    await AddBreedingChangeStatus(breeding.BreedingId, null, managerId, oldStatus, breeding.Status);
+
                     transaction.Commit();
                     return true;
                 }
@@ -240,6 +246,7 @@ namespace BusinessObjects.IService.Implements
 
                     await CloseClutchesByBreedingId(breeding.BreedingId);
 
+                    var oldStatus = breeding.Status;
                     if(breeding.Status == "Mating")
                     {
                         breeding.Status = "Failed";
@@ -282,7 +289,7 @@ namespace BusinessObjects.IService.Implements
 
                     _cageRepository.SaveChanges();
 
-                    var breedingReason = new BreedingStatusChange()
+                    /*var breedingReason = new BreedingStatusChange()
                     {
                         BreedingId = breeding.BreedingId,
                         Description = breedingUpdateRequest.Reason,
@@ -290,7 +297,9 @@ namespace BusinessObjects.IService.Implements
                         ChangedBy = managerId
                     };
                     await _breedingReasonRepository.AddAsync(breedingReason);
-                    _breedingReasonRepository.SaveChanges();
+                    _breedingReasonRepository.SaveChanges();*/
+
+                    await AddBreedingChangeStatus(breeding.BreedingId, breedingUpdateRequest.Reason, managerId, oldStatus, breeding.Status);
 
                     transaction.Commit();
                     return true;
@@ -316,6 +325,21 @@ namespace BusinessObjects.IService.Implements
                 }
                 _clutchRepository.SaveChanges();
             }
+        }
+
+        private async Task AddBreedingChangeStatus(int breedingId, string? reason, int changedBy, string? oldStatus, string newStatus)
+        {
+            var breedingReason = new BreedingStatusChange()
+            {
+                BreedingId = breedingId,
+                Description = reason,
+                ChangedDate = DateTime.Now,
+                ChangedBy = changedBy,
+                OldStatus = oldStatus,
+                NewStatus = newStatus
+            };
+            await _breedingReasonRepository.AddAsync(breedingReason);
+            _breedingReasonRepository.SaveChanges();
         }
     }
 }
