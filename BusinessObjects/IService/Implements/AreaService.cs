@@ -101,7 +101,6 @@ namespace BusinessObjects.IService.Implements
             }
             area.AreaName = areaUpdateRequest.AreaName;
             area.Description = areaUpdateRequest.Description;
-            area.FarmId = areaUpdateRequest.FarmId;
 
             _areaRepository.Update(area);
             var result = _areaRepository.SaveChanges();

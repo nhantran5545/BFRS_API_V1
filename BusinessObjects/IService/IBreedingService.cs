@@ -18,6 +18,7 @@ namespace BusinessObjects.IService
         Task<IEnumerable<BreedingResponse>> GetAllBreedings();
         Task<IEnumerable<BreedingResponse>> GetAllBreedingsByManagerId(object managerId);
         Task<IEnumerable<BreedingResponse>> GetBreedingsByStaffIdAsync(int staffId);
+        Task<int> GetBreedingCountByStatusNameAndManagedByStaff(int staffId, string status);
         Task<BreedingDetailResponse?> GetBreedingById(object breedingId);
     }
 }
