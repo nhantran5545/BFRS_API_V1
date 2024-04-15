@@ -63,7 +63,7 @@ namespace BFRS_API_V1.Controllers
 
         [HttpGet("{issueId}")]
         [Authorize]
-        public async Task<ActionResult<AreaResponse>> GetAreaById(int issueId)
+        public async Task<ActionResult<AreaResponse>> GetIssueById(int issueId)
         {
             var issue = await _issueService.GetIssueByIdAsync(issueId);
             if (issue == null)
