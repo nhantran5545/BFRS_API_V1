@@ -2,6 +2,7 @@
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
+using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -43,10 +44,36 @@ namespace BusinessObjects.IService.Implements
             issue.CreatedBy = accountId;
             issue.CreatedDate = DateTime.Now;
             issue.AssignedTo = breeding.CreatedBy;
-            issue.Status = "Active";
+            issue.Status = "InProgress";
             await _issueRepository.AddAsync(issue);
             _issueRepository.SaveChanges();
             return issue.IssueId;
+        }
+
+        public async Task<bool> UpdateProcessNoteIssue(int issueId, IssueUpdateRequest issueUpdateRequest, int accountId)
+        {
+            var issue = await _issueRepository.GetByIdAsync(issueId);
+            if (issue == null)
+            {
+                return false;
+            }
+            if (issueUpdateRequest.Status != "Ignore" && issueUpdateRequest.Status != "Processed")
+            {
+                return false;
+            }
+
+            issue.ProcessNote = issueUpdateRequest.ProcessNote;
+            issue.Status = issueUpdateRequest.Status;
+            issue.UpdatedBy = accountId;
+            issue.UpdatedDate = DateTime.Now;
+
+            _issueRepository.Update(issue);
+            var result = _issueRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
         }
 
         public void DeleteIssue(Issue issue)

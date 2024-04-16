@@ -43,7 +43,6 @@ namespace DataAccess.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -537,6 +536,8 @@ namespace DataAccess.Models
                 entity.Property(e => e.Description).HasMaxLength(255);
 
                 entity.Property(e => e.IssueName).HasMaxLength(255);
+
+                entity.Property(e => e.ProcessNote).HasMaxLength(255);
 
                 entity.Property(e => e.Status).HasMaxLength(50);
 

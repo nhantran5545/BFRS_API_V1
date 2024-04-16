@@ -32,11 +32,7 @@ namespace BusinessObjects.IService.Implements
         {
             if (areaAddRequest == null)
             {
-                throw new ArgumentNullException(nameof(areaAddRequest), "Data cannot be null");
-            }
-            if (areaAddRequest.Status != "For Nourishing" && areaAddRequest.Status != "For Breeding")
-            {
-                throw new ArgumentException("Status must be 'For Nourishing' or 'For Breeding'", nameof(areaAddRequest.Status));
+                return -1;
             }
 
             var area = _mapper.Map<Area>(areaAddRequest);

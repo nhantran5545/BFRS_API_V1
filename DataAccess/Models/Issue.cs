@@ -12,6 +12,7 @@ namespace DataAccess.Models
         public DateTime? CreatedDate { get; set; }
         public int? CreatedBy { get; set; }
         public int? AssignedTo { get; set; }
+        public string? ProcessNote { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedBy { get; set; }
         public int? IssueTypeId { get; set; }

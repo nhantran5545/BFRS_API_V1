@@ -17,6 +17,7 @@ namespace BusinessObjects.ResponseModels
         public string? CreatedByFirstName { get; set; }
         public string? CreatedByLastName { get; set; }
         public int? AssignedTo { get; set; }
+        public string? ProcessNote { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedBy { get; set; }
         public string? UpdatedByFirstName { get; set; }

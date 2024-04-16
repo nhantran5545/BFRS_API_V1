@@ -28,7 +28,12 @@ namespace BFRS_API_V1.Controllers
         {
             try
             {
+                
                 var areaId = await _areaService.CreateAreaAsync(areaAddRequest);
+                if (areaAddRequest.Status != "For Nourishing" && areaAddRequest.Status != "For Breeding")
+                {
+                    return BadRequest($"Status must be 'For Nourishing' or 'For Breeding'. Given status: {areaAddRequest.Status}");
+                }
                 return Ok("Add successful");
             }
             catch (ArgumentException ex)
