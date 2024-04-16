@@ -13,7 +13,6 @@ namespace BFRS_BankTests.ControllersTesting
     public class AccountsControllerTests
     {
         private readonly HttpClient _httpClient;
-
         public AccountsControllerTests()
         {
             var api = new ApiWebApplicationFactory();

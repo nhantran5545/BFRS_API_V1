@@ -61,6 +61,30 @@ namespace BFRS_API_V1.Controllers
             return Ok(clutch);
         }
 
+        [HttpPut("{issueId}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProcessNote(int issueId, [FromBody] IssueUpdateRequest issueUpdateRequest)
+        {
+            var accountId = _accountService.GetAccountIdFromToken();
+
+            var issue = await _issueService.GetIssueByIdAsync(issueId);
+            if (issue == null)
+            {
+                return NotFound("Issue not found");
+            }
+            if (issueUpdateRequest.Status != "Ignore" && issueUpdateRequest.Status != "Processed")
+            {
+                return BadRequest($"Status must be 'Ignore' or 'Processed'. Given status: {issueUpdateRequest.Status}");
+            }
+
+
+            if (await _issueService.UpdateProcessNoteIssue(issueId, issueUpdateRequest, accountId))
+            {
+                return Ok("Update Successfully");
+            }
+            return BadRequest();
+        }
+
         [HttpGet("{issueId}")]
         [Authorize]
         public async Task<ActionResult<AreaResponse>> GetIssueById(int issueId)
