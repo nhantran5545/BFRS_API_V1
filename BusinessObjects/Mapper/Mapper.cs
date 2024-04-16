@@ -1,6 +1,26 @@
 ﻿using AutoMapper;
 using BusinessObjects.RequestModels;
+using BusinessObjects.RequestModels.AccountReqModels;
+using BusinessObjects.RequestModels.AreaReqModels;
+using BusinessObjects.RequestModels.BirdReqModels;
+using BusinessObjects.RequestModels.BreedingReqModels;
+using BusinessObjects.RequestModels.CageReqModels;
+using BusinessObjects.RequestModels.ChecklistReqModels;
+using BusinessObjects.RequestModels.ClutchReqModels;
+using BusinessObjects.RequestModels.EggReqModels;
+using BusinessObjects.RequestModels.FarmReqModels;
+using BusinessObjects.RequestModels.IssueReqModels;
 using BusinessObjects.ResponseModels;
+using BusinessObjects.ResponseModels.AccountResModels;
+using BusinessObjects.ResponseModels.BirdResModels;
+using BusinessObjects.ResponseModels.BirdSpeciesResModels;
+using BusinessObjects.ResponseModels.BreedingChecklistResModels;
+using BusinessObjects.ResponseModels.BreedingResModels;
+using BusinessObjects.ResponseModels.CageResModels;
+using BusinessObjects.ResponseModels.ChecklistResModels;
+using BusinessObjects.ResponseModels.ClutchResModels;
+using BusinessObjects.ResponseModels.IssueResModels;
+using BusinessObjects.ResponseModels.TimelineResModels;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -143,7 +163,9 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.IssueType != null ? src.IssueType.IssueName : string.Empty))
                 .ReverseMap();
             CreateMap<CheckListDetail, CheckListDetailResponse>()
-                .ReverseMap(); 
+                .ReverseMap();
+            CreateMap<BirdType, BirdTypeResponse>()
+                .ReverseMap();
             CreateMap<IssueType, IssueTypeResponse>()
                 .ReverseMap();
             CreateMap<BreedingStatusChange, StatusChangeResponse>()

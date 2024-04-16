@@ -1,5 +1,5 @@
-﻿using BusinessObjects.RequestModels;
-using BusinessObjects.ResponseModels;
+﻿using BusinessObjects.RequestModels.ClutchReqModels;
+using BusinessObjects.ResponseModels.ClutchResModels;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;

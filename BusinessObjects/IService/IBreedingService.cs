@@ -1,5 +1,5 @@
-﻿using BusinessObjects.RequestModels;
-using BusinessObjects.ResponseModels;
+﻿using BusinessObjects.RequestModels.BreedingReqModels;
+using BusinessObjects.ResponseModels.BreedingResModels;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;

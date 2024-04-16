@@ -6,12 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.IService;
-using BusinessObjects.ResponseModels;
-using Microsoft.AspNetCore.OData.Query;
-using DataAccess.Models;
 using Microsoft.AspNetCore.Authorization;
-using BusinessObjects.IService.Implements;
 using BusinessObjects.RequestModels;
+using BusinessObjects.ResponseModels.BirdSpeciesResModels;
 
 namespace BFRS_API_V1.Controllers
 {
@@ -26,6 +23,18 @@ namespace BFRS_API_V1.Controllers
         {
             _birdSpeciesService = birdSpeciesService;
             _accountService = accountService;
+        }
+
+        [HttpGet("BirdType")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<BirdTypeResponse>>> GetBirdTypes()
+        {
+            var birdTypes = await _birdSpeciesService.GetBirdTypes();
+            if (birdTypes == null)
+            {
+                return NotFound("There are no bird species");
+            }
+            return Ok(birdTypes);
         }
 
         // GET: api/BirdSpecies

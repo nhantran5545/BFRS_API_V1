@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.IService;
 using BusinessObjects.ResponseModels;
-using BusinessObjects.RequestModels;
 using Microsoft.AspNetCore.Authorization;
-using BusinessObjects.IService.Implements;
+using BusinessObjects.RequestModels.EggReqModels;
 
 namespace BFRS_API_V1.Controllers
 {

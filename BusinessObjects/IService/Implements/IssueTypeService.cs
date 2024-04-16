@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BusinessObjects.RequestModels;
-using BusinessObjects.ResponseModels;
+using BusinessObjects.RequestModels.IssueReqModels;
+using BusinessObjects.ResponseModels.IssueResModels;
 using DataAccess.IRepositories;
 using DataAccess.IRepositories.Implements;
 using DataAccess.Models;

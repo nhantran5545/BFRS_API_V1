@@ -1,5 +1,5 @@
-﻿using BusinessObjects.RequestModels;
-using BusinessObjects.ResponseModels;
+﻿using BusinessObjects.RequestModels.IssueReqModels;
+using BusinessObjects.ResponseModels.IssueResModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

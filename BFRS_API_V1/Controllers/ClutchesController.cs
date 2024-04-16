@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.IService;
-using BusinessObjects.ResponseModels;
-using BusinessObjects.RequestModels;
 using Microsoft.AspNetCore.Authorization;
+using BusinessObjects.RequestModels.ClutchReqModels;
+using BusinessObjects.ResponseModels.ClutchResModels;
 
 namespace BFRS_API_V1.Controllers
 {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BusinessObjects.RequestModels;
+using BusinessObjects.RequestModels.EggReqModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
 using DataAccess.IRepositories.Implements;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using BusinessObjects.RequestModels;
-using BusinessObjects.ResponseModels;
+using BusinessObjects.RequestModels.ChecklistReqModels;
+using BusinessObjects.ResponseModels.BreedingChecklistResModels;
+using BusinessObjects.ResponseModels.ChecklistResModels;
 using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;

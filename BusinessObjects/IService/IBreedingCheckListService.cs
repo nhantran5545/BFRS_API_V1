@@ -1,5 +1,5 @@
-﻿using BusinessObjects.RequestModels;
-using BusinessObjects.ResponseModels;
+﻿using BusinessObjects.RequestModels.ChecklistReqModels;
+using BusinessObjects.ResponseModels.BreedingChecklistResModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

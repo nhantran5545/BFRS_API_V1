@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using BusinessObjects.InheritanceClass;
-using BusinessObjects.RequestModels;
+using BusinessObjects.RequestModels.AccountReqModels;
 using BusinessObjects.ResponseModels;
+using BusinessObjects.ResponseModels.AccountResModels;
 using DataAccess.IRepositories;
 using DataAccess.IRepositories.Implements;
 using DataAccess.Models;

@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BusinessObjects.IService;
-using BusinessObjects.ResponseModels;
-using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.Authorization;
-using BusinessObjects.RequestModels;
+using BusinessObjects.RequestModels.BirdReqModels;
+using BusinessObjects.ResponseModels.BirdResModels;
 
 namespace BFRS_API_V1.Controllers
 {

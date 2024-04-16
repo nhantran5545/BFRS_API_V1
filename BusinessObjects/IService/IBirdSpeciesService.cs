@@ -1,5 +1,5 @@
 ﻿using BusinessObjects.RequestModels;
-using BusinessObjects.ResponseModels;
+using BusinessObjects.ResponseModels.BirdSpeciesResModels;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -16,5 +16,6 @@ namespace BusinessObjects.IService
         void DeleteBirdSpecies(BirdSpecy birdSpecy);
         Task<IEnumerable<BirdSpeciesResponse>> GetBirdSpeciesAsync();
         Task<BirdSpeciesDetailResponse?> GetBirdSpeciesByIdAsync(object BirdSpecyId);
+        Task<IEnumerable<BirdTypeResponse>> GetBirdTypes();
     }
 }

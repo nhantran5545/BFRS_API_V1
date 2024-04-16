@@ -4,16 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using BusinessObjects.RequestModels;
 using BusinessObjects.IService;
-using BusinessObjects.InheritanceClass;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using BusinessObjects.ResponseModels;
-using DataAccess.Models;
-using BusinessObjects.IService.Implements;
+using BusinessObjects.RequestModels.AccountReqModels;
 
 namespace BFRS_API_V1.Controllers
 {

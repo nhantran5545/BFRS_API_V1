@@ -1,5 +1,5 @@
-﻿using BusinessObjects.RequestModels;
-using BusinessObjects.ResponseModels;
+﻿using BusinessObjects.RequestModels.BirdReqModels;
+using BusinessObjects.ResponseModels.BirdResModels;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;

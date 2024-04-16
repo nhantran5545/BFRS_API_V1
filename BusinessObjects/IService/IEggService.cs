@@ -1,4 +1,4 @@
-﻿using BusinessObjects.RequestModels;
+﻿using BusinessObjects.RequestModels.EggReqModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.Models;
 using System;

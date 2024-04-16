@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
+using BusinessObjects.ResponseModels.BirdSpeciesResModels;
 using DataAccess.IRepositories;
 using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
@@ -15,11 +16,14 @@ namespace BusinessObjects.IService.Implements
     public class BirdSpeciesService : IBirdSpeciesService
     {
         private readonly IBirdSpeciesRepository _birdSpeciesRepository;
+        private readonly IBirdTypeRepository _birdTypeRepository;
         private readonly IMapper _mapper;
 
-        public BirdSpeciesService(IBirdSpeciesRepository birdSpeciesRepository, IMapper mapper)
+        public BirdSpeciesService(IBirdSpeciesRepository birdSpeciesRepository,
+            IBirdTypeRepository birdTypeRepository, IMapper mapper)
         {
             _birdSpeciesRepository = birdSpeciesRepository;
+            _birdTypeRepository = birdTypeRepository;
             _mapper = mapper;
         }
 
@@ -90,6 +94,12 @@ namespace BusinessObjects.IService.Implements
                 return false;
             }
             return true;
+        }
+
+        public async Task<IEnumerable<BirdTypeResponse>> GetBirdTypes()
+        {
+            var birdTypes = await _birdTypeRepository.GetAllAsync();
+            return birdTypes.Select(bt => _mapper.Map<BirdTypeResponse>(bt));
         }
 
         private BirdSpeciesDetailResponse ConvertToResponse(BirdSpecy birdSpecies)

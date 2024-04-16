@@ -1,5 +1,5 @@
-﻿using BusinessObjects.RequestModels;
-using BusinessObjects.ResponseModels;
+﻿using BusinessObjects.RequestModels.CageReqModels;
+using BusinessObjects.ResponseModels.CageResModels;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;

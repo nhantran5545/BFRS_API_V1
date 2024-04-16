@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using BusinessObjects.RequestModels;
+using BusinessObjects.RequestModels.BirdReqModels;
 using BusinessObjects.ResponseModels;
+using BusinessObjects.ResponseModels.BirdResModels;
 using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;

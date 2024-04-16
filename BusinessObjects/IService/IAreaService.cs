@@ -1,4 +1,4 @@
-﻿using BusinessObjects.RequestModels;
+﻿using BusinessObjects.RequestModels.AreaReqModels;
 using BusinessObjects.ResponseModels;
 using System;
 using System.Collections.Generic;

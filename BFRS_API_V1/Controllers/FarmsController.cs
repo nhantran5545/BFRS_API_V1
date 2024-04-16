@@ -7,12 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using BusinessObjects.IService;
-using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.Authorization;
-using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using BusinessObjects.IService.Implements;
 using Azure.Core;
+using BusinessObjects.RequestModels.FarmReqModels;
 
 namespace BFRS_API_V1.Controllers
 {

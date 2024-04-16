@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BusinessObjects.ResponseModels;
+using BusinessObjects.ResponseModels.TimelineResModels;
 using DataAccess.IRepositories;
 using System;
 using System.Collections.Generic;

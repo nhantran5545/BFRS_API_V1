@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using BusinessObjects.RequestModels;
+using BusinessObjects.RequestModels.ClutchReqModels;
 using BusinessObjects.ResponseModels;
+using BusinessObjects.ResponseModels.ClutchResModels;
 using DataAccess.IRepositories;
 using DataAccess.Models;
 using System;

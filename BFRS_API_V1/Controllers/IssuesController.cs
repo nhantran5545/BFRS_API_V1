@@ -1,7 +1,7 @@
 ﻿using BusinessObjects.IService;
-using BusinessObjects.IService.Implements;
-using BusinessObjects.RequestModels;
+using BusinessObjects.RequestModels.IssueReqModels;
 using BusinessObjects.ResponseModels;
+using BusinessObjects.ResponseModels.IssueResModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

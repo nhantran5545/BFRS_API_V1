@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Core;
 using Azure;
-using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
 using DataAccess.IRepositories.Implements;
@@ -12,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObjects.RequestModels.AreaReqModels;
 
 namespace BusinessObjects.IService.Implements
 {

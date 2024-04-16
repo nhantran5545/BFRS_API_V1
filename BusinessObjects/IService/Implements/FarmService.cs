@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Azure;
 using Azure.Core;
-using BusinessObjects.RequestModels;
+using BusinessObjects.RequestModels.FarmReqModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
 using DataAccess.IRepositories.Implements;

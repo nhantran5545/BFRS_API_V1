@@ -1,5 +1,6 @@
-﻿using BusinessObjects.RequestModels;
+﻿using BusinessObjects.RequestModels.AccountReqModels;
 using BusinessObjects.ResponseModels;
+using BusinessObjects.ResponseModels.AccountResModels;
 using DataAccess.Models;
 using System.Threading.Tasks;
 
