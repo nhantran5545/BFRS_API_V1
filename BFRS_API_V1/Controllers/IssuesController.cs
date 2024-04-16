@@ -72,9 +72,9 @@ namespace BFRS_API_V1.Controllers
             {
                 return NotFound("Issue not found");
             }
-            if (issueUpdateRequest.Status != "Ignore" && issueUpdateRequest.Status != "Processed")
+            if (issueUpdateRequest.Status != "Rejected" && issueUpdateRequest.Status != "Approved")
             {
-                return BadRequest($"Status must be 'Ignore' or 'Processed'. Given status: {issueUpdateRequest.Status}");
+                return BadRequest($"Status must be 'Rejected' or 'Approved'. Given status: {issueUpdateRequest.Status}");
             }
 
 
