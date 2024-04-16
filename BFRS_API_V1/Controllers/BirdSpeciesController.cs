@@ -56,7 +56,11 @@ namespace BFRS_API_V1.Controllers
         {
             try
             {
-                var species = await _birdSpeciesService.CreateBirdSpeciesAsync(speciesRequest);
+                var result = await _birdSpeciesService.CreateBirdSpeciesAsync(speciesRequest);
+                if(result < 1)
+                {
+                    return BadRequest("Add failed, try again!");
+                }
                 return Ok("Add successful");
             }
             catch (ArgumentException ex)

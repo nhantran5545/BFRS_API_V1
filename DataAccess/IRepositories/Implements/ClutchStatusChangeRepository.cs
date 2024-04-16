@@ -17,7 +17,7 @@ namespace DataAccess.IRepositories.Implements
         public async Task<IEnumerable<ClutchStatusChange>> GetTimelineByClutchIdAsync(object clutchId)
         {
             return await _context.ClutchStatusChanges
-                .Include(br => br.ChangedBy)
+                .Include(br => br.ChangedByNavigation)
                 .Where(br => br.ClutchId.Equals(clutchId))
                 .ToListAsync();
         }

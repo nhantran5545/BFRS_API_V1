@@ -17,7 +17,7 @@ namespace DataAccess.IRepositories.Implements
         public async Task<IEnumerable<EggStatusChange>> GetTimelineByEggIdAsync(object eggId)
         {
             return await _context.EggStatusChanges
-                .Include(br => br.ChangedBy)
+                .Include(br => br.ChangedByNavigation)
                 .Where(br => br.EggId.Equals(eggId))
                 .ToListAsync();
         }
