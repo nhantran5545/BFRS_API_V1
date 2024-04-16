@@ -57,7 +57,7 @@ namespace BusinessObjects.IService.Implements
             {
                 return false;
             }
-            if (issueUpdateRequest.Status != "Ignore" && issueUpdateRequest.Status != "Processed")
+            if (issueUpdateRequest.Status != "Rejected" && issueUpdateRequest.Status != "Approved")
             {
                 return false;
             }

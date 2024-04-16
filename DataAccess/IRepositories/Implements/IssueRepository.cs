@@ -19,6 +19,7 @@ namespace DataAccess.IRepositories.Implements
                 //.Include(c => c.Breeding)
                 .Include(c => c.IssueType)
                 .Include(c => c.CreatedByNavigation)
+                .Include(c => c.UpdatedByNavigation)
                 .ToListAsync();
         }
 
