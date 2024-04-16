@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface IEggStatusChangeRepository : IGenericRepository<EggStatusChange>
     {
+        Task<IEnumerable<EggStatusChange>> GetTimelineByEggIdAsync(object eggId);
     }
 }

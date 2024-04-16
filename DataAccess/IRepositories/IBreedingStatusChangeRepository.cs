@@ -10,6 +10,6 @@ namespace DataAccess.IRepositories
     public interface IBreedingStatusChangeRepository : IGenericRepository<BreedingStatusChange>
 
     {
-        Task<IEnumerable<BreedingStatusChange>> GetReasonsByBreedingIdAsync(object breedingId);
+        Task<IEnumerable<BreedingStatusChange>> GetTimelineByBreedingIdAsync(object breedingId);
     }
 }

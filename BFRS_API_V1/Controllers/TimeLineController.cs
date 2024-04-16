@@ -15,13 +15,13 @@ namespace BFRS_API_V1.Controllers
             _reasonService = reasonService;
         }
 
-        [HttpGet("Breeding/{BreedingId}")]
+        [HttpGet("Breeding/{breedingId}")]
         public async Task<IActionResult> GetByBreedingId(int breedingId)
         {
-            var reasons = await _reasonService.GetStatusByBreedingId(breedingId);
-            if(!reasons.Any())
+            var reasons = await _reasonService.GetTimelineByBreedingId(breedingId);
+            if (reasons == null)
             {
-                return NotFound("Reason notfound");
+                return NotFound("Breeding not found");
             }
             return Ok(reasons);
         }

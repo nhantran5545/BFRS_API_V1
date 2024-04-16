@@ -9,6 +9,6 @@ namespace BusinessObjects.IService
 {
     public interface IReasonService
     {
-        Task<IEnumerable<ReasonResponse>> GetStatusByBreedingId(object breedingId);
+        Task<BreedingTimeline?> GetTimelineByBreedingId(int breedingId);
     }
 }

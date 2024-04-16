@@ -146,7 +146,24 @@ namespace BusinessObjects.Mapper
                 .ReverseMap(); 
             CreateMap<IssueType, IssueTypeResponse>()
                 .ReverseMap();
-
+            CreateMap<BreedingStatusChange, StatusChangeResponse>()
+                .ForMember(dest => dest.FirstName,
+                            opt => opt.MapFrom(src => src.ChangedByNavigation != null ? src.ChangedByNavigation.FirstName : string.Empty))
+                .ForMember(dest => dest.LastName,
+                            opt => opt.MapFrom(src => src.ChangedByNavigation != null ? src.ChangedByNavigation.LastName : string.Empty))
+                .ReverseMap();
+            CreateMap<ClutchStatusChange, StatusChangeResponse>()
+                .ForMember(dest => dest.FirstName,
+                            opt => opt.MapFrom(src => src.ChangedByNavigation != null ? src.ChangedByNavigation.FirstName : string.Empty))
+                .ForMember(dest => dest.LastName,
+                            opt => opt.MapFrom(src => src.ChangedByNavigation != null ? src.ChangedByNavigation.LastName : string.Empty))
+                .ReverseMap();
+            CreateMap<EggStatusChange, StatusChangeResponse>()
+                .ForMember(dest => dest.FirstName,
+                            opt => opt.MapFrom(src => src.ChangedByNavigation != null ? src.ChangedByNavigation.FirstName : string.Empty))
+                .ForMember(dest => dest.LastName,
+                            opt => opt.MapFrom(src => src.ChangedByNavigation != null ? src.ChangedByNavigation.LastName : string.Empty))
+                .ReverseMap();
             #endregion
 
             #region Mapper_Request

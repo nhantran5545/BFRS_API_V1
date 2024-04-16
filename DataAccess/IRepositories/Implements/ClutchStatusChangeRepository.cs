@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,14 @@ namespace DataAccess.IRepositories.Implements
     {
         public ClutchStatusChangeRepository(BFRS_DBContext context) : base(context)
         {
+        }
+
+        public async Task<IEnumerable<ClutchStatusChange>> GetTimelineByClutchIdAsync(object clutchId)
+        {
+            return await _context.ClutchStatusChanges
+                .Include(br => br.ChangedBy)
+                .Where(br => br.ClutchId.Equals(clutchId))
+                .ToListAsync();
         }
     }
 }

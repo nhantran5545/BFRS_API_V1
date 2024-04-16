@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface IClutchStatusChangeRepository : IGenericRepository<ClutchStatusChange>
     {
+        Task<IEnumerable<ClutchStatusChange>> GetTimelineByClutchIdAsync(object clutchId);
     }
 }

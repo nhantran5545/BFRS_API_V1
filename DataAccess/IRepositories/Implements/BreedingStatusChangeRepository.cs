@@ -14,10 +14,10 @@ namespace DataAccess.IRepositories.Implements
         {
         }
 
-        public async Task<IEnumerable<BreedingStatusChange>> GetReasonsByBreedingIdAsync(object breedingId)
+        public async Task<IEnumerable<BreedingStatusChange>> GetTimelineByBreedingIdAsync(object breedingId)
         {
             return await _context.BreedingStatusChanges
-                .Include(br => br.ChangedBy)
+                .Include(br => br.ChangedByNavigation)
                 .Where(br => br.BreedingId.Equals(breedingId))
                 .ToListAsync();
         }

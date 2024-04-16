@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BusinessObjects.ResponseModels
 {
-    public class BreedingStatusChangeResponse
+    public class EggTimeline
     {
+        public int EggId { get; set; }
+        public List<StatusChangeResponse>? EggStatuses { get; set; }
     }
 }
