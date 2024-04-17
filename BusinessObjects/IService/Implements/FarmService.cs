@@ -65,16 +65,33 @@ namespace BusinessObjects.IService.Implements
         public async Task<bool> UpdateFarmAsync(int farmId, FarmUpdateRequest request)
         {
             var farm = await _farmRepository.GetByIdAsync(farmId);
-            if(farm == null)
+            if (farm == null)
             {
                 return false;
             }
-            farm.FarmName = request.FarmName;
-            farm.Address = request.Address;
-            farm.PhoneNumber = request.PhoneNumber;
-            farm.Description = request.Description;
-            farm.Status = request.Status;
 
+            if (!string.IsNullOrEmpty(request.FarmName))
+            {
+                farm.FarmName = request.FarmName;
+            }
+            if (!string.IsNullOrEmpty(request.Address))
+            {
+                farm.Address = request.Address;
+            }
+            if (!string.IsNullOrEmpty(request.PhoneNumber))
+            {
+                farm.PhoneNumber = request.PhoneNumber;
+            }
+            if (!string.IsNullOrEmpty(request.Description))
+            {
+                farm.Description = request.Description;
+            }
+            if (request.Image != null) 
+            {
+                farm.Image = request.Image;
+            }
+
+            _farmRepository.Update(farm);
             var result = _farmRepository.SaveChanges();
             if (result < 1)
             {
@@ -82,6 +99,7 @@ namespace BusinessObjects.IService.Implements
             }
             return true;
         }
+
 
         public async Task<bool> ChangStatusFarmById(int farmId)
         {

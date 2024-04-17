@@ -52,7 +52,12 @@ namespace BusinessObjects.InheritanceClass.Validation
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var phoneNumber = value as string;
+            if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
+            {
+                return ValidationResult.Success;
+            }
+
+            var phoneNumber = value.ToString();
 
             // Regular expression for Vietnamese phone numbers with or without country code (+84)
             var regex = new Regex(@"^(?:\+?(84)|0)(\d{9,10})$");
@@ -64,4 +69,5 @@ namespace BusinessObjects.InheritanceClass.Validation
             return ValidationResult.Success;
         }
     }
+
 }

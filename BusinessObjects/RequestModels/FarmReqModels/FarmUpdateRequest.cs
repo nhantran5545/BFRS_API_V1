@@ -16,6 +16,5 @@ namespace BusinessObjects.RequestModels.FarmReqModels
         public string? PhoneNumber { get; set; }
         public string? Image { get; set; }
         public string? Description { get; set; }
-        public string? Status { get; set; }
     }
 }

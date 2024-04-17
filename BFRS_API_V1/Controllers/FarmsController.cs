@@ -80,7 +80,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("{farmId}")]
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutFarm(int farmId, [FromBody] FarmUpdateRequest farmUpdateRequest)
         {   
              var farm = await _farmService.GetFarmByIdAsync(farmId);
