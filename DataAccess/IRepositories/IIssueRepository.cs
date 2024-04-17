@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface IIssueRepository : IGenericRepository<Issue>
     {
+        Task<IEnumerable<Issue>> GetIssuesByBreedingAsync(int breedingId);
     }
 }

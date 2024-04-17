@@ -91,7 +91,13 @@ namespace BusinessObjects.IService.Implements
             var issues = await _issueRepository.GetAllAsync();
             return issues.Select(b => _mapper.Map<IssueResponse>(b));
         }
-
+        //get By Issue ID
+        public async Task<IEnumerable<IssueResponse>> GetIssuesByBreedingAsync(int breedingId)
+        {
+            var issues = await _issueRepository.GetIssuesByBreedingAsync(breedingId);
+            return issues.Select(issue => _mapper.Map<IssueResponse>(issue));
+        }
+        //get By Breeding ID
         public async Task<IssueResponse> GetIssueByIdAsync(int issueId)
         {
             var issue = await _issueRepository.GetByIdAsync(issueId);

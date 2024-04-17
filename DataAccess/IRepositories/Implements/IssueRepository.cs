@@ -23,6 +23,16 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Issue>> GetIssuesByBreedingAsync(int breedingId)
+        {
+            return await _context.Issues
+                .Where(issue => issue.BreedingId == breedingId)
+                .Include(c => c.IssueType)
+                .Include(c => c.CreatedByNavigation)
+                .Include(c => c.UpdatedByNavigation)
+                .ToListAsync();
+        }
+
         public override async Task<Issue?> GetByIdAsync(object id)
         {
             return await _context.Issues

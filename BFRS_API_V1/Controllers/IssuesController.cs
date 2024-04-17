@@ -62,7 +62,7 @@ namespace BFRS_API_V1.Controllers
         }
 
         [HttpPut("{issueId}")]
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> UpdateProcessNote(int issueId, [FromBody] IssueUpdateRequest issueUpdateRequest)
         {
             var accountId = _accountService.GetAccountIdFromToken();
@@ -95,6 +95,19 @@ namespace BFRS_API_V1.Controllers
                 return NotFound("Issue not found");
             }
             return Ok(issue);
+        }
+
+        [HttpGet("ByBreeding/{breedingId}")]
+        [Authorize]
+        public async Task<IActionResult> GetIssuesByBreeding(int breedingId)
+        {
+            var issues = await _issueService.GetIssuesByBreedingAsync(breedingId);
+            if (issues == null || !issues.Any())
+            {
+                return NotFound("No issues found for the provided breeding ID.");
+            }
+
+            return Ok(issues);
         }
     }
 }
