@@ -236,6 +236,12 @@ namespace BusinessObjects.IService.Implements
             return true;
         }
 
+        public async Task<int> GetTotalBirdByAccountIdAsync()
+        {
+            var birds = await _birdRepository.GetAllAsync();
+            return birds.Count();
+        }
+
         public async Task<bool> UpdatebirdMutations(int birdId, MutationRequest mutationRequest)
         {
             var bird = await _birdRepository.GetByIdAsync(birdId);

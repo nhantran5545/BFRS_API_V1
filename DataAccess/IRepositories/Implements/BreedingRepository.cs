@@ -55,10 +55,17 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
-        public async Task<int> GetTotalBreedingsByStaff(int accountId ,string statusName)
+        public async Task<int> GetTotalStatusBreedingsByStaff(int accountId ,string statusName)
         {
             return await _context.Breedings
                 .Where(c => c.Status == statusName && c.Cage.AccountId.Equals(accountId))
+                .CountAsync();
+        }
+
+        public async Task<int> GetTotalStatusBreedingsByManagerId(int accountId, string statusName)
+        {
+            return await _context.Breedings
+                .Where(br =>br.Status == statusName && br.CreatedBy.Equals(accountId))
                 .CountAsync();
         }
 

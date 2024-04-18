@@ -10,7 +10,7 @@ namespace DataAccess.IRepositories
     public interface ICageRepository : IGenericRepository<Cage>
     {
         Task<IEnumerable<Cage>> GetAllCagesAsync();
-        Task<IEnumerable<Cage>> GetCagesManagedByStaffAsync(int staffAccountId);
+        Task<IEnumerable<Cage>> GetCagesManagedByStaffAsync(int accountId);
         Task<IEnumerable<Cage>> GetStandbyCagesByFarmId(int farmId);
         Task<IEnumerable<Cage>> GetCagesByFarmIdAsync(int farmId);
     }

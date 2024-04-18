@@ -82,9 +82,15 @@ namespace BusinessObjects.IService.Implements
             return _mapper.Map<IEnumerable<CageResponse>>(cages);
         }
 
-        public async Task<int> GetTotalCagesByStaffIdAsync(int staffId)
+        public async Task<int> GetTotalCagesByStaffIdAsync(int accountId)
         {
-            var cages = await _cageRepository.GetCagesManagedByStaffAsync(staffId);
+            var cages = await _cageRepository.GetCagesManagedByStaffAsync(accountId);
+            return cages.Count();
+        }
+
+        public async Task<int> GetTotalCagesByManagerIdAsync(int farmId)
+        {
+            var cages = await _cageRepository.GetCagesByFarmIdAsync(farmId);
             return cages.Count();
         }
 

@@ -26,7 +26,7 @@ namespace BFRS_API_V1.Controllers
 
         [HttpGet("TotalByStaff")]
         [Authorize]
-        public async Task<IActionResult> GetTotalBirdCountByStaffId()
+        public async Task<IActionResult> GetTotalCountByStaffId()
         {
             var staffId = _accountService.GetAccountIdFromToken();
             var totalEggCount = await _eggService.GetTotalEggCountByStaffId(staffId);
@@ -38,6 +38,25 @@ namespace BFRS_API_V1.Controllers
                 totalEgg = totalEggCount,
                 totalBird = totalBirdCount,
                 totalCage = totalCageCount
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet("TotalByManager")]
+        [Authorize(Roles ="Admin, Manager")]
+        public async Task<IActionResult> GetTotalCountByManagerId(int farmId)
+        {
+            var managerId = _accountService.GetAccountIdFromToken();
+            var totalBirdCount = await _birdService.GetTotalBirdByAccountIdAsync();
+            var totalCageCount = await _cageService.GetTotalCagesByManagerIdAsync(farmId);
+            var totalBreedingCount = await _breedingService.GetTotalBreedingCountByManagerId(managerId);
+
+            var response = new
+            {
+                totalBird = totalBirdCount,
+                totalCage = totalCageCount,
+                totalBreeding = totalBreedingCount
             };
 
             return Ok(response);
@@ -74,6 +93,24 @@ namespace BFRS_API_V1.Controllers
             {
                 var eggCount = await _breedingService.GetBreedingCountByStatusNameAndManagedByStaff(staffId, status);
                 statusCounts.Add(status, eggCount);
+            }
+
+            return Ok(statusCounts);
+        }
+
+        [HttpGet("CountBreedingByStatusForManager")]
+        [Authorize]
+        public async Task<IActionResult> GetCountBreedingByStatusNameManageByManager()
+        {
+            var managerId = _accountService.GetAccountIdFromToken();
+            var statusCounts = new Dictionary<string, int>();
+
+            var statuses = new List<string> { "Mating", "InProgress", "Closed", "Failed", "Cancelled" };
+
+            foreach (var status in statuses)
+            {
+                var breedingCount = await _breedingService.GetBreedingCountByStatusNameAndManagedByManager(managerId, status);
+                statusCounts.Add(status, breedingCount);
             }
 
             return Ok(statusCounts);
