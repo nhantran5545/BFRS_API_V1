@@ -97,23 +97,5 @@ namespace BFRS_API_V1.Controllers
 
             return Ok(statusCounts);
         }
-
-        [HttpGet("CountBreedingByStatusForManager")]
-        [Authorize]
-        public async Task<IActionResult> GetCountBreedingByStatusNameManageByManager()
-        {
-            var managerId = _accountService.GetAccountIdFromToken();
-            var statusCounts = new Dictionary<string, int>();
-
-            var statuses = new List<string> { "Mating", "InProgress", "Closed", "Failed", "Cancelled" };
-
-            foreach (var status in statuses)
-            {
-                var breedingCount = await _breedingService.GetBreedingCountByStatusNameAndManagedByManager(managerId, status);
-                statusCounts.Add(status, breedingCount);
-            }
-
-            return Ok(statusCounts);
-        }
     }
 }
