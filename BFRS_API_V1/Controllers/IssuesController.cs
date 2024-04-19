@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.IService;
+using BusinessObjects.IService.Implements;
 using BusinessObjects.RequestModels.IssueReqModels;
 using BusinessObjects.ResponseModels;
 using BusinessObjects.ResponseModels.IssueResModels;
@@ -39,6 +40,28 @@ namespace BFRS_API_V1.Controllers
             catch (UnauthorizedAccessException)
             {
                 return StatusCode(403, "You are not authorized to access this resource.");
+            }
+        }
+
+        [HttpGet("staff")]
+        [Authorize(Roles = "Staff")]
+        public async Task<IActionResult> GetCagesByStaffId()
+        {
+            try
+            {
+                var staffAccountId = _accountService.GetAccountIdFromToken();
+
+                if (!_accountService.IsStaff(staffAccountId))
+                {
+                    return Forbid("You are not authorized to access this resource.");
+                }
+
+                var issues = await _issueService.GetIssueByStaffIdAsync(staffAccountId);
+                return Ok(issues);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
 

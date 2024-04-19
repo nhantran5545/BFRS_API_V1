@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessObjects.RequestModels.IssueReqModels;
+using BusinessObjects.ResponseModels.CageResModels;
 using BusinessObjects.ResponseModels.IssueResModels;
 using DataAccess.IRepositories;
 using DataAccess.IRepositories.Implements;
@@ -74,6 +75,12 @@ namespace BusinessObjects.IService.Implements
                 return false;
             }
             return true;
+        }
+
+        public async Task<IEnumerable<IssueResponse>> GetIssueByStaffIdAsync(int staffAccountId)
+        {
+            var issues = await _issueRepository.GetIssueByStaffId(staffAccountId);
+            return _mapper.Map<IEnumerable<IssueResponse>>(issues);
         }
 
         public void DeleteIssue(Issue issue)

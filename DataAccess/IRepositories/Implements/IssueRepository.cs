@@ -23,6 +23,13 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Issue>> GetIssueByStaffId(int staffId)
+        {
+            return await _context.Issues
+                .Where(e => e.CreatedBy == staffId)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Issue>> GetIssuesByBreedingAsync(int breedingId)
         {
             return await _context.Issues

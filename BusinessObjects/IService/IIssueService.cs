@@ -17,6 +17,7 @@ namespace BusinessObjects.IService
         void DeleteIssue(Issue issue);
         void DeleteIssueById(object issueId);
         Task<IEnumerable<IssueResponse>> GetAllIssuesAsync();
+        Task<IEnumerable<IssueResponse>> GetIssueByStaffIdAsync(int staffAccountId);
         Task<IEnumerable<IssueResponse>> GetIssuesByBreedingAsync(int breedingId);
         Task<IssueResponse> GetIssueByIdAsync(int issueId);
     }

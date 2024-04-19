@@ -13,7 +13,6 @@ namespace BusinessObjects.IService.Implements
         private Dictionary<string, object> pedigree = new Dictionary<string, object>();
         private Dictionary<string, Bird> pedigreeIndividual = new Dictionary<string, Bird>();
         private Dictionary<string, Dictionary<string, object>> ancestors = new Dictionary<string, Dictionary<string, object>>();
-        private Dictionary<int, Dictionary<string, object>> generations = new Dictionary<int, Dictionary<string, object>>();
         private Dictionary<string, double> ancestorCache = new Dictionary<string, double>();
         private readonly IBirdRepository _birdRepository;
 
