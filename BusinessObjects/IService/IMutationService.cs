@@ -13,6 +13,7 @@ namespace BusinessObjects.IService
     {
         Task<int> CreateMutationAsync(MutationRequest mutationRequest);
         Task<IEnumerable<IndividualMutation>> GetAllMutationsAsync();
+        Task<IEnumerable<IndividualMutation>> GetMutationsBySpeciesIdAsync(int speciesId);
         Task<IndividualMutation?> GetMutationByIdAsync(object mutationId);
     }
 }

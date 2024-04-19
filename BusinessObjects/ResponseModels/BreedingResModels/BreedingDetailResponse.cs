@@ -27,8 +27,6 @@ namespace BusinessObjects.ResponseModels.BreedingResModels
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedBy { get; set; }
         public string? Status { get; set; }
-        public int TotalClutches { get; set; }
-        public int TotalEggs { get; set; }
         public List<ClutchResponse>? ClutchResponses { get; set; }
     }
 }

@@ -303,16 +303,6 @@ namespace BusinessObjects.IService.Implements
 
                     _cageRepository.SaveChanges();
 
-                    /*var breedingReason = new BreedingStatusChange()
-                    {
-                        BreedingId = breeding.BreedingId,
-                        Description = breedingUpdateRequest.Reason,
-                        ChangedDate = DateTime.Now,
-                        ChangedBy = managerId
-                    };
-                    await _breedingReasonRepository.AddAsync(breedingReason);
-                    _breedingReasonRepository.SaveChanges();*/
-
                     await _statusChangeService.AddBreedingChangeStatus(breeding.BreedingId, breedingUpdateRequest.Reason, managerId, oldStatus, breeding.Status);
 
                     transaction.Commit();
@@ -340,20 +330,5 @@ namespace BusinessObjects.IService.Implements
                 _clutchRepository.SaveChanges();
             }
         }
-
-        /*private async Task AddBreedingChangeStatus(int breedingId, string? reason, int changedBy, string? oldStatus, string newStatus)
-        {
-            var breedingReason = new BreedingStatusChange()
-            {
-                BreedingId = breedingId,
-                Description = reason,
-                ChangedDate = DateTime.Now,
-                ChangedBy = changedBy,
-                OldStatus = oldStatus,
-                NewStatus = newStatus
-            };
-            await _breedingReasonRepository.AddAsync(breedingReason);
-            _breedingReasonRepository.SaveChanges();
-        }*/
     }
 }

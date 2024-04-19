@@ -148,35 +148,5 @@ namespace BusinessObjects.IService.Implements
             await _statusChangeService.AddClutchChangeStatus(clutch.ClutchId, clutchCloseRequest.Status, accountId, oldStatus, clutchCloseRequest.Status);
             return true;
         }
-
-        /*private async Task AddClutchChangeStatus(int clutchId, string? reason, int changedBy, string? oldStatus, string newStatus)
-        {
-            var clutchReason = new ClutchStatusChange()
-            {
-                ClutchId = clutchId,
-                Description = reason,
-                ChangedDate = DateTime.Now,
-                ChangedBy = changedBy,
-                OldStatus = oldStatus,
-                NewStatus = newStatus
-            };
-            await _clutchStatusChangeRepository.AddAsync(clutchReason);
-            _clutchStatusChangeRepository.SaveChanges();
-        }*/
-
-        /*private async Task AddBreedingChangeStatus(int breedingId, string? reason, int changedBy, string? oldStatus, string newStatus)
-        {
-            var breedingStatus = new BreedingStatusChange()
-            {
-                BreedingId = breedingId,
-                Description = reason,
-                ChangedDate = DateTime.Now,
-                ChangedBy = changedBy,
-                OldStatus = oldStatus,
-                NewStatus = newStatus
-            };
-            await _breedingStatusChangeRepository.AddAsync(breedingStatus);
-            _breedingStatusChangeRepository.SaveChanges();
-        }*/
     }
 }

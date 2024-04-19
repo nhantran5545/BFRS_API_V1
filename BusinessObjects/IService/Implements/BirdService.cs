@@ -163,7 +163,6 @@ namespace BusinessObjects.IService.Implements
             return birds.Count();
         }
 
-
         public async Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId)
         {
             var bird = await _birdRepository.GetByIdAsync(birdId);
@@ -207,32 +206,48 @@ namespace BusinessObjects.IService.Implements
 
         public async Task<bool> UpdateBirdAsync(BirdUpdateRequest birdUpdateRequest)
         {
-            var bird = await _birdRepository.GetByIdAsync(birdUpdateRequest.BirdId);
-            if(bird == null)
+            using (var transaction = _birdRepository.BeginTransaction())
             {
-                return false;
-            }
+                try
+                {
+                    var bird = await _birdRepository.GetByIdAsync(birdUpdateRequest.BirdId);
+                    if (bird == null)
+                    {
+                        return false;
+                    }
 
-            bird.Gender = birdUpdateRequest.Gender;
-            bird.HatchedDate = birdUpdateRequest.HatchedDate;
-            bird.PurchaseFrom = birdUpdateRequest.PurchaseFrom;
-            bird.AcquisitionDate = birdUpdateRequest.AcquisitionDate;
-            bird.BirdSpeciesId = birdUpdateRequest.BirdSpeciesId;
-            bird.CageId = birdUpdateRequest.CageId;
-            bird.FarmId = birdUpdateRequest.FarmId;
-            bird.FatherBirdId = birdUpdateRequest.FatherBirdId;
-            bird.MotherBirdId = birdUpdateRequest.MotherBirdId;
-            bird.BandNumber = birdUpdateRequest.BandNumber;
-            bird.Image = birdUpdateRequest.Image;
-            bird.LifeStage = birdUpdateRequest.LifeStage;
-            bird.Status = birdUpdateRequest.Status;
+                    bird.Gender = birdUpdateRequest.Gender;
+                    bird.HatchedDate = birdUpdateRequest.HatchedDate;
+                    bird.PurchaseFrom = birdUpdateRequest.PurchaseFrom;
+                    bird.AcquisitionDate = birdUpdateRequest.AcquisitionDate;
+                    bird.BirdSpeciesId = birdUpdateRequest.BirdSpeciesId;
+                    bird.CageId = birdUpdateRequest.CageId;
+                    bird.FarmId = birdUpdateRequest.FarmId;
+                    bird.FatherBirdId = birdUpdateRequest.FatherBirdId;
+                    bird.MotherBirdId = birdUpdateRequest.MotherBirdId;
+                    bird.BandNumber = birdUpdateRequest.BandNumber;
+                    bird.Image = birdUpdateRequest.Image;
+                    bird.LifeStage = birdUpdateRequest.LifeStage;
+                    bird.Status = birdUpdateRequest.Status;
 
-            var result = _birdRepository.SaveChanges();
-            if(result < 1)
-            {
-                return false;
+                    _birdRepository.SaveChanges();
+
+                    if (birdUpdateRequest.MutationRequests != null)
+                    {
+                        await UpdateBirdMutations(birdUpdateRequest.MutationRequests, bird.BirdId);
+                    }
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    transaction.Rollback();
+                    return false;
+                }
             }
-            return true;
+            
         }
 
         public async Task<int> GetTotalBirdByAccountIdAsync()
@@ -241,7 +256,7 @@ namespace BusinessObjects.IService.Implements
             return birds.Count();
         }
 
-        public async Task<bool> UpdatebirdMutations(int birdId, MutationRequest mutationRequest)
+        private async Task<bool> UpdateBirdMutations(List<MutationRequest> mutationRequests, int birdId)
         {
             var bird = await _birdRepository.GetByIdAsync(birdId);
             if (bird == null)
@@ -253,6 +268,11 @@ namespace BusinessObjects.IService.Implements
             if(birdMutations.Any())
             {
                 _birdMutationRepository.Delete(birdMutations);
+            }
+
+            if(mutationRequests.Any())
+            {
+                await AddMutation(mutationRequests, birdId);
             }
 
             return true;

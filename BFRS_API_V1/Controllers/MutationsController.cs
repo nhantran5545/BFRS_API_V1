@@ -30,6 +30,18 @@ namespace BFRS_API_V1.Controllers
             return Ok(mutations);
         }
 
+        [HttpGet("BySpecies/{speciesId}")]
+        [Authorize]
+        public async Task<IActionResult> GetBySpeciesIdAsync(int speciesId)
+        {
+            var mutations = await _mutationService.GetMutationsBySpeciesIdAsync(speciesId);
+            if (!mutations.Any())
+            {
+                return NotFound("There are no mutations");
+            }
+            return Ok(mutations);
+        }
+
         [HttpGet("{mutationId}")]
         [Authorize]
         public async Task<IActionResult> GetById(int mutationId)

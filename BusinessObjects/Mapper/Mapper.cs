@@ -150,6 +150,10 @@ namespace BusinessObjects.Mapper
                 .ReverseMap();
             CreateMap<Mutation, IndividualMutation>()
                 .ReverseMap();
+            CreateMap<SpeciesMutation, IndividualMutation>()
+                .ForMember(dest => dest.MutationName,
+                            opt => opt.MapFrom(src => src.Mutation != null ? src.Mutation.MutationName : string.Empty))
+                .ReverseMap();
             CreateMap<Issue, IssueResponse>()
                 .ForMember(dest => dest.CreatedByFirstName,
                             opt => opt.MapFrom(src => src.CreatedByNavigation != null ? src.CreatedByNavigation.FirstName : string.Empty))

@@ -14,11 +14,13 @@ namespace BusinessObjects.IService.Implements
     public class MutationService : IMutationService
     {
         private readonly IMutationRepository _mutationRepository;
+        private readonly ISpeciesMutationRepository _speciesMutationRepository;
         private readonly IMapper _mapper;
 
-        public MutationService(IMutationRepository mutationRepository, IMapper mapper)
+        public MutationService(IMutationRepository mutationRepository, ISpeciesMutationRepository speciesMutationRepository, IMapper mapper)
         {
             _mutationRepository = mutationRepository;
+            _speciesMutationRepository = speciesMutationRepository;
             _mapper = mapper;
         }
 
@@ -37,6 +39,12 @@ namespace BusinessObjects.IService.Implements
         public async Task<IEnumerable<IndividualMutation>> GetAllMutationsAsync()
         {
             var mutations = await _mutationRepository.GetAllAsync();
+            return mutations.Select(mutation => _mapper.Map<IndividualMutation>(mutation));
+        }
+
+        public async Task<IEnumerable<IndividualMutation>> GetMutationsBySpeciesIdAsync(int speciesId)
+        {
+            var mutations = await _speciesMutationRepository.GetBySpeciesIdAsync(speciesId);
             return mutations.Select(mutation => _mapper.Map<IndividualMutation>(mutation));
         }
 

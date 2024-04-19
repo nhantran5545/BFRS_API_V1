@@ -198,10 +198,6 @@ namespace BFRS_API_V1.Controllers
         public async Task<IActionResult> CancelBreeding(BreedingUpdateRequest breedingUpdateRequest)
         {
             var managerId = _accountService.GetAccountIdFromToken();
-            /*if (breedingUpdateRequest.Status != "Failed" && breedingUpdateRequest.Status != "Cancelled")
-            {
-                return BadRequest("Invalid Status");
-            }*/
 
             var breeding = await _breedingService.GetBreedingById(breedingUpdateRequest.BreedingId);
             if (breeding == null)
