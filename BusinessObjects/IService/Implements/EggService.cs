@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Storage.Blobs.Models;
 using BusinessObjects.RequestModels.EggReqModels;
 using BusinessObjects.ResponseModels;
 using DataAccess.IRepositories;
@@ -16,18 +17,16 @@ namespace BusinessObjects.IService.Implements
     {
         private readonly IEggRepository _eggRepository;
         private readonly IClutchRepository _clutchRepository;
-        private readonly IBreedingRepository _breedingRepository;
-        private readonly IEggStatusChangeRepository _eggStatusChangeRepository;
+        private readonly IStatusChangeService _statusChangeService;
         private readonly IMapper _mapper;
 
         public EggService(IEggRepository eggRepository,  IMapper mapper, IClutchRepository clutchRepository, 
-            IBreedingRepository breedingRepository, IEggStatusChangeRepository eggStatusChangeRepository)
+            IStatusChangeService statusChangeService)
         {
             _eggRepository = eggRepository;
             _mapper = mapper;
             _clutchRepository = clutchRepository;
-            _breedingRepository = breedingRepository;
-            _eggStatusChangeRepository = eggStatusChangeRepository;
+            _statusChangeService = statusChangeService;
         }
 
         public async Task<int> CreateEggAsync(EggAddRequest eggAddRequest, int accountId)
@@ -52,12 +51,14 @@ namespace BusinessObjects.IService.Implements
                         clutch.Status = "Hatched";
                         clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
+                        await _statusChangeService.AddClutchChangeStatus(clutch.ClutchId, null, accountId, "Created", "Hatched");
                     }
                     else if (clutch.Status == "Weaned" && egg.Status == "In Development")
                     {
                         clutch.Status = "Banding";
                         clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
+                        await _statusChangeService.AddClutchChangeStatus(clutch.ClutchId, null, accountId, "Weaned", "Banding");
                     }
 
                     egg.CreatedBy = accountId;
@@ -65,7 +66,7 @@ namespace BusinessObjects.IService.Implements
                     await _eggRepository.AddAsync(egg);
                     _eggRepository.SaveChanges();
 
-                    await AddEggChangeStatus(egg.EggId, null, accountId, null, eggAddRequest.Status);
+                    await _statusChangeService.AddEggChangeStatus(egg.EggId, null, accountId, null, eggAddRequest.Status);
                     transaction.Commit();
                     return egg.EggId;
                 }
@@ -151,8 +152,8 @@ namespace BusinessObjects.IService.Implements
 
                     _eggRepository.SaveChanges();
 
-                    await AddEggChangeStatus(egg.EggId, null, accountId, oldStatus, eggUpdateRequest.Status);
-                    await UpdateClutchStatus(egg.ClutchId);
+                    await _statusChangeService.AddEggChangeStatus(egg.EggId, null, accountId, oldStatus, eggUpdateRequest.Status);
+                    await UpdateClutchStatus(egg.ClutchId, accountId);
                     transaction.Commit();
                     return true;
                 }
@@ -186,6 +187,7 @@ namespace BusinessObjects.IService.Implements
                     {
                         clutch.Status = "Banding";
                         _clutchRepository.SaveChanges();
+                        await _statusChangeService.AddClutchChangeStatus(clutch.ClutchId, null, accountId, "Hatched", "Banding");
                     }
 
                     var oldStatus = egg.Status;
@@ -197,8 +199,8 @@ namespace BusinessObjects.IService.Implements
 
                     _eggRepository.SaveChanges();
 
-                    await AddEggChangeStatus(egg.EggId, null, accountId, oldStatus, "Hatched");
-                    await UpdateClutchStatus(egg.ClutchId);
+                    await _statusChangeService.AddEggChangeStatus(egg.EggId, null, accountId, oldStatus, "Hatched");
+                    await UpdateClutchStatus(egg.ClutchId, accountId);
                     transaction.Commit();
                     return true;
                 }
@@ -212,7 +214,7 @@ namespace BusinessObjects.IService.Implements
             
         }
 
-        private async Task UpdateClutchStatus(int clutchId)
+        private async Task UpdateClutchStatus(int clutchId, int accountId)
         {
             var eggs = await _eggRepository.GetEggsByClutchIdAsync(clutchId);
             if (eggs.Any())
@@ -229,21 +231,25 @@ namespace BusinessObjects.IService.Implements
                 if (flag)
                 {
                     var clutch = await _clutchRepository.GetByIdAsync(clutchId);
-                    if (clutch != null)
+                    if (clutch != null && clutch.Status != "Weaned")
                     {
+                        var oldStatus = clutch.Status;
                         clutch.Status = "Weaned";
                         clutch.Phase = 4;
                         _clutchRepository.SaveChanges();
+                        await _statusChangeService.AddClutchChangeStatus(clutch.ClutchId, null, accountId, oldStatus, "Weaned");
                     }
                 }
                 else
                 {
                     var clutch = await _clutchRepository.GetByIdAsync(clutchId);
-                    if (clutch != null)
+                    if (clutch != null && clutch.Status != "Banding")
                     {
+                        var oldStatus = clutch.Status;
                         clutch.Status = "Banding";
                         clutch.Phase = 3;
                         _clutchRepository.SaveChanges();
+                        await _statusChangeService.AddClutchChangeStatus(clutch.ClutchId, null, accountId, oldStatus, "Banding");
                     }
                 }
             }
@@ -260,21 +266,6 @@ namespace BusinessObjects.IService.Implements
             }
             
             return eggResponse;
-        }
-
-        private async Task AddEggChangeStatus(int eggId, string? reason, int changedBy, string? oldStatus, string newStatus)
-        {
-            var eggReason = new EggStatusChange()
-            {
-                EggId = eggId,
-                Description = reason,
-                ChangedDate = DateTime.Now,
-                ChangedBy = changedBy,
-                OldStatus = oldStatus,
-                NewStatus = newStatus
-            };
-            await _eggStatusChangeRepository.AddAsync(eggReason);
-            _eggStatusChangeRepository.SaveChanges();
         }
     }
 }

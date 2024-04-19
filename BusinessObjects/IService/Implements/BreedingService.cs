@@ -22,19 +22,19 @@ namespace BusinessObjects.IService.Implements
         private readonly ICageRepository _cageRepository;
         private readonly IBirdSpeciesRepository _birdSpeciesRepository;
         private readonly IClutchRepository _clutchRepository;
-        private readonly IBreedingStatusChangeRepository _breedingReasonRepository;
+        private readonly IStatusChangeService _statusChangeService;
         private readonly IMapper _mapper;
 
         public BreedingService(IBreedingRepository breedingRepository, IBirdRepository birdRepository,
             ICageRepository cageRepository, IBirdSpeciesRepository birdSpeciesRepository, IClutchRepository clutchRepository,
-            IBreedingStatusChangeRepository breedingReasonRepository, IMapper mapper, IAccountRepository accountRepository)
+            IStatusChangeService statusChangeService, IMapper mapper, IAccountRepository accountRepository)
         {
             _breedingRepository = breedingRepository;
             _birdRepository = birdRepository;
             _cageRepository = cageRepository;
             _birdSpeciesRepository = birdSpeciesRepository;
             _clutchRepository = clutchRepository;
-            _breedingReasonRepository = breedingReasonRepository;
+            _statusChangeService = statusChangeService;
             _mapper = mapper;
             _accountRepository = accountRepository;
         }
@@ -94,7 +94,7 @@ namespace BusinessObjects.IService.Implements
                     
                     _cageRepository.SaveChanges();
 
-                    await AddBreedingChangeStatus(breeding.BreedingId, null, managerId, null, breeding.Status);
+                    await _statusChangeService.AddBreedingChangeStatus(breeding.BreedingId, null, managerId, null, breeding.Status);
 
                     transaction.Commit();
                     return breeding.BreedingId;
@@ -232,7 +232,7 @@ namespace BusinessObjects.IService.Implements
 
                     _cageRepository.SaveChanges();
 
-                    await AddBreedingChangeStatus(breeding.BreedingId, null, managerId, oldStatus, breeding.Status);
+                    await _statusChangeService.AddBreedingChangeStatus(breeding.BreedingId, null, managerId, oldStatus, breeding.Status);
 
                     transaction.Commit();
                     return true;
@@ -313,7 +313,7 @@ namespace BusinessObjects.IService.Implements
                     await _breedingReasonRepository.AddAsync(breedingReason);
                     _breedingReasonRepository.SaveChanges();*/
 
-                    await AddBreedingChangeStatus(breeding.BreedingId, breedingUpdateRequest.Reason, managerId, oldStatus, breeding.Status);
+                    await _statusChangeService.AddBreedingChangeStatus(breeding.BreedingId, breedingUpdateRequest.Reason, managerId, oldStatus, breeding.Status);
 
                     transaction.Commit();
                     return true;
@@ -341,7 +341,7 @@ namespace BusinessObjects.IService.Implements
             }
         }
 
-        private async Task AddBreedingChangeStatus(int breedingId, string? reason, int changedBy, string? oldStatus, string newStatus)
+        /*private async Task AddBreedingChangeStatus(int breedingId, string? reason, int changedBy, string? oldStatus, string newStatus)
         {
             var breedingReason = new BreedingStatusChange()
             {
@@ -354,6 +354,6 @@ namespace BusinessObjects.IService.Implements
             };
             await _breedingReasonRepository.AddAsync(breedingReason);
             _breedingReasonRepository.SaveChanges();
-        }
+        }*/
     }
 }

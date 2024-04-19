@@ -94,7 +94,6 @@ builder.Services.AddScoped<IAreaService, AreaService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IBirdService, BirdService>();
 builder.Services.AddScoped<IBirdSpeciesService, BirdSpeciesService>();
-builder.Services.AddScoped<IBreedingStatusChangeService, BreedingStatusChangeService>();
 builder.Services.AddScoped<IBreedingService, BreedingService>();
 builder.Services.AddScoped<ICageService, CageService>();
 builder.Services.AddScoped<ICheckListService, CheckListService>();
@@ -105,12 +104,11 @@ builder.Services.AddScoped<IMutationService, MutationService>();
 builder.Services.AddScoped<ICheckListDetailService, CheckListDetailService>();
 builder.Services.AddScoped<ICheckListService, CheckListService>();
 builder.Services.AddScoped<IBreedingCheckListService, BreedingCheckListService>();
-builder.Services.AddScoped<IEggStatusChangeService, EggStatusChangeService>();
-builder.Services.AddScoped<IClutchStatusChangeService, ClutchStatusChangeService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IIssueService, IssueService>();
 builder.Services.AddScoped<IIssueTypeService, IssueTypeService>();
 builder.Services.AddScoped<IReasonService, ReasonService>();
+builder.Services.AddScoped<IStatusChangeService, StatusChangeService>();
 
 // Mapper
 var mapperConfig = new MapperConfiguration(mc =>
