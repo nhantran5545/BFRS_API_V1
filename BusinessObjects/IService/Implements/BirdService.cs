@@ -105,7 +105,6 @@ namespace BusinessObjects.IService.Implements
                     bird.BirdSpeciesId = breeding.FatherBird.BirdSpeciesId;
                     bird.FatherBirdId = breeding.FatherBirdId;
                     bird.MotherBirdId = breeding.MotherBirdId;
-                    //bird.FarmId = breeding.FatherBird.FarmId;
                     bird.HatchedDate = egg.HatchedDate;
                     await _birdRepository.AddAsync(bird);
                     _birdRepository.SaveChanges();

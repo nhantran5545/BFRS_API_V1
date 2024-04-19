@@ -10,6 +10,5 @@ namespace BusinessObjects.RequestModels.EggReqModels
     {
         public int EggId { get; set; }
         public DateTime? HatchedDate { get; set; }
-        //public int UpdatedBy { get; set; }
     }
 }

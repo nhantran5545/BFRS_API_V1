@@ -104,7 +104,6 @@ builder.Services.AddScoped<IFarmService, FarmService>();
 builder.Services.AddScoped<IMutationService, MutationService>();
 builder.Services.AddScoped<ICheckListDetailService, CheckListDetailService>();
 builder.Services.AddScoped<ICheckListService, CheckListService>();
-builder.Services.AddScoped<IBreedingCheckListDetailService, BreedingCheckListDetailService>();
 builder.Services.AddScoped<IBreedingCheckListService, BreedingCheckListService>();
 builder.Services.AddScoped<IEggStatusChangeService, EggStatusChangeService>();
 builder.Services.AddScoped<IClutchStatusChangeService, ClutchStatusChangeService>();

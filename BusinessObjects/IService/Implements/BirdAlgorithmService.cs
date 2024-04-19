@@ -76,7 +76,6 @@ namespace BusinessObjects.IService.Implements
 
             if (bird == null) { return; }
             AddInd(ancestor, birdId);
-            //pedigreeIndividual.Add(ancestor, bird);
 
             if (bird.FatherBirdId != null)
             {

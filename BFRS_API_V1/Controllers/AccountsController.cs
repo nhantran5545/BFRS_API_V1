@@ -17,7 +17,6 @@ namespace BFRS_API_V1.Controllers
     {
         IAccountService _accountService;
 
-
         public AccountsController(IAccountService accountService)
         {
             _accountService = accountService;

@@ -12,8 +12,6 @@ namespace BusinessObjects.IService
     {
         Task CreateCheckListAsync(CheckList checkList);
         void UpdateCheckList(CheckList checkList);
-        void DeleteCheckList(CheckList checkList);
-        void DeleteCheckListById(object checkListId);
         Task<IEnumerable<CheckList>> GetAllCheckListsAsync();
         Task<CheckList?> GetCheckListByIdAsync(object checkListId);
     }

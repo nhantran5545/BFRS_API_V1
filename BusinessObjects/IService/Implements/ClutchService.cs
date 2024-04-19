@@ -78,16 +78,6 @@ namespace BusinessObjects.IService.Implements
             }
         }
 
-        public void DeleteClutch(Clutch clutch)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteClutchtById(object clutchId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IEnumerable<ClutchResponse>> GetAllClutchsAsync()
         {
             var clutchs = await _clutchRepository.GetAllAsync();
@@ -129,7 +119,6 @@ namespace BusinessObjects.IService.Implements
 
             clutch.BroodStartDate = clutchUpdateRequest.BroodStartDate;
             clutch.BroodEndDate = clutchUpdateRequest.BroodEndDate;
-            //clutch.CageId = clutch.CageId;
             clutch.UpdatedBy = accountId;
             clutch.UpdatedDate = DateTime.Now;
             var result = _clutchRepository.SaveChanges();

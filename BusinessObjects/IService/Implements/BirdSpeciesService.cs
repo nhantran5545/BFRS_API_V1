@@ -3,7 +3,6 @@ using BusinessObjects.RequestModels;
 using BusinessObjects.ResponseModels;
 using BusinessObjects.ResponseModels.BirdSpeciesResModels;
 using DataAccess.IRepositories;
-using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;

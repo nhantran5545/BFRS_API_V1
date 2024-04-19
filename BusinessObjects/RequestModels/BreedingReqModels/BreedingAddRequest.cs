@@ -11,6 +11,5 @@ namespace BusinessObjects.RequestModels.BreedingReqModels
         public int FatherBirdId { get; set; }
         public int MotherBirdId { get; set; }
         public int CageId { get; set; }
-        //public int ManagerId { get; set; }
     }
 }

@@ -28,16 +28,6 @@ namespace BusinessObjects.IService.Implements
             _checkListRepository.SaveChanges();
         }
 
-        public void DeleteCheckList(CheckList checkList)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteCheckListById(object checkListId)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<IEnumerable<CheckList>> GetAllCheckListsAsync()
         {
             return await _checkListRepository.GetAllAsync();

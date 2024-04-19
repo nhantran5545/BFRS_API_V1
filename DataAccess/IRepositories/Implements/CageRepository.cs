@@ -47,6 +47,7 @@ namespace DataAccess.IRepositories.Implements
             return await _context.Cages
                 .Include(c => c.Area)
                 .Include(c => c.Account)
+                .Include(c => c.Birds)
                 .Where(c => (c.Status == null || c.Status.Equals("Standby"))
                             && c.Area != null && c.Area.FarmId.Equals(farmId))
                 .ToListAsync();
@@ -57,6 +58,7 @@ namespace DataAccess.IRepositories.Implements
             return await _context.Cages
                 .Include(c => c.Area)
                 .Include(c => c.Account)
+                .Include(c => c.Birds)
                 .Where(c => c.Area != null && c.Area.FarmId.Equals(farmId))
                 .ToListAsync();
         }

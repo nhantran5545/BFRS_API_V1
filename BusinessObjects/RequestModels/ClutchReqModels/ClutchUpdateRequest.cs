@@ -11,7 +11,5 @@ namespace BusinessObjects.RequestModels.ClutchReqModels
         public int ClutchId { get; set; }
         public DateTime? BroodStartDate { get; set; }
         public DateTime? BroodEndDate { get; set; }
-        //public int? CageId { get; set; }
-        //public int? UpdatedBy { get; set; }
     }
 }
