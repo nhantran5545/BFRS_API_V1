@@ -26,6 +26,7 @@ namespace DataAccess.IRepositories.Implements
         public async Task<IEnumerable<Issue>> GetIssueByStaffId(int staffId)
         {
             return await _context.Issues
+                .Include(e => e.IssueType)
                 .Where(e => e.CreatedBy == staffId)
                 .ToListAsync();
         }

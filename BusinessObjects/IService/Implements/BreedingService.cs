@@ -162,11 +162,6 @@ namespace BusinessObjects.IService.Implements
             return await _breedingRepository.GetTotalStatusBreedingsByStaff(staffId, status);
         }
 
-        public async Task<int> GetBreedingCountByStatusNameAndManagedByManager(int managerId, string status)
-        {
-            return await _breedingRepository.GetTotalStatusBreedingsByManagerId(managerId, status);
-        }
-
         public async Task<int> GetTotalBreedingCountByManagerId(int managerId)
         {
             var breedings = await _breedingRepository.GetAllBreedingsByManagerId(managerId);
