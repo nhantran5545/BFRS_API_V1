@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using BusinessObjects.IService;
 using Microsoft.AspNetCore.Authorization;
 using BusinessObjects.RequestModels.BirdReqModels;
@@ -92,7 +90,7 @@ namespace BFRS_API_V1.Controllers
         // GET: api/Birds/5
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<BirdResponse>> GetBird(int id)
+        public async Task<ActionResult<BirdDetailResponse>> GetBird(int id)
         {
             var bird = await _birdService.GetBirdByIdAsync(id);
             if (bird == null)
@@ -142,7 +140,7 @@ namespace BFRS_API_V1.Controllers
             
             if(await _birdService.UpdateBirdAsync(birdUpdateRequest))
             {
-                return Ok(birdUpdateRequest);
+                return Ok("Update Successful");
             }
             return BadRequest("Something wrong with the server Please try again");
         }
@@ -151,7 +149,7 @@ namespace BFRS_API_V1.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("ForEgg")]
         [Authorize(Roles = "Admin, Manager")]
-        public async Task<ActionResult<BirdResponse>> PostBirdForEgg(BirdAddFromEggRequest birdAddFromEggRequest)
+        public async Task<ActionResult<BirdDetailResponse>> PostBirdForEgg(BirdAddFromEggRequest birdAddFromEggRequest)
         {
             var egg = await _eggService.GetEggByIdAsync(birdAddFromEggRequest.EggId);
             if (egg == null)
@@ -192,7 +190,7 @@ namespace BFRS_API_V1.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin, Manager")]
-        public async Task<ActionResult<BirdResponse>> PostBird(BirdAddRequest birdAddRequest)
+        public async Task<ActionResult<BirdDetailResponse>> PostBird(BirdAddRequest birdAddRequest)
         {
             var species = await _birdSpeciesService.GetBirdSpeciesByIdAsync(birdAddRequest.BirdSpeciesId);
             if (species == null)
@@ -233,12 +231,5 @@ namespace BFRS_API_V1.Controllers
             var bird = await _birdService.GetBirdByIdAsync(result);
             return Ok(bird);
         }
-        // DELETE: api/Birds/5
-        /*[HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBird(int id)
-        {
-
-            return NoContent();
-        }*/
     }
 }

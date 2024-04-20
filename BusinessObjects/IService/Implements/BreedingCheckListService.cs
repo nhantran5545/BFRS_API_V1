@@ -100,7 +100,6 @@ namespace BusinessObjects.IService.Implements
                 foreach (var item in checkList.CheckListDetails)
                 {
                     BreedingCheckListDetailResponse breedingCheckListDetailResponse = new BreedingCheckListDetailResponse();
-                    //breedingCheckListDetailResponse.BreedingCheckListId = 0;
                     breedingCheckListDetailResponse.CheckListDetailResponse = _mapper.Map<CheckListDetailResponse>(item);
                     breedingCheckListDetails.Add(breedingCheckListDetailResponse);
                 }
@@ -202,7 +201,6 @@ namespace BusinessObjects.IService.Implements
                 foreach (var item in checkList.CheckListDetails)
                 {
                     BreedingCheckListDetailResponse breedingCheckListDetailResponse = new BreedingCheckListDetailResponse();
-                    //breedingCheckListDetailResponse.BreedingCheckListId = 0;
                     breedingCheckListDetailResponse.CheckListDetailResponse = _mapper.Map<CheckListDetailResponse>(item);
                     breedingCheckListDetails.Add(breedingCheckListDetailResponse);
                 }
