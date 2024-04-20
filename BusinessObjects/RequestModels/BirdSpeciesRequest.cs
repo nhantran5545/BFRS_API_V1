@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,9 @@ namespace BusinessObjects.RequestModels
 {
     public class BirdSpeciesRequest
     {
+        [Required(ErrorMessage = "Bird species name is required.")]
         public string? BirdSpeciesName { get; set; }
+        [StringLength(255, ErrorMessage = "Description cannot exceed 255 characters")]
         public string? Description { get; set; }
         public int? BirdTypeId { get; set; }
         public int? HatchingPhaseFrom { get; set; }
