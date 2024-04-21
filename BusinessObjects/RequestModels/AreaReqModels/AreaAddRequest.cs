@@ -11,7 +11,7 @@ namespace BusinessObjects.RequestModels.AreaReqModels
     {
         [Required(ErrorMessage = "AreaName is required")]
         public string AreaName { get; set; }
-
+        [StringLength(255, ErrorMessage = "Description cannot exceed 255 characters")]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "FarmId is required")]

@@ -43,25 +43,6 @@ namespace BFRS_API_V1.Controllers
             return Ok(response);
         }
 
-        [HttpGet("TotalByManager")]
-        [Authorize(Roles ="Admin, Manager")]
-        public async Task<IActionResult> GetTotalCountByManagerId(int farmId)
-        {
-            var managerId = _accountService.GetAccountIdFromToken();
-            var totalBirdCount = await _birdService.GetTotalBirdByAccountIdAsync();
-            var totalCageCount = await _cageService.GetTotalCagesByManagerIdAsync(farmId);
-            var totalBreedingCount = await _breedingService.GetTotalBreedingCountByManagerId(managerId);
-
-            var response = new
-            {
-                totalBird = totalBirdCount,
-                totalCage = totalCageCount,
-                totalBreeding = totalBreedingCount
-            };
-
-            return Ok(response);
-        }
-
         [HttpGet("CountEggByStatusForStaff")]
         [Authorize]
         public async Task<IActionResult> GetCountEggByStatusNameManageByStaff()
