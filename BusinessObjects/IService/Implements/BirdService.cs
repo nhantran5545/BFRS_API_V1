@@ -216,13 +216,22 @@ namespace BusinessObjects.IService.Implements
                         return false;
                     }
 
+                    bird.BirdName= birdUpdateRequest.BirdName;
                     bird.Gender = birdUpdateRequest.Gender;
                     bird.HatchedDate = birdUpdateRequest.HatchedDate;
                     bird.PurchaseFrom = birdUpdateRequest.PurchaseFrom;
                     bird.AcquisitionDate = birdUpdateRequest.AcquisitionDate;
                     bird.BirdSpeciesId = birdUpdateRequest.BirdSpeciesId;
                     bird.CageId = birdUpdateRequest.CageId;
-                    bird.FarmId = birdUpdateRequest.FarmId;
+                    if(bird.CageId != null)
+                    {
+                        var cage = await _cageRepository.GetByIdAsync(bird.CageId);
+                        if (cage != null && cage.Area != null)//cage never null
+                        {
+                            bird.FarmId = cage.Area.FarmId;
+                        }
+                    }
+                    
                     bird.FatherBirdId = birdUpdateRequest.FatherBirdId;
                     bird.MotherBirdId = birdUpdateRequest.MotherBirdId;
                     bird.BandNumber = birdUpdateRequest.BandNumber;
