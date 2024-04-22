@@ -21,6 +21,7 @@ namespace BusinessObjects.IService
         Task<int> GetBreedingCountByStatusNameAndManagedByStaff(int staffId, string status);
         Task<int> GetBreedingCountByStatusNameAndManagedByManager(int managerId, string status);
         Task<int> GetTotalBreedingCountByManagerId(int managerId);
+        Dictionary<string, int> GetTotalBreedingByFarm();
         Task<BreedingDetailResponse?> GetBreedingById(object breedingId);
     }
 }

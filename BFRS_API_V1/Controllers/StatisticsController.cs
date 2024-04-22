@@ -81,7 +81,7 @@ namespace BFRS_API_V1.Controllers
             return Ok(statusCounts);
         }
 
-        [HttpGet("CountBreedingByStatusForManager")]
+        [HttpGet("Manager/CountBreedingByStatusForManager")]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetCountBreedingByStatusNameManageByManager()
         {
@@ -99,7 +99,7 @@ namespace BFRS_API_V1.Controllers
             return Ok(statusCounts);
         }
 
-        [HttpGet("totalBirdByFarmId")]
+        [HttpGet("Manager/totalBirdByFarmId")]
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetTotalBirdsByFarmId(int farmId)
         {
@@ -131,29 +131,31 @@ namespace BFRS_API_V1.Controllers
         }
 
 
-        [HttpGet("totalCageByStatusAndFarmId")]
+        [HttpGet("Manager/totalCageFarmId")]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> GetTotalCagesByStatusAndFarmId(int farmId)
+        public async Task<IActionResult> GetTotalCagesFarmId(int farmId)
         {
+            var response = new Dictionary<string, object>();
+
             var statusCounts = new Dictionary<string, int>();
-
             var statuses = new List<string> { "Nourishing", "Breeding", "Standby" };
-
             foreach (var status in statuses)
             {
                 var cageCount = await _cageService.GetTotalCagesStatusByFarmIdAsync(status, farmId);
                 statusCounts.Add(status, cageCount);
             }
-
             int totalCageCount = statusCounts.Values.Sum();
-
             statusCounts.Add("Total", totalCageCount);
+            response.Add("CageStatusCounts", statusCounts);
 
-            return Ok(statusCounts);
+            var cageCountByArea = _cageService.GetCageCountByAreaAndFarm(farmId);
+            response.Add("CageCountByArea", cageCountByArea);
+
+            return Ok(response);
         }
 
 
-        [HttpGet("TotalByManager")]
+        [HttpGet("Manager/TotalByManager")]
         [Authorize(Roles ="Manager")]
         public async Task<IActionResult> GetTotalCountByManagerId()
         {
@@ -171,6 +173,26 @@ namespace BFRS_API_V1.Controllers
             };
 
             return Ok(response);
+        }
+
+        [HttpGet("Manager/TotalBreedingByFarm")]
+        public ActionResult<Dictionary<string, int>> GetTotalBreedingByFarm()
+        {
+            var breedingCounts = _breedingService.GetTotalBreedingByFarm();
+            var totalFarmCount = breedingCounts.Count;
+
+            return Ok(new
+            {
+                TotalFarm = totalFarmCount,
+                TotalBreedingByFarm = breedingCounts
+            });
+        }
+
+        [HttpGet("TManager/otalCageByFarm")]
+        public ActionResult<List<Dictionary<string, object>>> GetTotalCageByFarm()
+        {
+            var result = _cageService.GetTotalCageByFarm();
+            return Ok(result);
         }
     }
 }

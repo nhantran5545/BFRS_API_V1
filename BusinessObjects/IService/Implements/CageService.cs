@@ -93,7 +93,10 @@ namespace BusinessObjects.IService.Implements
             return await _cageRepository.GetTotalCageStatusByFarmIdAsync(farmId, status);
         }
 
-
+        public Dictionary<int, int> GetCageCountByAreaAndFarm(int farmId)
+        {
+            return _cageRepository.GetCageCountByAreaAndFarm(farmId);
+        }
 
         public async Task<IEnumerable<CageResponse>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId)
         {
@@ -176,6 +179,11 @@ namespace BusinessObjects.IService.Implements
                 return false;
             }
             return true;
+        }
+
+        public List<Dictionary<string, object>> GetTotalCageByFarm()
+        {
+            return _cageRepository.GetTotalCageByFarm();
         }
 
     }

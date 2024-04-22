@@ -17,10 +17,12 @@ namespace BusinessObjects.IService
         Task<IEnumerable<CageResponse>> GetCagesByStaffIdAsync(int staffAccountId);
         Task<int> GetTotalCagesByStaffIdAsync(int accountId);
         Task<int> GetTotalCagesStatusByFarmIdAsync(string status, int farmId);
+        Dictionary<int, int> GetCageCountByAreaAndFarm(int farmId);
         Task<IEnumerable<CageResponse>> GetCagesByFarmIdAsync(int farmId);
         Task<IEnumerable<CageResponse>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId);
         Task<IEnumerable<CageResponse>> GetCagesForBreeding(int farmId);
         Task<CageDetailResponse?> GetCageByIdAsync(object cageId);
+        List<Dictionary<string, object>> GetTotalCageByFarm();
 
     }
 }

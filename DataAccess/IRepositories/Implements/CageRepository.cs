@@ -70,5 +70,59 @@ namespace DataAccess.IRepositories.Implements
                 .CountAsync();
         }
 
+        public Dictionary<int, int> GetCageCountByAreaAndFarm(int farmId)
+        {
+            var cages = _context.Cages
+                .Include(c => c.Area)
+                .Where(c => c.Area != null && c.Area.FarmId == farmId)
+                .ToList();
+
+            var result = cages
+                .GroupBy(c => c.AreaId)
+                .ToDictionary(g => g.Key ?? 0, g => g.Count());
+
+            return result;
+        }
+
+        public List<Dictionary<string, object>> GetTotalCageByFarm()
+        {
+            var farms = _context.Farms
+                .Select(farm => new
+                {
+                    FarmName = farm.FarmName ?? "Unknown",
+                    Areas = farm.Areas.Select(area => new
+                    {
+                        AreaName = area.AreaName ?? "Unknown",
+                        TotalCage = area.Cages.Count,
+                        TotalCageByStatus = new Dictionary<string, int>
+                        {
+                    { "Nourishing", area.Cages.Count(cage => cage.Status == "Nourishing") },
+                    { "Standby", area.Cages.Count(cage => cage.Status == "Standby") },
+                    { "Breeding", area.Cages.Count(cage => cage.Status == "Breeding") }
+                        }
+                    })
+                })
+                .ToList();
+
+            var result = farms
+                .SelectMany(farm => farm.Areas.Select(area => new Dictionary<string, object>
+                {
+            { $"TotalCageOf{farm.FarmName}", area.TotalCage },
+            {
+                area.AreaName,
+                new Dictionary<string, int>
+                {
+                    { "Nourishing", area.TotalCageByStatus["Nourishing"] },
+                    { "Standby", area.TotalCageByStatus["Standby"] },
+                    { "Breeding", area.TotalCageByStatus["Breeding"] }
+                }
+            }
+                }))
+                .ToList();
+
+            return result;
+        }
+
+
     }
 }
