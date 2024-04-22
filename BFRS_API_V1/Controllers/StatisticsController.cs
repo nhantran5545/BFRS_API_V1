@@ -132,25 +132,27 @@ namespace BFRS_API_V1.Controllers
         }
 
 
-        [HttpGet("totalCageByStatusAndFarmId")]
+        [HttpGet("totalCageFarmId")]
         [Authorize(Roles = "Manager")]
-        public async Task<IActionResult> GetTotalCagesByStatusAndFarmId(int farmId)
+        public async Task<IActionResult> GetTotalCagesFarmId(int farmId)
         {
+            var response = new Dictionary<string, object>();
+
             var statusCounts = new Dictionary<string, int>();
-
             var statuses = new List<string> { "Nourishing", "Breeding", "Standby" };
-
             foreach (var status in statuses)
             {
                 var cageCount = await _cageService.GetTotalCagesStatusByFarmIdAsync(status, farmId);
                 statusCounts.Add(status, cageCount);
             }
-
             int totalCageCount = statusCounts.Values.Sum();
-
             statusCounts.Add("Total", totalCageCount);
+            response.Add("CageStatusCounts", statusCounts);
 
-            return Ok(statusCounts);
+            var cageCountByArea = _cageService.GetCageCountByAreaAndFarm(farmId);
+            response.Add("CageCountByArea", cageCountByArea);
+
+            return Ok(response);
         }
 
 

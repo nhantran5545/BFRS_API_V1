@@ -70,5 +70,21 @@ namespace DataAccess.IRepositories.Implements
                 .CountAsync();
         }
 
+        public Dictionary<int, int> GetCageCountByAreaAndFarm(int farmId)
+        {
+            var cages = _context.Cages
+                .Include(c => c.Area)
+                .Where(c => c.Area != null && c.Area.FarmId == farmId)
+                .ToList();
+
+            var result = cages
+                .GroupBy(c => c.AreaId)
+                .ToDictionary(g => g.Key ?? 0, g => g.Count());
+
+            return result;
+        }
+
+
+
     }
 }
