@@ -21,6 +21,7 @@ namespace BusinessObjects.IService
         Task<IEnumerable<AccountDetailResponse>> GetManagerAccountsAsync();
         Task<IEnumerable<AccountDetailResponse>> GetStaffAccountsAsync();
         Task<ProfileResponse?> GetProfileAccountByIdAsync(int accId);
+        Task<bool> UpdateAdminProfile(int accountId, AdminUpdateRequest accountUpdate);
         bool IsManager(int accountId);
         bool IsStaff(int accountId);
     }

@@ -14,5 +14,6 @@ namespace DataAccess.IRepositories
         Task<Egg?> GetEggDetailsAsync(object eggId);
         Task<IEnumerable<Egg>> GetEggsByStaffId(int staffId);
         Task<int> GetEggCountByStatusNameAndManagedByStaff(string statusName, int staffId);
+        Task<int> GetTotalEggsCountByAccountId(int accountId);
     }
 }

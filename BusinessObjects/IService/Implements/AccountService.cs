@@ -161,6 +161,29 @@ namespace BusinessObjects.IService.Implements
             return true;
         }
 
+
+        public async Task<bool> UpdateAdminProfile(int accountId,AdminUpdateRequest accountUpdate)
+        {
+            var account = await _accountRepository.GetByIdAsync(accountId);
+            if (account == null)
+            {
+                return false;
+            }
+
+            account.FirstName = accountUpdate.FirstName;
+            account.LastName = accountUpdate.LastName;
+            account.PhoneNumber = accountUpdate.PhoneNumber;
+            account.City = accountUpdate.City;
+            account.Address = accountUpdate.Address;
+
+            var result = _accountRepository.SaveChanges();
+            if (result < 1)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task<bool> ChangStatusAccountById(int accId)
         {
 

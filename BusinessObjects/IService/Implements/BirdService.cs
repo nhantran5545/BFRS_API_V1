@@ -163,6 +163,16 @@ namespace BusinessObjects.IService.Implements
             return birds.Count();
         }
 
+        public async Task<Dictionary<string, int>> GetBirdCountBySpeciesAsync(int farmId)
+        {
+            return await _birdRepository.GetBirdCountBySpeciesAndFarm(farmId);
+        }
+
+        public async Task<Dictionary<string, int>> GetBirdCountByGenderAsync(int farmId)
+        {
+            return await _birdRepository.GetTotalBirdsByGenderAndFarmId(farmId);
+        }
+
         public async Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId)
         {
             var bird = await _birdRepository.GetByIdAsync(birdId);
@@ -258,7 +268,10 @@ namespace BusinessObjects.IService.Implements
             
         }
 
-
+        public async Task<int> GetTotalBirdsByStatusAndFarmId(string status, int farmId)
+        {
+            return await _birdRepository.GetTotalBirdsByStatusAndFarmId(status, farmId);
+        }
         private async Task<bool> UpdateBirdMutations(List<MutationRequest> mutationRequests, int birdId)
         {
             var bird = await _birdRepository.GetByIdAsync(birdId);

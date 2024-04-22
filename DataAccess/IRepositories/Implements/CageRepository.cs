@@ -62,5 +62,13 @@ namespace DataAccess.IRepositories.Implements
                 .Where(c => c.Area != null && c.Area.FarmId.Equals(farmId))
                 .ToListAsync();
         }
+
+        public async Task<int> GetTotalCageStatusByFarmIdAsync(int farmId, string status)
+        {
+            return await _context.Cages
+                .Where(c => c.Status == status && c.Area.FarmId.Equals(farmId))
+                .CountAsync();
+        }
+
     }
 }

@@ -18,5 +18,6 @@ namespace BusinessObjects.IService
         Task<IEnumerable<ClutchResponse>> GetClutchsByBreedingId(object breedingId);
         Task<IEnumerable<ClutchResponse>> GetClutchsByCreatedById(object CreatedById);
         Task<ClutchDetailResponse?> GetClutchByIdAsync(object clutchId);
+        Task<int> GetTotalClutchByManagerId(int accountId);
     }
 }

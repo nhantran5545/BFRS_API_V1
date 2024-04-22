@@ -62,6 +62,18 @@ namespace DataAccess.IRepositories.Implements
                 .CountAsync();
         }
 
+        public async Task<IEnumerable<Breeding>> GetAllBreedingsStatusByManagerId(int managerId, string statusName)
+        {
+            return await _context.Breedings
+                .Where(br => br.Status == statusName && br.CreatedBy.Equals(managerId))
+                .ToListAsync();
+        }
+
+        public async Task<int> GetTotalEggsAndClutchesCount()
+        {
+            return await _context.Clutches.SumAsync(c => c.Eggs.Count()) + await _context.Clutches.CountAsync();
+        }
+
         public async Task<int> GetTotalStatusBreedingsByManagerId(int accountId, string statusName)
         {
             return await _context.Breedings
