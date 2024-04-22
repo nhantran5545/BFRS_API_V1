@@ -23,5 +23,8 @@ namespace BusinessObjects.ResponseModels.BirdResModels
         public List<IndividualMutation>? IndividualMutations { get; set; }
         public string? LifeStage { get; set; }
         public string? Status { get; set; }
+        public int? FatherBirdId { get; set; }
+        public int? MotherBirdId { get; set; }
+        public int? EggId { get; set; }
     }
 }

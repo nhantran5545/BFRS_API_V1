@@ -217,7 +217,6 @@ namespace BusinessObjects.IService.Implements
                     }
 
                     bird.BirdName= birdUpdateRequest.BirdName;
-                    bird.Gender = birdUpdateRequest.Gender;
                     bird.HatchedDate = birdUpdateRequest.HatchedDate;
                     bird.PurchaseFrom = birdUpdateRequest.PurchaseFrom;
                     bird.AcquisitionDate = birdUpdateRequest.AcquisitionDate;

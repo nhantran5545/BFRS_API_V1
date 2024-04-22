@@ -48,7 +48,7 @@ namespace BFRS_API_V1.Controllers
         public async Task<IActionResult> GetTotalCountByManagerId(int farmId)
         {
             var managerId = _accountService.GetAccountIdFromToken();
-            var totalBirdCount = await _birdService.GetTotalBirdByAccountIdAsync();
+            var totalBirdCount = /*await _birdService.GetTotalBirdByAccountIdAsync()*/0;
             var totalCageCount = await _cageService.GetTotalCagesByManagerIdAsync(farmId);
             var totalBreedingCount = await _breedingService.GetTotalBreedingCountByManagerId(managerId);
 

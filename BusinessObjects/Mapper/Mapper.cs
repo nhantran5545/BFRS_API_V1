@@ -54,6 +54,8 @@ namespace BusinessObjects.Mapper
             CreateMap<Bird, BirdDetailResponse>()
                 .ForMember(dest => dest.BirdSpeciesName,
                             opt => opt.MapFrom(src => src.BirdSpecies != null ? src.BirdSpecies.BirdSpeciesName : string.Empty))
+                .ForMember(dest => dest.EggId,
+                            opt => opt.MapFrom(src => src.EggBirds.Any() ? src.EggBirds.First().EggId : 0))
                 .ReverseMap();
             CreateMap<Bird, BirdPedi>()
                 .ReverseMap();
