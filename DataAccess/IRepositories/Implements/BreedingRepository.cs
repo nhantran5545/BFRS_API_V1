@@ -96,6 +96,16 @@ namespace DataAccess.IRepositories.Implements
                 .ToListAsync();
         }
 
-
+        public Dictionary<string, int> GetTotalBreedingByFarm()
+        {
+            var result = _context.Farms
+                .Include(f => f.Areas)
+                .ThenInclude(a => a.Cages)
+                .ThenInclude(c => c.Breedings)
+                .ToDictionary(
+                    f => f.FarmName ?? "Unknown",
+                    f => f.Areas.SelectMany(a => a.Cages.SelectMany(c => c.Breedings)).Count());
+            return result;
+        }
     }
 }

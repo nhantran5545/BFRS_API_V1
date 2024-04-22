@@ -22,6 +22,7 @@ namespace BusinessObjects.IService
         Task<IEnumerable<CageResponse>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId);
         Task<IEnumerable<CageResponse>> GetCagesForBreeding(int farmId);
         Task<CageDetailResponse?> GetCageByIdAsync(object cageId);
+        List<Dictionary<string, object>> GetTotalCageByFarm();
 
     }
 }

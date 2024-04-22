@@ -173,6 +173,10 @@ namespace BusinessObjects.IService.Implements
             return breedings.Count();
         }
 
+        public Dictionary<string, int> GetTotalBreedingByFarm()
+        {
+            return _breedingRepository.GetTotalBreedingByFarm();
+        }
 
         public async Task<BreedingDetailResponse?> GetBreedingById(object breedingId)
         {

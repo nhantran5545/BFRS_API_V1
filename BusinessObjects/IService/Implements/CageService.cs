@@ -181,5 +181,10 @@ namespace BusinessObjects.IService.Implements
             return true;
         }
 
+        public List<Dictionary<string, object>> GetTotalCageByFarm()
+        {
+            return _cageRepository.GetTotalCageByFarm();
+        }
+
     }
 }

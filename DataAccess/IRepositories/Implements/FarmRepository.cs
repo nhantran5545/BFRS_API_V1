@@ -12,5 +12,6 @@ namespace DataAccess.IRepositories.Implements
         public FarmRepository(BFRS_DBContext context) : base(context)
         {
         }
+
     }
 }
