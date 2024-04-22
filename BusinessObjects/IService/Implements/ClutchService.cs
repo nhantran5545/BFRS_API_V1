@@ -3,6 +3,7 @@ using BusinessObjects.RequestModels.ClutchReqModels;
 using BusinessObjects.ResponseModels;
 using BusinessObjects.ResponseModels.ClutchResModels;
 using DataAccess.IRepositories;
+using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
 using System;
 using System.Collections.Generic;
@@ -147,6 +148,11 @@ namespace BusinessObjects.IService.Implements
 
             await _statusChangeService.AddClutchChangeStatus(clutch.ClutchId, clutchCloseRequest.Status, accountId, oldStatus, clutchCloseRequest.Status);
             return true;
+        }
+
+        public async Task<int> GetTotalClutchByManagerId(int accountId)
+        {
+            return await _clutchRepository.GetTotalClutchesCountByAccountId(accountId);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace BusinessObjects.IService
         Task<EggResponse?> GetEggByIdAsync(object eggId);
         Task<EggResponse?> GetEggByBirdIdAsync(object birdId);
         Task<int> GetTotalEggCountByStaffId(int staffId);
+        Task<int> GetTotalEggsByManagerId(int accountId);
         Task<int> GetEggCountByStatusNameAndManagedByStaff(string status, int staffId);
     }
 }

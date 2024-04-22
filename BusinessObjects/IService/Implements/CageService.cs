@@ -88,11 +88,12 @@ namespace BusinessObjects.IService.Implements
             return cages.Count();
         }
 
-        public async Task<int> GetTotalCagesByManagerIdAsync(int farmId)
+        public async Task<int> GetTotalCagesStatusByFarmIdAsync(string status, int farmId)
         {
-            var cages = await _cageRepository.GetCagesByFarmIdAsync(farmId);
-            return cages.Count();
+            return await _cageRepository.GetTotalCageStatusByFarmIdAsync(farmId, status);
         }
+
+
 
         public async Task<IEnumerable<CageResponse>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId)
         {

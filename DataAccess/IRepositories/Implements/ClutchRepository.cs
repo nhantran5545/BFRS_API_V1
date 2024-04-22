@@ -52,7 +52,14 @@ namespace DataAccess.IRepositories.Implements
                 .Include(c => c.Eggs)
                 .Include(c => c.CreatedByNavigation)
                 .Where(c => c.CreatedBy.Equals(createdById))
-                .ToListAsync();
+                .ToListAsync(); 
+        }
+        public async Task<int> GetTotalClutchesCountByAccountId(int accountId)
+        {
+            return await _context.Clutches
+                       .Include(c => c.Breeding)
+                       .Where(c => c.Breeding.CreatedBy == accountId)
+                       .CountAsync();
         }
     }
 }

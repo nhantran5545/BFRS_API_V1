@@ -66,6 +66,13 @@ namespace DataAccess.IRepositories.Implements
                 .Where(b => b.Cage.AccountId.Equals(staffId))
                 .ToListAsync();
         }
+
+        public async Task<int> GetTotalEggsAndClutchesCount()
+        {
+            return await _context.Clutches.SumAsync(c => c.Eggs.Count()) + await _context.Clutches.CountAsync();
+        }
+
+
         public override async Task<Bird?> GetByIdAsync(object id)
         {
             return await _context.Birds
@@ -75,6 +82,38 @@ namespace DataAccess.IRepositories.Implements
                 .ThenInclude(bm => bm.Mutation)
                 .Where(b => b.BirdId.Equals(id))
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<Dictionary<string, int>> GetBirdCountBySpeciesAndFarm(int farmId)
+        {
+            var result = await _context.Birds
+                .Where(b => b.FarmId == farmId)
+                .GroupBy(b => b.BirdSpecies.BirdSpeciesName)
+                .Select(g => new { Species = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.Species, x => x.Count);
+
+            return result;
+        }
+
+        public async Task<Dictionary<string, int>> GetTotalBirdsByGenderAndFarmId(int farmId)
+        {
+            var birds = await _context.Birds
+                .Where(b => b.FarmId == farmId) 
+                .ToListAsync();
+
+            var totalBirdsByGender = birds
+                .GroupBy(b => b.Gender)
+                .ToDictionary(g => g.Key ?? "Unknown", g => g.Count());
+
+            return totalBirdsByGender;
+        }
+
+
+        public async Task<int> GetTotalBirdsByStatusAndFarmId(string status, int farmId)
+        {
+            return await _context.Birds
+            .Where(b => b.FarmId == farmId && b.Status == status)
+            .CountAsync();
         }
     }
 }

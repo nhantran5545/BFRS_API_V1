@@ -5,6 +5,7 @@ using BusinessObjects.ResponseModels.ClutchResModels;
 using DataAccess.IRepositories;
 using DataAccess.IRepositories.Implements;
 using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -160,6 +161,10 @@ namespace BusinessObjects.IService.Implements
         public async Task<int> GetBreedingCountByStatusNameAndManagedByStaff(int staffId,string status)
         {
             return await _breedingRepository.GetTotalStatusBreedingsByStaff(staffId, status);
+        }
+        public async Task<int> GetBreedingCountByStatusNameAndManagedByManager(int managerId, string status)
+        {
+            return await _breedingRepository.GetTotalStatusBreedingsByManagerId(managerId, status);
         }
 
         public async Task<int> GetTotalBreedingCountByManagerId(int managerId)

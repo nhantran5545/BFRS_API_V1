@@ -16,7 +16,7 @@ namespace BusinessObjects.IService
         Task<IEnumerable<CageResponse>> GetAllCagesAsync();
         Task<IEnumerable<CageResponse>> GetCagesByStaffIdAsync(int staffAccountId);
         Task<int> GetTotalCagesByStaffIdAsync(int accountId);
-        Task<int> GetTotalCagesByManagerIdAsync(int farmId);
+        Task<int> GetTotalCagesStatusByFarmIdAsync(string status, int farmId);
         Task<IEnumerable<CageResponse>> GetCagesByFarmIdAsync(int farmId);
         Task<IEnumerable<CageResponse>> GetCagesForBreeding(int fatherBirdId, int motherBirdId, int farmId);
         Task<IEnumerable<CageResponse>> GetCagesForBreeding(int farmId);
