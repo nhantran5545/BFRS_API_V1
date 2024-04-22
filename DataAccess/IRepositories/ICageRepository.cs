@@ -13,5 +13,6 @@ namespace DataAccess.IRepositories
         Task<IEnumerable<Cage>> GetCagesManagedByStaffAsync(int accountId);
         Task<IEnumerable<Cage>> GetStandbyCagesByFarmId(int farmId);
         Task<IEnumerable<Cage>> GetCagesByFarmIdAsync(int farmId);
+        Task<int> GetTotalCageStatusByFarmIdAsync(int farmId, string status);
     }
 }

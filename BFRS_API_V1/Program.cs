@@ -61,7 +61,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("BFRSDB")));
 
 // C?u h�nh Memory Cache
 builder.Services.AddMemoryCache();
-
+//
+builder.Services.AddAuthentication();
 //Repositories
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();

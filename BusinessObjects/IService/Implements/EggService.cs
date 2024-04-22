@@ -133,6 +133,11 @@ namespace BusinessObjects.IService.Implements
             return await _eggRepository.GetEggCountByStatusNameAndManagedByStaff(status, staffId);
         }
 
+        public async Task<int> GetTotalEggsByManagerId(int accountId)
+        {
+            return await _eggRepository.GetTotalEggsCountByAccountId(accountId);
+        }
+
         public async Task<bool> UpdateEgg(EggUpdateRequest eggUpdateRequest, int accountId)
         {
             using(var transaction = _eggRepository.BeginTransaction())

@@ -11,5 +11,6 @@ namespace DataAccess.IRepositories
     {
         Task<IEnumerable<Clutch>> GetClutchsByBreedingId(object breedingId);
         Task<IEnumerable<Clutch>> GetClutchsByCreatedById(object createdById);
+        Task<int> GetTotalClutchesCountByAccountId(int accountId);
     }
 }

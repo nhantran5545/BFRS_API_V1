@@ -60,6 +60,14 @@ namespace DataAccess.IRepositories.Implements
                 .CountAsync();
         }
 
+        public async Task<int> GetTotalEggsCountByAccountId(int accountId)
+        {
+            return await _context.Eggs
+                       .Include(c => c.Clutch)
+                       .Where(c => c.Clutch.Breeding.CreatedBy == accountId)
+                       .CountAsync();
+        }
+
         public async Task<Egg?> GetEggDetailsAsync(object eggId)
         {
             return await _context.Eggs

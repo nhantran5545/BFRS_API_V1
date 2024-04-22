@@ -103,7 +103,18 @@ namespace BFRS_API_V1.Controllers
             return BadRequest("Something wrong with the server Please try again");
         }
 
+        [HttpPut("UpdateProfileAdmin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PutAdminAccount([FromBody] AdminUpdateRequest accountUpdate)
+        {
+            var accId = _accountService.GetAccountIdFromToken();
 
+            if (await _accountService.UpdateAdminProfile(accId, accountUpdate))
+            {
+                return Ok(accountUpdate);
+            }
+            return BadRequest("Something wrong with the server Please try again");
+        }
 
         [HttpPut("status/{id}")]
         [Authorize(Roles = "Admin")]
@@ -138,7 +149,8 @@ namespace BFRS_API_V1.Controllers
                 return Forbid(ex.Message);
             }
         }
-        // GET: api/Areas/5
+
+
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<ProfileResponse>> GetProfileAccountById()
@@ -172,7 +184,5 @@ namespace BFRS_API_V1.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
     }
 }
