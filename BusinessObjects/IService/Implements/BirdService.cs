@@ -241,8 +241,12 @@ namespace BusinessObjects.IService.Implements
                         }
                     }
                     
-                    bird.FatherBirdId = birdUpdateRequest.FatherBirdId;
-                    bird.MotherBirdId = birdUpdateRequest.MotherBirdId;
+                    if(bird.EggBirds.Any())
+                    {
+                        bird.FatherBirdId = birdUpdateRequest.FatherBirdId;
+                        bird.MotherBirdId = birdUpdateRequest.MotherBirdId;
+                    }
+                    
                     bird.BandNumber = birdUpdateRequest.BandNumber;
                     bird.Image = birdUpdateRequest.Image;
                     bird.LifeStage = birdUpdateRequest.LifeStage;
