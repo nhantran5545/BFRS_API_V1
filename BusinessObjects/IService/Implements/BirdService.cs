@@ -241,7 +241,7 @@ namespace BusinessObjects.IService.Implements
                         }
                     }
                     
-                    if(bird.EggBirds.Any())
+                    if(!bird.EggBirds.Any())
                     {
                         bird.FatherBirdId = birdUpdateRequest.FatherBirdId;
                         bird.MotherBirdId = birdUpdateRequest.MotherBirdId;
