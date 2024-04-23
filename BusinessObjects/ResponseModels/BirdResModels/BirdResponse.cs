@@ -20,5 +20,8 @@ namespace BusinessObjects.ResponseModels.BirdResModels
         public string? BirdSpeciesName { get; set; }
         public string? Image { get; set; }
         public string? Status { get; set; }
+        public int? FatherBirdId { get; set; }
+        public int? MotherBirdId { get; set; }
+        public int? EggId { get; set; }
     }
 }

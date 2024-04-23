@@ -50,6 +50,8 @@ namespace BusinessObjects.Mapper
                             opt => opt.MapFrom(src => src.BirdSpecies != null ? src.BirdSpecies.BirdSpeciesName : string.Empty))
                 .ForMember(dest => dest.FarmName,
                             opt => opt.MapFrom(src => src.Farm != null ? src.Farm.FarmName : string.Empty))
+                .ForMember(dest => dest.EggId,
+                            opt => opt.MapFrom(src => src.EggBirds.Any() ? src.EggBirds.First().EggId : 0))
                 .ReverseMap();
             CreateMap<Bird, BirdDetailResponse>()
                 .ForMember(dest => dest.BirdSpeciesName,
