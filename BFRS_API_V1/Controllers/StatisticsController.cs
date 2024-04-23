@@ -175,7 +175,8 @@ namespace BFRS_API_V1.Controllers
             return Ok(response);
         }
 
-        [HttpGet("Manager/TotalBreedingByFarm")]
+        [HttpGet("Admin/TotalBreedingByFarm")]
+        [Authorize(Roles = "Admin")]
         public ActionResult<Dictionary<string, int>> GetTotalBreedingByFarm()
         {
             var breedingCounts = _breedingService.GetTotalBreedingByFarm();
@@ -188,7 +189,8 @@ namespace BFRS_API_V1.Controllers
             });
         }
 
-        [HttpGet("TManager/otalCageByFarm")]
+        [HttpGet("Admin/TotalCageByFarm")]
+        [Authorize(Roles = "Admin")]
         public ActionResult<List<Dictionary<string, object>>> GetTotalCageByFarm()
         {
             var result = _cageService.GetTotalCageByFarm();
