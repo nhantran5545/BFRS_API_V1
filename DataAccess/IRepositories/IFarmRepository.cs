@@ -9,5 +9,6 @@ namespace DataAccess.IRepositories
 {
     public interface IFarmRepository : IGenericRepository<Farm>
     {
+        Task<List<object>> GetTotalAccountByFarm();
     }
 }

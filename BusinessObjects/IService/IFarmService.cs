@@ -18,5 +18,6 @@ namespace BusinessObjects.IService
         Task<IEnumerable<FarmResponse>> GetAllFarmsAsync();
         Task<FarmResponse?> GetFarmByIdAsync(int farmId);
         Task<bool> ChangStatusFarmById(int farmId);
+        Task<List<object>> GetTotalAccountByFarm();
     }
 }

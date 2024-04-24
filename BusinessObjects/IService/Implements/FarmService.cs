@@ -119,5 +119,10 @@ namespace BusinessObjects.IService.Implements
             }
             return true;
         }
+
+        public async Task<List<object>> GetTotalAccountByFarm()
+        {
+            return await _farmRepository.GetTotalAccountByFarm();
+        }
     }
 }

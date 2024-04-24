@@ -1,4 +1,5 @@
 ﻿using BusinessObjects.IService;
+using BusinessObjects.IService.Implements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +15,10 @@ namespace BFRS_API_V1.Controllers
         private readonly IEggService _eggService;
         private readonly IBreedingService _breedingService;
         private readonly IClutchService  _clutchService;
+        private readonly IFarmService   _farmService;
         private readonly IAccountService _accountService;
 
-        public StatisticsController(IBirdService birdService, IBirdSpeciesService birdSpeciesService, ICageService cageService, IEggService eggService, IAccountService accountService, IBreedingService breedingService, IClutchService clutchService)
+        public StatisticsController(IBirdService birdService, IBirdSpeciesService birdSpeciesService, ICageService cageService, IEggService eggService, IAccountService accountService, IBreedingService breedingService, IClutchService clutchService, IFarmService farmService)
         {
             _birdService = birdService;
             _cageService = cageService;
@@ -24,6 +26,7 @@ namespace BFRS_API_V1.Controllers
             _accountService = accountService;
             _breedingService = breedingService;
             _clutchService = clutchService;
+            _farmService = farmService;
         }
 
         [HttpGet("TotalByStaff")]
@@ -195,6 +198,13 @@ namespace BFRS_API_V1.Controllers
         {
             var result = _cageService.GetTotalCageByFarm();
             return Ok(result);
+        }
+
+        [HttpGet("TotalAccountByFarm")]
+        public async Task<ActionResult<List<object>>> GetTotalAccountByFarm()
+        {
+            var data = await _farmService.GetTotalAccountByFarm();
+            return Ok(data);
         }
     }
 }
