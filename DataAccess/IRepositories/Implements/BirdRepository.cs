@@ -27,6 +27,7 @@ namespace DataAccess.IRepositories.Implements
         {
             return await _context.Birds
                 .Include(b => b.BirdSpecies)
+                .Include(b => b.EggBirds)
                 .Include(b => b.Cage)
                 .Include(b => b.Farm)
                 .Where(b => b.FarmId.Equals(farmId))
