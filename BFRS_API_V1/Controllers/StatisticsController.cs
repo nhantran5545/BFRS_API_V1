@@ -200,7 +200,8 @@ namespace BFRS_API_V1.Controllers
             return Ok(result);
         }
 
-        [HttpGet("TotalAccountByFarm")]
+        [HttpGet("Admin/TotalAccountByFarm")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<object>>> GetTotalAccountByFarm()
         {
             var data = await _farmService.GetTotalAccountByFarm();
