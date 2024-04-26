@@ -18,15 +18,17 @@ namespace BFRS_API_V1.Controllers
     {
         private readonly ICageService _cageService;
         private readonly IBirdService _birdService;
+        private readonly IAreaService  _areaService;
         private readonly IFarmService _farmService;
         private readonly IAccountService _accountService;
 
-        public CagesController(ICageService cageService, IBirdService birdService, IFarmService farmService, IAccountService accountService)
+        public CagesController(ICageService cageService, IBirdService birdService, IFarmService farmService, IAccountService accountService, IAreaService areaService)
         {
             _cageService = cageService;
             _birdService = birdService;
             _farmService = farmService;
             _accountService = accountService;
+            _areaService = areaService; 
         }
 
         // GET: api/Cages
@@ -104,6 +106,29 @@ namespace BFRS_API_V1.Controllers
             if (cage == null)
             {
                 return NotFound("Cage Not Found");
+            }
+            var currentArea = await _areaService.GetAreaByIdAsync(cage.AreaId);
+            if (currentArea == null)
+            {
+                return BadRequest("Current area not found");
+            }
+
+            var targetArea = await _areaService.GetAreaByIdAsync(request.AreaId);
+            if (targetArea == null)
+            {
+                return BadRequest("Target area not found");
+            }
+
+            var birdsInCage = await _birdService.GetBirdsByCageIdAsync(cageId);
+
+            if (currentArea.Status == "For Nourishing" && targetArea.Status == "For Breeding" && birdsInCage.Any())
+            {
+                return BadRequest("Please move birds to another cage before transferring the cage to a breeding area");
+            }
+
+            if (currentArea.Status == "For Breeding" && targetArea.Status == "For Nourishing" && cage.Status != "Standby")
+            {
+                return BadRequest("You can only transfer a cage with standby status from breeding area to nourishing area");
             }
             var success = await _cageService.UpdateCageAsync(cageId, request);
             if (success)

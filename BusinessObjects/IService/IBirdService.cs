@@ -22,6 +22,7 @@ namespace BusinessObjects.IService
         Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId);
         Task<BirdDetailResponse?> GetBirdByEggIdAsync(object eggId);
         Task<Dictionary<string, BirdPedi>> GetPedigreeOfABird(int birdId);
+        Task<List<Bird>> GetBirdsByCageIdAsync(int cageId);
         Task<int> GetTotalBirdsByStatusAndFarmId(string status, int farmId);
         Task<Dictionary<string, int>> GetBirdCountBySpeciesAsync(int farmId);
         Task<Dictionary<string, int>> GetBirdCountByGenderAsync(int farmId);
