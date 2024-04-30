@@ -70,7 +70,7 @@ namespace DataAccess.IRepositories.Implements
                 .CountAsync();
         }
 
-        public Dictionary<int, int> GetCageCountByAreaAndFarm(int farmId)
+        public Dictionary<string, int> GetCageCountByAreaAndFarm(int farmId)
         {
             var cages = _context.Cages
                 .Include(c => c.Area)
@@ -78,11 +78,12 @@ namespace DataAccess.IRepositories.Implements
                 .ToList();
 
             var result = cages
-                .GroupBy(c => c.AreaId)
-                .ToDictionary(g => g.Key ?? 0, g => g.Count());
+                .GroupBy(c => c.Area.AreaName ?? "Unknown") // Sử dụng "Unknown" làm giá trị mặc định
+                .ToDictionary(g => g.Key, g => g.Count());
 
             return result;
         }
+
 
         public List<Dictionary<string, object>> GetTotalCageByFarm()
         {

@@ -93,7 +93,7 @@ namespace BusinessObjects.IService.Implements
             return await _cageRepository.GetTotalCageStatusByFarmIdAsync(farmId, status);
         }
 
-        public Dictionary<int, int> GetCageCountByAreaAndFarm(int farmId)
+        public Dictionary<string, int> GetCageCountByAreaAndFarm(int farmId)
         {
             return _cageRepository.GetCageCountByAreaAndFarm(farmId);
         }
@@ -140,13 +140,13 @@ namespace BusinessObjects.IService.Implements
             var currentArea = await _areaRepository.GetByIdAsync(cage.AreaId);
             if (currentArea == null)
             {
-                throw new ArgumentException("Current area not found");
+                return false;
             }
 
             var targetArea = await _areaRepository.GetByIdAsync(request.AreaId);
             if (targetArea == null)
             {
-                throw new ArgumentException("Target area not found");
+                return false;
             }
 
             // Check if the cage has birds
@@ -154,7 +154,7 @@ namespace BusinessObjects.IService.Implements
 
             if (currentArea.Status == "For Nourishing" && targetArea.Status == "For Breeding" && birdsInCage.Any())
             {
-                throw new ArgumentException("Please move birds to another cage before transferring the cage to a breeding area");
+                return false;
             }
 
             if (currentArea.Status == "For Nourishing" && targetArea.Status == "For Breeding" && !birdsInCage.Any())
@@ -164,7 +164,7 @@ namespace BusinessObjects.IService.Implements
 
             if (currentArea.Status == "For Breeding" && targetArea.Status == "For Nourishing" && cage.Status != "Standby")
             {
-                throw new ArgumentException("You can only transfer a cage with standby status from breeding area to nourishing area");
+                return false;
             } 
             cage.ManufacturedDate = request.ManufacturedDate;
             cage.ManufacturedAt = request.ManufacturedAt;

@@ -173,6 +173,10 @@ namespace BusinessObjects.IService.Implements
             return await _birdRepository.GetTotalBirdsByGenderAndFarmId(farmId);
         }
 
+        public async Task<List<Bird>> GetBirdsByCageIdAsync(int cageId)
+        {
+            return await _birdRepository.GetBirdsByCageIdAsync(cageId);
+        }
         public async Task<BirdDetailResponse?> GetBirdByIdAsync(object birdId)
         {
             var bird = await _birdRepository.GetByIdAsync(birdId);
