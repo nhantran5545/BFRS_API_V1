@@ -98,7 +98,7 @@ namespace BusinessObjects.IService.Implements
             // Initialize variables.
             Dictionary<string, object> node = pedigree;
 
-            // Duyệt qua các ký tự của mã để thêm nút vào danh phả.
+            // Duyệt qua các ký tự của code để thêm node vào danh phả.
             for (int i = 0; i < code.Length; i++)
             {
                 if (!node.ContainsKey(code[i].ToString()))
